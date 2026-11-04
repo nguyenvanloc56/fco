@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - OVR Upgrade Logic</title>
+  <title>FC Online Simulator - Upgrade FX & Animation</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -19,6 +20,9 @@
       --accent-blue: #00d2ff;
       --accent-gold: #ffb700;
       --accent-red: #ff4757;
+      --glow-gold: 0 0 15px rgba(255, 183, 0, 0.6);
+      --glow-blue: 0 0 15px rgba(0, 210, 255, 0.6);
+      --glow-green: 0 0 15px rgba(0, 255, 136, 0.6);
       --text-main: #f1f2f6;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
@@ -30,11 +34,9 @@
     .user-info, .bp-display { background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--panel-border); display: flex; align-items: center; gap: 8px; font-size: 12px; }
     .bp-display { color: var(--accent-gold); font-weight: bold; border-color: var(--accent-gold); }
     .btn-logout { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; }
-    .btn-logout:hover { background: var(--accent-red); color: #fff; }
 
     nav { display: flex; justify-content: center; gap: 6px; padding: 10px; background: rgba(0,0,0,0.7); border-bottom: 1px solid var(--panel-border); flex-wrap: wrap; }
     .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #aaa; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.2s; }
-    .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
     .nav-btn.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); color: #000; border-color: transparent; }
     .nav-btn.admin-btn { background: rgba(255, 71, 87, 0.15); border-color: var(--accent-red); color: var(--accent-red); }
 
@@ -42,59 +44,83 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    #gameToast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 10px 22px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 2000; box-shadow: 0 5px 20px rgba(0,0,0,0.8); transition: transform 0.3s ease; pointer-events: none; }
+    #gameToast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 10px 25px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 2000; box-shadow: 0 5px 20px rgba(0,0,0,0.8); transition: transform 0.3s ease; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
     .auth-box { background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 30px; border-radius: 12px; width: 340px; text-align: center; }
-    .auth-box h2 { margin-bottom: 15px; color: var(--accent-green); font-size: 16px; }
     .input-group { margin-bottom: 12px; text-align: left; }
     .input-group label { display: block; margin-bottom: 4px; font-size: 11px; color: #aaa; }
     .input-group input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--panel-border); background: rgba(0,0,0,0.6); color: #fff; outline: none; font-size: 13px; }
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 13px; color: #000; cursor: pointer; }
 
+    /* HOẠT ẢNH ÉP THẺ (UPGRADE ANIMATIONS) */
+    .upgrade-room { display: grid; grid-template-columns: 290px 1fr; gap: 20px; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 14px; padding: 20px; position: relative; }
+    .upgrade-left-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+    
+    .main-card-slot { width: 160px; height: 220px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 10px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; margin: 10px 0; box-shadow: var(--glow-gold); transition: all 0.3s ease; }
+    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; }
+    .card-ovr { font-size: 18px; font-weight: 900; color: var(--accent-gold); }
+    .card-grade { font-size: 11px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 1px 5px; border-radius: 3px; }
+    .card-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 8px 0; border: 2px solid rgba(255,255,255,0.2); background: #000; }
+    .card-name { font-size: 12px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+    /* Keyframes hiệu ứng lắc và hào quang khi đập thẻ */
+    @keyframes shakeCard {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-3px, 3px) rotate(-2deg); }
+      40% { transform: translate(3px, -3px) rotate(2deg); }
+      60% { transform: translate(-3px, -3px) rotate(-1deg); }
+      80% { transform: translate(3px, 3px) rotate(1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    @keyframes intenseGlow {
+      0% { box-shadow: 0 0 10px var(--accent-gold); }
+      50% { box-shadow: 0 0 40px var(--accent-blue), 0 0 80px var(--accent-green); }
+      100% { box-shadow: 0 0 10px var(--accent-gold); }
+    }
+
+    .shaking { animation: shakeCard 0.1s infinite, intenseGlow 0.3s infinite; border-color: var(--accent-blue) !important; }
+
+    /* Modal Overlay Kết Quả Ép Thẻ */
+    #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 3000; flex-direction: column; }
+    .flash-screen { position: absolute; top:0; left:0; width:100%; height:100%; background: #fff; opacity:0; pointer-events:none; transition: opacity 0.5s ease; }
+    .result-box-fx { text-align: center; transform: scale(0.5); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .result-box-fx.show { transform: scale(1.2); opacity: 1; }
+    .result-title { font-size: 36px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+
+    /* Bảng Quản lý, Đội Hình, Locker */
     .squad-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-    .pitch { background: radial-gradient(circle, #1e4620 0%, #0d210e 100%); border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; height: 500px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); }
+    .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 520px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
     .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.15); transform: translateY(-50%); }
     .pitch-row { display: flex; justify-content: space-around; width: 100%; z-index: 2; }
-    
-    .pitch-slot { width: 70px; height: 90px; background: rgba(0,0,0,0.4); border: 1px dashed rgba(255,255,255,0.3); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: 0.2s; }
-    .pitch-slot:hover { border-color: var(--accent-green); background: rgba(0,255,136,0.1); }
-    .pitch-slot img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .pitch-slot { width: 75px; height: 95px; background: rgba(0,0,0,0.45); border: 1px dashed rgba(255,255,255,0.3); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .pitch-slot img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
     .pitch-slot .p-name { font-size: 10px; font-weight: bold; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; color: #fff; margin-top: 2px; }
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
 
-    .player-table-container { background: rgba(13, 20, 32, 0.8); border: 1px solid var(--panel-border); border-radius: 8px; overflow: hidden; }
+    .player-table-container { background: rgba(13, 20, 32, 0.85); border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; }
     .player-list-table { width: 100%; border-collapse: collapse; }
-    .player-list-table th, .player-list-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
-    .player-list-table th { background: rgba(0,0,0,0.5); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; }
-    .player-list-table tr:hover { background: rgba(255,255,255,0.02); }
-    
-    .table-card-mini { display: flex; align-items: center; gap: 10px; }
-    .mini-card-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); background: #000; }
-    .btn-action-table { background: #00b894; color: #000; border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
-    .btn-action-table:hover { background: #55efc4; }
+    .player-list-table th, .player-list-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+    .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; }
+    .mini-card-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); background: #000; }
+    .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
 
-    .upgrade-room { display: grid; grid-template-columns: 280px 1fr; gap: 20px; background: rgba(13, 20, 32, 0.85); border: 1px solid var(--panel-border); border-radius: 12px; padding: 15px; }
-    .upgrade-left-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-    
-    .main-card-slot { width: 150px; height: 210px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 8px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; margin: 10px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; }
-    .card-ovr { font-size: 18px; font-weight: 900; color: var(--accent-gold); }
-    .card-grade { font-size: 11px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 1px 4px; border-radius: 3px; }
-    .card-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; margin: 6px 0; border: 2px solid rgba(255,255,255,0.2); background: #000; }
-    .card-name { font-size: 12px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-
-    .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; margin-bottom: 12px; display: flex; gap: 8px; justify-content: space-between; }
-    .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 5px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; flex: 1; }
-    .btn-quick-buy:hover { background: var(--accent-blue); color: #000; }
-
-    .fodder-selection-box { background: rgba(0,0,0,0.25); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; max-height: 300px; overflow-y: auto; }
+    .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 12px; margin-bottom: 15px; display: flex; gap: 8px; justify-content: space-between; }
+    .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; flex: 1; }
+    .fodder-selection-box { background: rgba(0,0,0,0.25); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; max-height: 280px; overflow-y: auto; }
     .rate-bar-container { background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--panel-border); margin-top: 12px; }
     .btn-upgrade-execute { background: linear-gradient(135deg, #00d2ff, #00ff88); color: #000; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 900; font-size: 14px; cursor: pointer; }
 
+    .quest-item { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); padding: 15px; border-radius: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-claim { background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); color: #000; border: none; padding: 8px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; }
+    .btn-claim:disabled { background: #555; color: #888; cursor: not-allowed; }
+
+    #canvas-container { width: 100%; height: 450px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--panel-border); position: relative; }
+    .controls-hint { position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.7); padding: 10px 15px; border-radius: 8px; font-size: 12px; color: var(--accent-green); pointer-events: none; }
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    .admin-table th, .admin-table td { padding: 8px; border: 1px solid var(--panel-border); text-align: left; font-size: 12px; }
+    .admin-table th, .admin-table td { padding: 10px; border: 1px solid var(--panel-border); text-align: left; font-size: 12px; }
     .admin-table th { background: rgba(255,255,255,0.05); color: var(--accent-green); }
     .btn-action { padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 11px; }
     .btn-edit { background: var(--accent-gold); color: #000; }
@@ -103,8 +129,20 @@
 </head>
 <body>
 
+  <!-- Toast Game -->
   <div id="gameToast">Thông báo game</div>
 
+  <!-- Modal FX Kết Quả Nâng Cấp -->
+  <div id="upgradeEffectModal">
+    <div class="flash-screen" id="flashScreen"></div>
+    <div class="result-box-fx" id="resultBoxFx">
+      <div class="result-title" id="resultTitleFX">THÀNH CÔNG</div>
+      <div class="main-card-slot" id="resultCardSlot" style="margin: 0 auto;"></div>
+      <button class="btn-submit" style="margin-top: 25px; padding: 10px 30px; width: auto;" onclick="closeUpgradeFX()">TIẾP TỤC ÉP THẺ</button>
+    </div>
+  </div>
+
+  <!-- Modal Đăng nhập -->
   <div id="loginModal" class="modal-overlay">
     <div class="auth-box">
       <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
@@ -122,6 +160,7 @@
     </div>
   </div>
 
+  <!-- Header -->
   <header>
     <div class="logo"><i class="fa-solid fa-trophy"></i> FC ONLINE SIMULATOR</div>
     <div class="user-profile">
@@ -131,19 +170,26 @@
     </div>
   </header>
 
+  <!-- Nav -->
   <nav>
-    <button class="nav-btn active" onclick="switchTab('squadTab')">ĐỘI HÌNH MAIN</button>
+    <button class="nav-btn active" onclick="switchTab('squadTab')">ĐỘI HÌNH</button>
     <button class="nav-btn" onclick="switchTab('inventoryTab')">QUẢN LÝ CẦU THỦ</button>
+    <button class="nav-btn" onclick="switchTab('lockerTab')">PHÒNG THAY ĐỒ</button>
     <button class="nav-btn" onclick="switchTab('upgradeTab')">PHÒNG ÉP THẺ</button>
+    <button class="nav-btn" onclick="switchTab('marketTab')">TTCN (CHỢ)</button>
     <button class="nav-btn" onclick="switchTab('packTab')">MỞ GÓI THẺ VIP</button>
-    <button id="adminNavBtn" class="nav-btn admin-btn" style="display:none;" onclick="switchTab('adminTab')"><i class="fa-solid fa-user-gear"></i> QUẢN LÝ ADMIN</button>
+    <button class="nav-btn" onclick="switchTab('questTab')">NHIỆM VỤ (5)</button>
+    <button class="nav-btn" onclick="switchTab('matchTab')">ĐÁ XẾP HẠNG 3D</button>
+    <button id="adminNavBtn" class="nav-btn admin-btn" style="display:none;" onclick="switchTab('adminTab')"><i class="fa-solid fa-user-gear"></i> ADMIN</button>
   </nav>
 
+  <!-- Main Content Areas -->
   <main>
+    <!-- 1. Đội Hình Main -->
     <div id="squadTab" class="tab-content active">
       <div class="squad-container">
         <div>
-          <h2 style="font-size: 14px; margin-bottom: 10px;">Sơ Đồ Đội Hình (4-3-3)</h2>
+          <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Sơ Đồ Đội Hình Chính (4-3-3)</h2>
           <div class="pitch">
             <div class="pitch-line-center"></div>
             <div class="pitch-row">
@@ -169,15 +215,11 @@
         </div>
 
         <div>
-          <h2 style="font-size: 14px; margin-bottom: 10px;">Chọn Cầu Thủ Xếp Vào Đội Hình</h2>
-          <div class="player-table-container" style="max-height: 500px; overflow-y: auto;">
+          <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">Chọn Cầu Thủ Vào Sân</h2>
+          <div class="player-table-container" style="max-height: 520px; overflow-y: auto;">
             <table class="player-list-table">
               <thead>
-                <tr>
-                  <th>Cầu thủ</th>
-                  <th>OVR</th>
-                  <th>Hành động</th>
-                </tr>
+                <tr><th>Cầu thủ</th><th>OVR</th><th>Thao tác</th></tr>
               </thead>
               <tbody id="squadBenchTable"></tbody>
             </table>
@@ -186,37 +228,63 @@
       </div>
     </div>
 
+    <!-- 2. Quản Lý Cầu Thủ -->
     <div id="inventoryTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px;">Danh Sách Kho Cầu Thủ</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Kho Cầu Thủ Cá Nhân</h2>
       <div class="player-table-container">
         <table class="player-list-table">
           <thead>
-            <tr>
-              <th>Cầu Thủ</th>
-              <th>Lương</th>
-              <th>OVR</th>
-              <th>Cấp độ</th>
-              <th>Hành động</th>
-            </tr>
+            <tr><th>Cầu Thủ</th><th>Lương</th><th>OVR</th><th>Cấp độ</th><th>Hành động</th></tr>
           </thead>
           <tbody id="inventoryTableBody"></tbody>
         </table>
       </div>
     </div>
 
+    <!-- 3. Phòng Thay Đồ & Miniface -->
+    <div id="lockerTab" class="tab-content">
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Phòng Thay Đồ - Tùy Chỉnh Miniface & Số Áo</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: var(--panel-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--panel-border);">
+        <div>
+          <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--accent-blue);">1. Chọn Cầu Thủ Cần Chỉnh</h3>
+          <div class="player-table-container" style="max-height: 350px; overflow-y: auto;">
+            <table class="player-list-table">
+              <tbody id="lockerPlayerTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--accent-green);">2. Thay Đổi Thông Tin</h3>
+          <div id="lockerEditor" style="display:none;">
+            <div class="input-group">
+              <label>Đường dẫn Miniface (URL Ảnh PNG):</label>
+              <input type="text" id="lockerImgInput" placeholder="https://...">
+            </div>
+            <div class="input-group">
+              <label>Số Áo:</label>
+              <input type="number" id="lockerNumberInput" min="1" max="99" value="7">
+            </div>
+            <button class="btn-submit" onclick="saveLockerChanges()">LƯU THAY ĐỔI</button>
+          </div>
+          <div id="lockerNotice" style="color: #666; font-size: 12px; text-align: center; margin-top: 100px;">Hãy chọn 1 cầu thủ bên trái để bắt đầu chỉnh sửa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Phòng Ép Thẻ Hoạt Ảnh HOÀNH TRÁNG -->
     <div id="upgradeTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px;">Phòng Nâng Cấp Thẻ & Ép Thẻ</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Phòng Nâng Cấp Thẻ & Ép Thẻ</h2>
       <div class="upgrade-room">
         <div class="upgrade-left-panel">
           <h3 style="font-size: 12px; color: #aaa;">Cầu Thủ Chính</h3>
-          <div id="mainUpgradeSlot">
+          <div id="mainUpgradeSlot" class="main-card-slot">
             <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Chưa chọn thẻ chính</div>
           </div>
           <button class="btn-submit" style="background: var(--accent-red); color: #fff; font-size: 11px; padding: 6px;" onclick="switchTab('inventoryTab')">Chọn từ Kho</button>
         </div>
 
         <div>
-          <h3 style="font-size: 12px; color: #aaa; margin-bottom: 6px;">Mua Phôi Nhanh (Cộng thẳng vào kho)</h3>
+          <h3 style="font-size: 12px; color: #aaa; margin-bottom: 6px;">Mua Phôi Nhanh</h3>
           <div class="quick-fodder-shop">
             <button class="btn-quick-buy" onclick="buyQuickFodder(100)">Phôi 100 (0.1B)</button>
             <button class="btn-quick-buy" onclick="buyQuickFodder(110)">Phôi 110 (2B)</button>
@@ -234,31 +302,70 @@
               <span style="font-size: 11px; color: #aaa;">Tỷ lệ thành công:</span>
               <div id="successRateText" style="font-size: 20px; font-weight: bold; color: var(--accent-green);">0%</div>
             </div>
-            <button class="btn-upgrade-execute" onclick="executeUpgrade()">NÂNG CẤP</button>
+            <button class="btn-upgrade-execute" id="btnExecuteUpgrade" onclick="startUpgradeAnimation()">NÂNG CẤP</button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- 5. TTCN -->
+    <div id="marketTab" class="tab-content">
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">Thị Trường Chuyển Nhượng (TTCN)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <h3 style="font-size: 12px; color: #aaa; margin-bottom: 8px;">Cầu Thủ Ra Rao Bán</h3>
+          <div class="player-table-container">
+            <table class="player-list-table">
+              <thead><tr><th>Cầu thủ</th><th>Giá niêm yết</th><th>Hành động</th></tr></thead>
+              <tbody id="marketListTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size: 12px; color: #aaa; margin-bottom: 8px;">Cầu Thủ Trong Kho (Bán kiếm BP)</h3>
+          <div class="player-table-container">
+            <table class="player-list-table">
+              <thead><tr><th>Cầu thủ</th><th>OVR</th><th>Bán</th></tr></thead>
+              <tbody id="myMarketTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Mở Gói Thẻ VIP -->
     <div id="packTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px;">Mở Gói Cầu Thủ VIP</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Mở Gói Cầu Thủ VIP</h2>
       <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-submit" style="width: auto; padding: 8px 18px;" onclick="openPacks(1)">Mở x1</button>
-        <button class="btn-submit" style="width: auto; padding: 8px 18px; background: linear-gradient(135deg, #00d2ff, #0055ff);" onclick="openPacks(10)">Mở x10</button>
+        <button class="btn-submit" style="width: auto; padding: 8px 18px;" onclick="openPacks(1)">Mở x1 (Free)</button>
+        <button class="btn-submit" style="width: auto; padding: 8px 18px; background: linear-gradient(135deg, #00d2ff, #0055ff);" onclick="openPacks(10)">Mở x10 (Free)</button>
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;" id="packResultGrid"></div>
     </div>
 
+    <!-- 7. Nhiệm Vụ -->
+    <div id="questTab" class="tab-content">
+      <h2 style="font-size: 14px; margin-bottom: 12px; color: var(--accent-green);">Nhiệm Vụ Hàng Ngày (Nhận thưởng 1 lần)</h2>
+      <div id="questContainer"></div>
+    </div>
+
+    <!-- 8. Đá Xếp Hạng 3D -->
+    <div id="matchTab" class="tab-content">
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Đá Xếp Hạng Mô Phỏng 3D</h2>
+      <div id="canvas-container">
+        <div class="controls-hint"><i class="fa-solid fa-gamepad"></i> Phím: [WASD]: Di chuyển | [S]: Chuyền | [D]: Sút</div>
+      </div>
+      <div style="margin-top: 10px;">
+        <button class="btn-submit" style="width: auto; padding: 8px 18px;" onclick="start3DMatch()">Bắt Đầu Trận Đấu</button>
+      </div>
+    </div>
+
+    <!-- 9. Admin Panel -->
     <div id="adminTab" class="tab-content">
       <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Bảng Quản Lý Admin</h2>
       <table class="admin-table">
         <thead>
-          <tr>
-            <th>Người Chơi</th>
-            <th>BP</th>
-            <th>Thẻ</th>
-            <th>Hành Động</th>
-          </tr>
+          <tr><th>Người Chơi</th><th>BP</th><th>Thẻ</th><th>Hành Động</th></tr>
         </thead>
         <tbody id="adminUserTable"></tbody>
       </table>
@@ -267,7 +374,7 @@
 
   <script>
     const firebaseConfig = {
-       apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
+      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
       authDomain: "fc-online-simulator.firebaseapp.com",
       databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
       projectId: "fc-online-simulator",
@@ -280,9 +387,8 @@
     const db = firebase.database();
 
     const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "123";
+    const ADMIN_PASSWORD = "1234";
     const INITIAL_BP = 100000000000;
-
     const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
 
     const playerDatabase = [
@@ -296,18 +402,26 @@
       { name: "Pelé", img: "https://media.fifacm.com/24/players/190042.png", salary: 28 }
     ];
 
+    const questsData = [
+      { id: 1, title: "1. Đăng nhập game thành công", reward: 10000000000 },
+      { id: 2, title: "2. Mở 1 gói cầu thủ VIP", reward: 20000000000 },
+      { id: 3, title: "3. Thực hiện 1 lần nâng cấp ép thẻ", reward: 30000000000 },
+      { id: 4, title: "4. Mua 1 cầu thủ trên TTCN", reward: 50000000000 },
+      { id: 5, title: "5. Tham gia 1 trận đá Xếp hạng 3D", reward: 100000000000 }
+    ];
+
     let currentUser = null;
-    let userData = { bp: INITIAL_BP, inventory: [], squad: {} };
+    let userData = { bp: INITIAL_BP, inventory: [], squad: {}, quests: {} };
     let selectedMainIndex = null;
     let selectedFodderIndices = [];
+    let selectedLockerIndex = null;
 
-    // H hàm tính chỉ số OVR theo cấp độ thẻ chuẩn yêu cầu
     function calculateOvr(baseOvr, grade) {
       let extra = 0;
       if (grade === 2 || grade === 3) extra = 1;
       else if (grade >= 4 && grade <= 6) extra = 2;
       else if (grade === 7) extra = 3;
-      else if (grade >= 8) extra = 4 + (grade - 8); // Mở rộng cho +9, +10 nếu có
+      else if (grade >= 8) extra = 4 + (grade - 8);
       return baseOvr + extra;
     }
 
@@ -351,14 +465,17 @@
           userData = data;
           if (!userData.inventory) userData.inventory = [];
           if (!userData.squad) userData.squad = {};
+          if (!userData.quests) userData.quests = {};
           if (userData.bp === undefined) {
             userData.bp = INITIAL_BP;
             saveDataOnline();
           }
         } else {
-          userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {} };
+          userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, quests: {} };
           saveDataOnline();
         }
+        
+        userData.quests[1] = userData.quests[1] || 'ready';
         updateUI();
       });
     }
@@ -371,6 +488,9 @@
       renderInventoryTable();
       renderSquad();
       renderSquadBench();
+      renderLocker();
+      renderQuests();
+      renderMarket();
     }
 
     function switchTab(tabId) {
@@ -381,39 +501,7 @@
       if (tabId === 'upgradeTab') renderFodderSelection();
     }
 
-    function renderInventoryTable() {
-      const tbody = document.getElementById('inventoryTableBody');
-      tbody.innerHTML = '';
-      if (!userData.inventory || userData.inventory.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #666;">Kho trống...</td></tr>`;
-        return;
-      }
-
-      userData.inventory.forEach((item, index) => {
-        const currentGrade = item.grade || 1;
-        const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
-        tbody.innerHTML += `
-          <tr>
-            <td>
-              <div class="table-card-mini">
-                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
-                <div>
-                  <div style="font-weight: bold; color: #fff;">${item.name}</div>
-                  <div style="font-size: 10px; color: #aaa;">Lương: ${item.salary || 20}</div>
-                </div>
-              </div>
-            </td>
-            <td>${item.salary || 20}</td>
-            <td style="color: var(--accent-gold); font-weight: bold;">${currentOvr}</td>
-            <td><span class="card-grade">+${currentGrade}</span></td>
-            <td>
-              <button class="btn-action-table" onclick="selectMainCard(${index})">Chuyển ép thẻ</button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
+    /* Đội Hình */
     function renderSquad() {
       for (let i = 0; i < 11; i++) {
         const slotEl = document.getElementById(`slot-${i}`);
@@ -444,7 +532,7 @@
         tbody.innerHTML += `
           <tr>
             <td>
-              <div class="table-card-mini">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
                 <div>${item.name} (+${currentGrade})</div>
               </div>
@@ -464,11 +552,11 @@
           userData.inventory.splice(invIndex, 1);
           saveDataOnline();
           updateUI();
-          showToast("Đã thêm cầu thủ vào sơ đồ!");
+          showToast("Đã xếp cầu thủ vào sân!");
           return;
         }
       }
-      showToast("Đội hình đã đầy 11 cầu thủ!");
+      showToast("Đội hình đã đầy!");
     }
 
     function removeFromSquad(slotIndex) {
@@ -477,10 +565,85 @@
         delete userData.squad[slotIndex];
         saveDataOnline();
         updateUI();
-        showToast("Đã rút cầu thủ về kho!");
+        showToast("Đã đưa cầu thủ về kho!");
       }
     }
 
+    /* Quản Lý Kho */
+    function renderInventoryTable() {
+      const tbody = document.getElementById('inventoryTableBody');
+      tbody.innerHTML = '';
+      if (!userData.inventory || userData.inventory.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #666;">Kho trống...</td></tr>`;
+        return;
+      }
+
+      userData.inventory.forEach((item, index) => {
+        const currentGrade = item.grade || 1;
+        const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
+                <div>
+                  <div style="font-weight: bold; color: #fff;">${item.name}</div>
+                  <div style="font-size: 10px; color: #aaa;">Lương: ${item.salary || 20}</div>
+                </div>
+              </div>
+            </td>
+            <td>${item.salary || 20}</td>
+            <td style="color: var(--accent-gold); font-weight: bold;">${currentOvr}</td>
+            <td><span class="card-grade">+${currentGrade}</span></td>
+            <td>
+              <button class="btn-action-table" onclick="selectMainCard(${index})">Ép Thẻ</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    /* Phòng Thay Đồ */
+    function renderLocker() {
+      const tbody = document.getElementById('lockerPlayerTable');
+      tbody.innerHTML = '';
+      if (!userData.inventory) return;
+
+      userData.inventory.forEach((item, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
+                <div><strong>${item.name}</strong> (#${item.number || 7})</div>
+              </div>
+            </td>
+            <td><button class="btn-action-table" onclick="selectLockerPlayer(${index})">Chỉnh sửa</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    function selectLockerPlayer(index) {
+      selectedLockerIndex = index;
+      const player = userData.inventory[index];
+      document.getElementById('lockerImgInput').value = player.img || '';
+      document.getElementById('lockerNumberInput').value = player.number || 7;
+      document.getElementById('lockerEditor').style.display = 'block';
+      document.getElementById('lockerNotice').style.display = 'none';
+    }
+
+    function saveLockerChanges() {
+      if (selectedLockerIndex === null || !userData.inventory[selectedLockerIndex]) return;
+      const player = userData.inventory[selectedLockerIndex];
+      player.img = document.getElementById('lockerImgInput').value.trim() || defaultFodderImg;
+      player.number = parseInt(document.getElementById('lockerNumberInput').value) || 7;
+      saveDataOnline();
+      updateUI();
+      showToast("Lưu chỉnh sửa thành công!");
+    }
+
+    /* ÉP THẺ & HOẠT ẢNH HOÀNH TRÁNG */
     function buyQuickFodder(ovr) {
       const priceMap = { 100: 100000000, 110: 2000000000, 120: 50000000000, 135: 3000000000000 };
       const cost = priceMap[ovr];
@@ -562,11 +725,28 @@
       document.getElementById('successRateText').innerText = totalRate + "%";
     }
 
-    function executeUpgrade() {
+    /* Bắt đầu Chuỗi Hoạt Ảnh Ép Thẻ */
+    function startUpgradeAnimation() {
       if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
         showToast("Chưa chọn thẻ chính!");
         return;
       }
+
+      const mainCardSlot = document.getElementById('mainUpgradeSlot');
+      const btn = document.getElementById('btnExecuteUpgrade');
+      btn.disabled = true;
+
+      // 1. Thẻ rung lắc phát sáng
+      mainCardSlot.classList.add('shaking');
+
+      setTimeout(() => {
+        mainCardSlot.classList.remove('shaking');
+        btn.disabled = false;
+        executeUpgradeLogic();
+      }, 2000); // Rung 2 giây rồi nổ kết quả
+    }
+
+    function executeUpgradeLogic() {
       const mainCard = userData.inventory[selectedMainIndex];
       const baseRate = Math.max(10, 100 - ((mainCard.grade || 1) * 12));
       const totalRate = Math.min(100, baseRate + (selectedFodderIndices.length * 15));
@@ -577,38 +757,147 @@
       selectedFodderIndices.forEach(idx => userData.inventory.splice(idx, 1));
 
       const currentMainIndex = userData.inventory.indexOf(mainCard);
+      let isSuccess = false;
 
       if (roll <= totalRate) {
         mainCard.grade = (mainCard.grade || 1) + 1;
-        showToast(`🎉 Ép thành công lên +${mainCard.grade}!`);
+        isSuccess = true;
       } else {
-        if (currentMainIndex > -1) userData.inventory.splice(currentMainIndex, 1);
-        showToast("💥 Ép thất bại! Cầu thủ đã bị cháy.");
+        if ((mainCard.grade || 1) > 1) mainCard.grade -= 1;
+        isSuccess = false;
       }
 
+      userData.quests[3] = userData.quests[3] || 'ready';
       saveDataOnline();
       updateUI();
 
-      if (roll <= totalRate && currentMainIndex > -1) {
-        selectedMainIndex = currentMainIndex;
-        selectedFodderIndices = [];
-        const newGrade = mainCard.grade;
-        const newOvr = calculateOvr(mainCard.baseOvr || mainCard.ovr, newGrade);
-        document.getElementById('mainUpgradeSlot').innerHTML = `
-          <div class="card-top"><span class="card-ovr">${newOvr}</span><span class="card-grade">+${newGrade}</span></div>
-          <img class="card-img" src="${mainCard.img || defaultFodderImg}">
-          <div class="card-name">${mainCard.name}</div>
-        `;
-        renderFodderSelection();
+      // Giữ nguyên vị trí thẻ để ép tiếp
+      selectedMainIndex = currentMainIndex;
+      selectedFodderIndices = [];
+
+      // Hiển thị Màn Hình Kết Quả Lóe Sáng
+      showUpgradeFX(mainCard, isSuccess);
+    }
+
+    function showUpgradeFX(card, isSuccess) {
+      const modal = document.getElementById('upgradeEffectModal');
+      const flash = document.getElementById('flashScreen');
+      const resultBox = document.getElementById('resultBoxFx');
+      const resultTitle = document.getElementById('resultTitleFX');
+      const slot = document.getElementById('resultCardSlot');
+
+      const currentGrade = card.grade || 1;
+      const currentOvr = calculateOvr(card.baseOvr || card.ovr, currentGrade);
+
+      modal.style.display = 'flex';
+      
+      // Flash sáng trắng
+      flash.style.opacity = '1';
+      setTimeout(() => { flash.style.opacity = '0'; }, 300);
+
+      if (isSuccess) {
+        resultTitle.innerText = "NÂNG CẤP THÀNH CÔNG";
+        resultTitle.style.color = "var(--accent-green)";
       } else {
-        selectedMainIndex = null;
-        selectedFodderIndices = [];
-        document.getElementById('mainUpgradeSlot').innerHTML = `<div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Chưa chọn thẻ chính</div>`;
-        document.getElementById('successRateText').innerText = "0%";
+        resultTitle.innerText = "NÂNG CẤP THẤT BẠI";
+        resultTitle.style.color = "var(--accent-red)";
+      }
+
+      slot.innerHTML = `
+        <div class="card-top"><span class="card-ovr">${currentOvr}</span><span class="card-grade">+${currentGrade}</span></div>
+        <img class="card-img" src="${card.img || defaultFodderImg}">
+        <div class="card-name">${card.name}</div>
+      `;
+
+      setTimeout(() => {
+        resultBox.classList.add('show');
+      }, 200);
+    }
+
+    function closeUpgradeFX() {
+      const modal = document.getElementById('upgradeEffectModal');
+      const resultBox = document.getElementById('resultBoxFx');
+      resultBox.classList.remove('show');
+      modal.style.display = 'none';
+
+      // Load lại khung ép thẻ chính
+      if (selectedMainIndex !== null && userData.inventory[selectedMainIndex]) {
+        const card = userData.inventory[selectedMainIndex];
+        const currentGrade = card.grade || 1;
+        const currentOvr = calculateOvr(card.baseOvr || card.ovr, currentGrade);
+        document.getElementById('mainUpgradeSlot').innerHTML = `
+          <div class="card-top"><span class="card-ovr">${currentOvr}</span><span class="card-grade">+${currentGrade}</span></div>
+          <img class="card-img" src="${card.img || defaultFodderImg}">
+          <div class="card-name">${card.name}</div>
+        `;
         renderFodderSelection();
       }
     }
 
+    /* TTCN */
+    function renderMarket() {
+      const items = [
+        { id: 'm1', name: "K. De Bruyne", ovr: 132, price: 50000000000, img: "https://media.fifacm.com/24/players/192985.png" },
+        { id: 'm2', name: "V. van Dijk", ovr: 130, price: 40000000000, img: "https://media.fifacm.com/24/players/203376.png" }
+      ];
+
+      const tbodyMarket = document.getElementById('marketListTable');
+      tbodyMarket.innerHTML = '';
+      items.forEach(item => {
+        tbodyMarket.innerHTML += `
+          <tr>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img class="mini-card-avatar" src="${item.img}">
+                <div><strong>${item.name}</strong> (OVR ${item.ovr})</div>
+              </div>
+            </td>
+            <td style="color: var(--accent-gold);">${(item.price / 1e9).toFixed(0)} Tỷ BP</td>
+            <td><button class="btn-action-table" onclick="buyFromMarket('${item.name}', ${item.ovr}, ${item.price}, '${item.img}')">Mua</button></td>
+          </tr>
+        `;
+      });
+
+      const tbodyMy = document.getElementById('myMarketTable');
+      tbodyMy.innerHTML = '';
+      if (userData.inventory) {
+        userData.inventory.forEach((item, index) => {
+          const currentGrade = item.grade || 1;
+          const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
+          const sellPrice = currentOvr * 1000000000;
+          tbodyMy.innerHTML += `
+            <tr>
+              <td>${item.name} (+${currentGrade})</td>
+              <td style="color: var(--accent-gold);">${currentOvr}</td>
+              <td><button class="btn-action-table" style="background:var(--accent-gold);" onclick="sellToMarket(${index}, ${sellPrice})">Bán ${(sellPrice/1e9).toFixed(1)}B</button></td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function buyFromMarket(name, ovr, price, img) {
+      if (userData.bp < price) {
+        showToast("Không đủ BP!");
+        return;
+      }
+      userData.bp -= price;
+      userData.inventory.push({ id: Date.now() + Math.random(), name: name, baseOvr: ovr, ovr: ovr, grade: 1, img: img, salary: 25 });
+      userData.quests[4] = userData.quests[4] || 'ready';
+      saveDataOnline();
+      updateUI();
+      showToast(`Đã mua ${name}!`);
+    }
+
+    function sellToMarket(index, price) {
+      userData.bp += price;
+      userData.inventory.splice(index, 1);
+      saveDataOnline();
+      updateUI();
+      showToast(`Bán thu về ${(price/1e9).toFixed(1)} Tỷ BP!`);
+    }
+
+    /* Gói Thẻ */
     function openPacks(count) {
       const resultGrid = document.getElementById('packResultGrid');
       resultGrid.innerHTML = '';
@@ -618,15 +907,7 @@
         const randPlayer = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
         const randOvr = Math.floor(Math.random() * (135 - 100 + 1)) + 100;
         
-        userData.inventory.push({ 
-          id: Date.now() + Math.random(), 
-          name: randPlayer.name, 
-          baseOvr: randOvr, 
-          ovr: randOvr, 
-          grade: 1, 
-          img: randPlayer.img, 
-          salary: randPlayer.salary 
-        });
+        userData.inventory.push({ id: Date.now() + Math.random(), name: randPlayer.name, baseOvr: randOvr, ovr: randOvr, grade: 1, img: randPlayer.img, salary: randPlayer.salary });
         
         resultGrid.innerHTML += `
           <div class="main-card-slot" style="width: 110px; height: 160px; margin: 0;">
@@ -636,11 +917,110 @@
           </div>
         `;
       }
+
+      userData.quests[2] = userData.quests[2] || 'ready';
       saveDataOnline();
       updateUI();
       showToast(`Đã mở ${count} gói!`);
     }
 
+    /* Nhiệm Vụ */
+    function renderQuests() {
+      const container = document.getElementById('questContainer');
+      container.innerHTML = '';
+
+      questsData.forEach(q => {
+        const status = userData.quests ? userData.quests[q.id] : null;
+        let btnText = "Chưa hoàn thành";
+        let disabled = true;
+
+        if (status === 'ready') {
+          btnText = "Nhận Thưởng";
+          disabled = false;
+        } else if (status === 'claimed') {
+          btnText = "Đã Nhận";
+          disabled = true;
+        }
+
+        container.innerHTML += `
+          <div class="quest-item">
+            <div>
+              <div style="font-weight: bold; font-size: 13px;">${q.title}</div>
+              <div style="font-size: 11px; color: var(--accent-gold);">Phần thưởng: ${(q.reward / 1e9).toFixed(0)} Tỷ BP</div>
+            </div>
+            <button class="btn-claim" ${disabled ? 'disabled' : ''} onclick="claimQuest(${q.id}, ${q.reward})">${btnText}</button>
+          </div>
+        `;
+      });
+    }
+
+    function claimQuest(questId, reward) {
+      if (userData.quests[questId] === 'ready') {
+        userData.bp += reward;
+        userData.quests[questId] = 'claimed';
+        saveDataOnline();
+        updateUI();
+        showToast(`🎉 Đã nhận ${(reward / 1e9).toFixed(0)} Tỷ BP!`);
+      }
+    }
+
+    /* Đá 3D */
+    let matchInit = false;
+    function start3DMatch() {
+      showToast("Trận đấu 3D bắt đầu!");
+      userData.quests[5] = userData.quests[5] || 'ready';
+      saveDataOnline();
+      updateUI();
+
+      if (matchInit) return;
+      matchInit = true;
+
+      const container = document.getElementById('canvas-container');
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a192f);
+
+      const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      const pitchGeo = new THREE.PlaneGeometry(100, 60);
+      const pitchMat = new THREE.MeshBasicMaterial({ color: 0x1e4620 });
+      const pitchMesh = new THREE.Mesh(pitchGeo, pitchMat);
+      pitchMesh.rotation.x = -Math.PI / 2;
+      scene.add(pitchMesh);
+
+      const ballGeo = new THREE.SphereGeometry(1, 16, 16);
+      const ballMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const ball = new THREE.Mesh(ballGeo, ballMat);
+      ball.position.y = 1;
+      scene.add(ball);
+
+      const playerGeo = new THREE.CylinderGeometry(1, 1, 3, 16);
+      const playerMat = new THREE.MeshBasicMaterial({ color: 0x00d2ff });
+      const player = new THREE.Mesh(playerGeo, playerMat);
+      player.position.set(0, 1.5, 10);
+      scene.add(player);
+
+      camera.position.set(0, 35, 45);
+      camera.lookAt(0, 0, 0);
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'w' || e.key === 'W') player.position.z -= 1;
+        if (e.key === 's' || e.key === 'S') player.position.z += 1;
+        if (e.key === 'a' || e.key === 'A') player.position.x -= 1;
+        if (e.key === 'd' || e.key === 'D') player.position.x += 1;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        ball.rotation.y += 0.02;
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+
+    /* Admin */
     function listenToAllUsers() {
       db.ref('users').on('value', (snapshot) => {
         const users = snapshot.val();
