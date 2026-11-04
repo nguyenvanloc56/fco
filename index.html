@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Big Miniface & All Seasons</title>
+  <title>FC Online Simulator - Dynamic Squad & Arrow Controls</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -54,7 +54,7 @@
     .input-group input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--panel-border); background: rgba(0,0,0,0.6); color: #fff; outline: none; font-size: 13px; }
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 13px; color: #000; cursor: pointer; }
 
-    /* KHUNG THẺ CẦU THỦ VỚI MINIFACE TO RÕ */
+    /* Ép Thẻ UI */
     .upgrade-room { display: grid; grid-template-columns: 290px 1fr; gap: 20px; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 14px; padding: 20px; position: relative; }
     .upgrade-left-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
     
@@ -64,10 +64,8 @@
     .card-season { font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; color: #000; text-transform: uppercase; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     .card-grade { font-size: 11px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 1px 5px; border-radius: 3px; }
     
-    /* Miniface Phóng To Chuẩn FC Online */
     .card-img-container { width: 100%; height: 130px; display: flex; justify-content: center; align-items: center; margin: 5px 0; position: relative; }
-    .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); transition: transform 0.2s ease; }
-    .card-img:hover { transform: scale(1.08); }
+    .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
 
     .card-name { font-size: 13px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
@@ -87,15 +85,17 @@
     .result-box-fx.show { transform: scale(1.2); opacity: 1; }
     .result-title { font-size: 32px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
 
-    /* Bảng Đội Hình & Kho Cầu Thủ */
+    /* Layout Sân Cỏ & Đội Hình Linh Hoạt */
     .squad-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-    .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 520px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
+    .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 530px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
     .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.15); transform: translateY(-50%); }
     .pitch-row { display: flex; justify-content: space-around; width: 100%; z-index: 2; }
-    .pitch-slot { width: 80px; height: 100px; background: rgba(0,0,0,0.45); border: 1px dashed rgba(255,255,255,0.3); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .pitch-slot img { width: 55px; height: 55px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+    .pitch-slot { width: 85px; height: 105px; background: rgba(0,0,0,0.5); border: 1px dashed rgba(255,255,255,0.3); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; }
+    .pitch-slot:hover { border-color: var(--accent-green); background: rgba(0,255,136,0.15); }
+    .pitch-slot img { width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
     .pitch-slot .p-name { font-size: 10px; font-weight: bold; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; color: #fff; margin-top: 2px; }
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
+    .pos-select { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.8); color: var(--accent-green); border: 1px solid var(--accent-green); font-size: 9px; font-weight: bold; border-radius: 3px; outline: none; cursor: pointer; padding: 1px; }
 
     .player-table-container { background: rgba(13, 20, 32, 0.85); border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; }
     .player-list-table { width: 100%; border-collapse: collapse; }
@@ -119,7 +119,7 @@
     .btn-claim:disabled { background: #555; color: #888; cursor: not-allowed; }
 
     #canvas-container { width: 100%; height: 450px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--panel-border); position: relative; }
-    .controls-hint { position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.7); padding: 10px 15px; border-radius: 8px; font-size: 12px; color: var(--accent-green); pointer-events: none; }
+    .controls-hint { position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.85); padding: 12px 18px; border-radius: 8px; font-size: 12px; color: var(--accent-green); pointer-events: none; border: 1px solid var(--accent-green); }
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
     .admin-table th, .admin-table td { padding: 10px; border: 1px solid var(--panel-border); text-align: left; font-size: 12px; }
     .admin-table th { background: rgba(255,255,255,0.05); color: var(--accent-green); }
@@ -186,31 +186,31 @@
 
   <!-- Main Content Areas -->
   <main>
-    <!-- 1. Đội Hình Main -->
+    <!-- 1. Đội Hình Main (Tùy chỉnh vị trí linh hoạt) -->
     <div id="squadTab" class="tab-content active">
       <div class="squad-container">
         <div>
-          <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Sơ Đồ Đội Hình Chính (4-3-3)</h2>
+          <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Sơ Đồ Đội Hình Linh Hoạt (Chỉnh vị trí tùy ý)</h2>
           <div class="pitch">
             <div class="pitch-line-center"></div>
             <div class="pitch-row">
-              <div class="pitch-slot" onclick="removeFromSquad(0)" id="slot-0"><span style="font-size:10px; color:#aaa;">LW</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(1)" id="slot-1"><span style="font-size:10px; color:#aaa;">ST</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(2)" id="slot-2"><span style="font-size:10px; color:#aaa;">RW</span></div>
+              <div class="pitch-slot" id="slot-0"><select class="pos-select" onchange="changeSlotPos(0, this.value)"><option value="LW">LW</option><option value="ST">ST</option><option value="RW">RW</option><option value="CAM">CAM</option><option value="LM">LM</option></select><div onclick="removeFromSquad(0)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-0"></div></div>
+              <div class="pitch-slot" id="slot-1"><select class="pos-select" onchange="changeSlotPos(1, this.value)"><option value="ST">ST</option><option value="CF">CF</option><option value="LW">LW</option><option value="RW">RW</option></select><div onclick="removeFromSquad(1)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-1"></div></div>
+              <div class="pitch-slot" id="slot-2"><select class="pos-select" onchange="changeSlotPos(2, this.value)"><option value="RW">RW</option><option value="ST">ST</option><option value="LW">LW</option><option value="CAM">CAM</option><option value="RM">RM</option></select><div onclick="removeFromSquad(2)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-2"></div></div>
             </div>
             <div class="pitch-row">
-              <div class="pitch-slot" onclick="removeFromSquad(3)" id="slot-3"><span style="font-size:10px; color:#aaa;">CAM</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(4)" id="slot-4"><span style="font-size:10px; color:#aaa;">CM</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(5)" id="slot-5"><span style="font-size:10px; color:#aaa;">CDM</span></div>
+              <div class="pitch-slot" id="slot-3"><select class="pos-select" onchange="changeSlotPos(3, this.value)"><option value="CAM">CAM</option><option value="CM">CM</option><option value="LM">LM</option><option value="RM">RM</option></select><div onclick="removeFromSquad(3)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-3"></div></div>
+              <div class="pitch-slot" id="slot-4"><select class="pos-select" onchange="changeSlotPos(4, this.value)"><option value="CM">CM</option><option value="CAM">CAM</option><option value="CDM">CDM</option></select><div onclick="removeFromSquad(4)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-4"></div></div>
+              <div class="pitch-slot" id="slot-5"><select class="pos-select" onchange="changeSlotPos(5, this.value)"><option value="CDM">CDM</option><option value="CM">CM</option><option value="CB">CB</option></select><div onclick="removeFromSquad(5)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-5"></div></div>
             </div>
             <div class="pitch-row">
-              <div class="pitch-slot" onclick="removeFromSquad(6)" id="slot-6"><span style="font-size:10px; color:#aaa;">LB</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(7)" id="slot-7"><span style="font-size:10px; color:#aaa;">CB</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(8)" id="slot-8"><span style="font-size:10px; color:#aaa;">CB</span></div>
-              <div class="pitch-slot" onclick="removeFromSquad(9)" id="slot-9"><span style="font-size:10px; color:#aaa;">RB</span></div>
+              <div class="pitch-slot" id="slot-6"><select class="pos-select" onchange="changeSlotPos(6, this.value)"><option value="LB">LB</option><option value="LWB">LWB</option><option value="CB">CB</option></select><div onclick="removeFromSquad(6)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-6"></div></div>
+              <div class="pitch-slot" id="slot-7"><select class="pos-select" onchange="changeSlotPos(7, this.value)"><option value="CB">CB</option><option value="CDM">CDM</option><option value="RB">RB</option></select><div onclick="removeFromSquad(7)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-7"></div></div>
+              <div class="pitch-slot" id="slot-8"><select class="pos-select" onchange="changeSlotPos(8, this.value)"><option value="CB">CB</option><option value="CDM">CDM</option><option value="LB">LB</option></select><div onclick="removeFromSquad(8)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-8"></div></div>
+              <div class="pitch-slot" id="slot-9"><select class="pos-select" onchange="changeSlotPos(9, this.value)"><option value="RB">RB</option><option value="RWB">RWB</option><option value="CB">CB</option></select><div onclick="removeFromSquad(9)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-9"></div></div>
             </div>
             <div class="pitch-row">
-              <div class="pitch-slot" onclick="removeFromSquad(10)" id="slot-10"><span style="font-size:10px; color:#aaa;">GK</span></div>
+              <div class="pitch-slot" id="slot-10"><select class="pos-select" onchange="changeSlotPos(10, this.value)"><option value="GK">GK</option></select><div onclick="removeFromSquad(10)" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;" id="slot-inner-10"></div></div>
             </div>
           </div>
         </div>
@@ -351,11 +351,11 @@
       <div id="questContainer"></div>
     </div>
 
-    <!-- 8. Đá Xếp Hạng 3D -->
+    <!-- 8. Đá Xếp Hạng 3D (Hỗ trợ phím Điều Hướng & WASD) -->
     <div id="matchTab" class="tab-content">
       <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Đá Xếp Hạng Mô Phỏng 3D</h2>
       <div id="canvas-container">
-        <div class="controls-hint"><i class="fa-solid fa-gamepad"></i> Phím: [WASD]: Di chuyển | [S]: Chuyền | [D]: Sút</div>
+        <div class="controls-hint"><i class="fa-solid fa-gamepad"></i> Điều khiển: [WASD] hoặc [Phím Mũi Tên $\leftarrow \uparrow \rightarrow \downarrow$]: Di chuyển | [S]: Chuyền | [D]: Sút</div>
       </div>
       <div style="margin-top: 10px;">
         <button class="btn-submit" style="width: auto; padding: 8px 18px;" onclick="start3DMatch()">Bắt Đầu Trận Đấu</button>
@@ -376,25 +376,23 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
-      authDomain: "fc-online-simulator.firebaseapp.com",
-      databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
-      projectId: "fc-online-simulator",
-      storageBucket: "fc-online-simulator.firebasestorage.app",
-      messagingSenderId: "220897790682",
-      appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
-
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "1234";
+    const ADMIN_PASSWORD = "123";
     const INITIAL_BP = 100000000000;
     const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
 
-    // Danh sách 12 Mùa Thẻ FC Online chuẩn
     const seasonDatabase = [
       { code: "ICON", name: "ICON", color: "#ffb700", ovrBoost: 8 },
       { code: "IPRM", name: "IPRM", color: "#00d2ff", ovrBoost: 7 },
@@ -410,8 +408,7 @@
       { code: "NORM", name: "NORM", color: "#adb5bd", ovrBoost: 0 }
     ];
 
-    // Cầu Thủ & Miniface To Rõ
-    const playerDatabase = [
+ const playerDatabase = [
       { name: "C. Ronaldo", img: "https://s1.fifaaddict.com/fo4/players/zllarwzny.png?20210828", salary: 26 },
       { name: "L. Messi", img: "https://s1.fifaaddict.com/fo4/players/njqpggqmj.png?20210828", salary: 26 },
       { name: "K. Mbappé", img: "https://s1.fifaaddict.com/fo4/players/dydgollwn.png?20210828", salary: 25 },
@@ -435,7 +432,7 @@
     ];
 
     let currentUser = null;
-    let userData = { bp: INITIAL_BP, inventory: [], squad: {}, quests: {} };
+    let userData = { bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {}, quests: {} };
     let selectedMainIndex = null;
     let selectedFodderIndices = [];
     let selectedLockerIndex = null;
@@ -491,13 +488,14 @@
           userData = data;
           if (!userData.inventory) userData.inventory = [];
           if (!userData.squad) userData.squad = {};
+          if (!userData.slotPositions) userData.slotPositions = {};
           if (!userData.quests) userData.quests = {};
           if (userData.bp === undefined) {
             userData.bp = INITIAL_BP;
             saveDataOnline();
           }
         } else {
-          userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, quests: {} };
+          userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {}, quests: {} };
           saveDataOnline();
         }
         
@@ -527,24 +525,35 @@
       if (tabId === 'upgradeTab') renderFodderSelection();
     }
 
-    /* Đội Hình */
+    /* Đội Hình Linh Hoạt */
     function renderSquad() {
+      const defaultPositions = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "CB", "RB", "GK"];
+      
       for (let i = 0; i < 11; i++) {
-        const slotEl = document.getElementById(`slot-${i}`);
+        const slotInner = document.getElementById(`slot-inner-${i}`);
         const p = userData.squad ? userData.squad[i] : null;
+        const currentPos = (userData.slotPositions && userData.slotPositions[i]) ? userData.slotPositions[i] : defaultPositions[i];
+
         if (p) {
           const currentGrade = p.grade || 1;
           const currentOvr = calculateOvr(p.baseOvr || p.ovr, currentGrade);
-          slotEl.innerHTML = `
+          slotInner.innerHTML = `
             <img src="${p.img || defaultFodderImg}" loading="lazy">
             <div class="p-name">${p.name}</div>
             <div class="p-ovr">${currentOvr} (+${currentGrade})</div>
           `;
         } else {
-          const posNames = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "CB", "RB", "GK"];
-          slotEl.innerHTML = `<span style="font-size:10px; color:#aaa;">${posNames[i]}</span>`;
+          slotInner.innerHTML = `<span style="font-size:10px; color:#aaa; margin-top:15px;">${currentPos}</span>`;
         }
       }
+    }
+
+    function changeSlotPos(slotIndex, newPos) {
+      if (!userData.slotPositions) userData.slotPositions = {};
+      userData.slotPositions[slotIndex] = newPos;
+      saveDataOnline();
+      renderSquad();
+      showToast(`Đã đổi vị trí slot ${slotIndex + 1} thành ${newPos}`);
     }
 
     function renderSquadBench() {
@@ -908,7 +917,6 @@
       const items = [
         { id: 'm1', name: "K. De Bruyne", season: '25UCL', seasonColor: '#4cc9f0', ovr: 132, price: 50000000000, img: "https://media.fifacm.com/24/players/192985.png" },
         { id: 'm2', name: "V. van Dijk", season: '24TS', seasonColor: '#00f5d4', ovr: 130, price: 40000000000, img: "https://media.fifacm.com/24/players/203376.png" }
-        { id: 'm3', name: "L. Messi ", season: 'PRM', seasonColor: '#00f5d4', ovr: 140, price: 40000000000, img: "https://s1.fifaaddict.com/fo4/players/njqpggqmj.png?20210828" }
       ];
 
       const tbodyMarket = document.getElementById('marketListTable');
@@ -1052,10 +1060,10 @@
       }
     }
 
-    /* Đá 3D */
+    /* Đá Xếp Hạng 3D (Phím Mũi Tên & WASD) */
     let matchInit = false;
     function start3DMatch() {
-      showToast("Trận đấu 3D bắt đầu!");
+      showToast("Trận đấu 3D bắt đầu! Dùng phím Mũi Tên hoặc WASD");
       userData.quests[5] = userData.quests[5] || 'ready';
       saveDataOnline();
       updateUI();
@@ -1093,11 +1101,12 @@
       camera.position.set(0, 35, 45);
       camera.lookAt(0, 0, 0);
 
+      // Nhận diện cả WASD và Phím Mũi Tên (Arrow keys)
       window.addEventListener('keydown', (e) => {
-        if (e.key === 'w' || e.key === 'W') player.position.z -= 1;
-        if (e.key === 's' || e.key === 'S') player.position.z += 1;
-        if (e.key === 'a' || e.key === 'A') player.position.x -= 1;
-        if (e.key === 'd' || e.key === 'D') player.position.x += 1;
+        if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') player.position.z -= 1.2;
+        if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') player.position.z += 1.2;
+        if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') player.position.x -= 1.2;
+        if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') player.position.x += 1.2;
       });
 
       function animate() {
