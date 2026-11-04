@@ -1,9 +1,9 @@
-v<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Upgrade FX & Animation</title>
+  <title>FC Online Simulator - Big Miniface & All Seasons</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -22,7 +22,6 @@ v<!DOCTYPE html>
       --accent-red: #ff4757;
       --glow-gold: 0 0 15px rgba(255, 183, 0, 0.6);
       --glow-blue: 0 0 15px rgba(0, 210, 255, 0.6);
-      --glow-green: 0 0 15px rgba(0, 255, 136, 0.6);
       --text-main: #f1f2f6;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
@@ -37,6 +36,7 @@ v<!DOCTYPE html>
 
     nav { display: flex; justify-content: center; gap: 6px; padding: 10px; background: rgba(0,0,0,0.7); border-bottom: 1px solid var(--panel-border); flex-wrap: wrap; }
     .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #aaa; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; transition: 0.2s; }
+    .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
     .nav-btn.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); color: #000; border-color: transparent; }
     .nav-btn.admin-btn { background: rgba(255, 71, 87, 0.15); border-color: var(--accent-red); color: var(--accent-red); }
 
@@ -54,18 +54,23 @@ v<!DOCTYPE html>
     .input-group input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--panel-border); background: rgba(0,0,0,0.6); color: #fff; outline: none; font-size: 13px; }
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 13px; color: #000; cursor: pointer; }
 
-    /* HOẠT ẢNH ÉP THẺ (UPGRADE ANIMATIONS) */
+    /* KHUNG THẺ CẦU THỦ VỚI MINIFACE TO RÕ */
     .upgrade-room { display: grid; grid-template-columns: 290px 1fr; gap: 20px; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 14px; padding: 20px; position: relative; }
     .upgrade-left-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
     
-    .main-card-slot { width: 160px; height: 220px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 10px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; margin: 10px 0; box-shadow: var(--glow-gold); transition: all 0.3s ease; }
-    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; }
-    .card-ovr { font-size: 18px; font-weight: 900; color: var(--accent-gold); }
+    .main-card-slot { width: 170px; height: 240px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; margin: 10px 0; box-shadow: var(--glow-gold); transition: all 0.3s ease; overflow: hidden; }
+    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 2; }
+    .card-ovr { font-size: 20px; font-weight: 900; color: var(--accent-gold); }
+    .card-season { font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; color: #000; text-transform: uppercase; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
     .card-grade { font-size: 11px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 1px 5px; border-radius: 3px; }
-    .card-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 8px 0; border: 2px solid rgba(255,255,255,0.2); background: #000; }
-    .card-name { font-size: 12px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+    
+    /* Miniface Phóng To Chuẩn FC Online */
+    .card-img-container { width: 100%; height: 130px; display: flex; justify-content: center; align-items: center; margin: 5px 0; position: relative; }
+    .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); transition: transform 0.2s ease; }
+    .card-img:hover { transform: scale(1.08); }
 
-    /* Keyframes hiệu ứng lắc và hào quang khi đập thẻ */
+    .card-name { font-size: 13px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+
     @keyframes shakeCard {
       0% { transform: translate(0, 0) rotate(0deg); }
       20% { transform: translate(-3px, 3px) rotate(-2deg); }
@@ -74,29 +79,21 @@ v<!DOCTYPE html>
       80% { transform: translate(3px, 3px) rotate(1deg); }
       100% { transform: translate(0, 0) rotate(0deg); }
     }
+    .shaking { animation: shakeCard 0.1s infinite; border-color: var(--accent-blue) !important; }
 
-    @keyframes intenseGlow {
-      0% { box-shadow: 0 0 10px var(--accent-gold); }
-      50% { box-shadow: 0 0 40px var(--accent-blue), 0 0 80px var(--accent-green); }
-      100% { box-shadow: 0 0 10px var(--accent-gold); }
-    }
-
-    .shaking { animation: shakeCard 0.1s infinite, intenseGlow 0.3s infinite; border-color: var(--accent-blue) !important; }
-
-    /* Modal Overlay Kết Quả Ép Thẻ */
     #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 3000; flex-direction: column; }
     .flash-screen { position: absolute; top:0; left:0; width:100%; height:100%; background: #fff; opacity:0; pointer-events:none; transition: opacity 0.5s ease; }
     .result-box-fx { text-align: center; transform: scale(0.5); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .result-box-fx.show { transform: scale(1.2); opacity: 1; }
-    .result-title { font-size: 36px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+    .result-title { font-size: 32px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
 
-    /* Bảng Quản lý, Đội Hình, Locker */
+    /* Bảng Đội Hình & Kho Cầu Thủ */
     .squad-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
     .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 520px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 20px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
     .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.15); transform: translateY(-50%); }
     .pitch-row { display: flex; justify-content: space-around; width: 100%; z-index: 2; }
-    .pitch-slot { width: 75px; height: 95px; background: rgba(0,0,0,0.45); border: 1px dashed rgba(255,255,255,0.3); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-    .pitch-slot img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid var(--accent-gold); }
+    .pitch-slot { width: 80px; height: 100px; background: rgba(0,0,0,0.45); border: 1px dashed rgba(255,255,255,0.3); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    .pitch-slot img { width: 55px; height: 55px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
     .pitch-slot .p-name { font-size: 10px; font-weight: bold; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; color: #fff; margin-top: 2px; }
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
 
@@ -104,8 +101,12 @@ v<!DOCTYPE html>
     .player-list-table { width: 100%; border-collapse: collapse; }
     .player-list-table th, .player-list-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
     .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; }
-    .mini-card-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); background: #000; }
+    .mini-card-avatar { width: 45px; height: 45px; object-fit: contain; background: transparent; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
     .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
+
+    .pagination-bar { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px; background: rgba(0,0,0,0.3); }
+    .page-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 11px; }
+    .page-btn.active { background: var(--accent-blue); color: #000; }
 
     .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 12px; margin-bottom: 15px; display: flex; gap: 8px; justify-content: space-between; }
     .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; flex: 1; }
@@ -230,14 +231,15 @@ v<!DOCTYPE html>
 
     <!-- 2. Quản Lý Cầu Thủ -->
     <div id="inventoryTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Kho Cầu Thủ Cá Nhân</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Kho Cầu Thủ Cá Nhân (Tối ưu chống lag)</h2>
       <div class="player-table-container">
         <table class="player-list-table">
           <thead>
-            <tr><th>Cầu Thủ</th><th>Lương</th><th>OVR</th><th>Cấp độ</th><th>Hành động</th></tr>
+            <tr><th>Cầu Thủ</th><th>Mùa Thẻ</th><th>OVR</th><th>Cấp độ</th><th>Hành động</th></tr>
           </thead>
           <tbody id="inventoryTableBody"></tbody>
         </table>
+        <div class="pagination-bar" id="inventoryPagination"></div>
       </div>
     </div>
 
@@ -257,8 +259,8 @@ v<!DOCTYPE html>
           <h3 style="font-size: 13px; margin-bottom: 10px; color: var(--accent-green);">2. Thay Đổi Thông Tin</h3>
           <div id="lockerEditor" style="display:none;">
             <div class="input-group">
-              <label>Đường dẫn Miniface (URL Ảnh PNG):</label>
-              <input type="text" id="lockerImgInput" placeholder="https://...">
+              <label>Link Miniface (Hỗ trợ fcoplayers.com):</label>
+              <input type="text" id="lockerImgInput" placeholder="https://fcoplayers.com/...">
             </div>
             <div class="input-group">
               <label>Số Áo:</label>
@@ -271,7 +273,7 @@ v<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- 4. Phòng Ép Thẻ Hoạt Ảnh HOÀNH TRÁNG -->
+    <!-- 4. Phòng Ép Thẻ -->
     <div id="upgradeTab" class="tab-content">
       <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Phòng Nâng Cấp Thẻ & Ép Thẻ</h2>
       <div class="upgrade-room">
@@ -316,7 +318,7 @@ v<!DOCTYPE html>
           <h3 style="font-size: 12px; color: #aaa; margin-bottom: 8px;">Cầu Thủ Ra Rao Bán</h3>
           <div class="player-table-container">
             <table class="player-list-table">
-              <thead><tr><th>Cầu thủ</th><th>Giá niêm yết</th><th>Hành động</th></tr></thead>
+              <thead><tr><th>Cầu thủ</th><th>Mùa</th><th>Giá niêm yết</th><th>Hành động</th></tr></thead>
               <tbody id="marketListTable"></tbody>
             </table>
           </div>
@@ -335,7 +337,7 @@ v<!DOCTYPE html>
 
     <!-- 6. Mở Gói Thẻ VIP -->
     <div id="packTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Mở Gói Cầu Thủ VIP</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Mở Gói Cầu Thủ Đa Dạng Mùa Thẻ</h2>
       <div style="display: flex; gap: 10px; margin-bottom: 15px;">
         <button class="btn-submit" style="width: auto; padding: 8px 18px;" onclick="openPacks(1)">Mở x1 (Free)</button>
         <button class="btn-submit" style="width: auto; padding: 8px 18px; background: linear-gradient(135deg, #00d2ff, #0055ff);" onclick="openPacks(10)">Mở x10 (Free)</button>
@@ -383,6 +385,7 @@ v<!DOCTYPE html>
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
 
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -391,15 +394,36 @@ v<!DOCTYPE html>
     const INITIAL_BP = 100000000000;
     const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
 
+    // Danh sách 12 Mùa Thẻ FC Online chuẩn
+    const seasonDatabase = [
+      { code: "ICON", name: "ICON", color: "#ffb700", ovrBoost: 8 },
+      { code: "IPRM", name: "IPRM", color: "#00d2ff", ovrBoost: 7 },
+      { code: "TOTY", name: "TOTY", color: "#0055ff", ovrBoost: 6 },
+      { code: "TOTS", name: "TOTS", color: "#9d4edd", ovrBoost: 5 },
+      { code: "25UCL", name: "25UCL", color: "#4cc9f0", ovrBoost: 4 },
+      { code: "25TY", name: "25TY", color: "#f72585", ovrBoost: 5 },
+      { code: "FAC", name: "FAC", color: "#4895ef", ovrBoost: 3 },
+      { code: "24TS", name: "24TS", color: "#00f5d4", ovrBoost: 4 },
+      { code: "HG", name: "HG", color: "#b5179e", ovrBoost: 4 },
+      { code: "BWC", name: "BWC", color: "#ffd166", ovrBoost: 5 },
+      { code: "BWN", name: "BWN", color: "#38b000", ovrBoost: 3 },
+      { code: "NORM", name: "NORM", color: "#adb5bd", ovrBoost: 0 }
+    ];
+
+    // Cầu Thủ & Miniface To Rõ
     const playerDatabase = [
-      { name: "C. Ronaldo", img: "https://media.fifacm.com/24/players/20801.png", salary: 26 },
-      { name: "L. Messi", img: "https://media.fifacm.com/24/players/158023.png", salary: 26 },
-      { name: "K. Mbappé", img: "https://media.fifacm.com/24/players/231747.png", salary: 25 },
-      { name: "E. Haaland", img: "https://media.fifacm.com/24/players/239085.png", salary: 25 },
+      { name: "C. Ronaldo", img: "https://fcoplayers.com/players/cristiano-ronaldo-mua-ws", salary: 26 },
+      { name: "L. Messi", img: " https://fcoplayers.com/players/lionel-messi-mua-uc", salary: 26 },
+      { name: "K. Mbappé", img: "https://fcoplayers.com/players/kylian-mbappe-lottin-mua-23toty", salary: 25 },
+      { name: "E. Haaland", img: "https://fcoplayers.com/players/erling-braut-haaland-mua-26ty", salary: 25 },
       { name: "J. Bellingham", img: "https://media.fifacm.com/24/players/252371.png", salary: 24 },
       { name: "Z. Zidane", img: "https://media.fifacm.com/24/players/1397.png", salary: 28 },
       { name: "R. Gullit", img: "https://media.fifacm.com/24/players/2141.png", salary: 27 },
-      { name: "Pelé", img: "https://media.fifacm.com/24/players/190042.png", salary: 28 }
+      { name: "Pelé", img: "https://media.fifacm.com/24/players/190042.png", salary: 28 },
+      { name: "K. De Bruyne", img: "https://media.fifacm.com/24/players/192985.png", salary: 25 },
+      { name: "V. van Dijk", img: "https://media.fifacm.com/24/players/203376.png", salary: 25 },
+      { name: "Son Heung-min", img: "https://media.fifacm.com/24/players/200104.png", salary: 24 },
+      { name: "Vinícius Jr.", img: "https://media.fifacm.com/24/players/238794.png", salary: 25 }
     ];
 
     const questsData = [
@@ -415,6 +439,8 @@ v<!DOCTYPE html>
     let selectedMainIndex = null;
     let selectedFodderIndices = [];
     let selectedLockerIndex = null;
+    let currentInventoryPage = 1;
+    const itemsPerPage = 20;
 
     function calculateOvr(baseOvr, grade) {
       let extra = 0;
@@ -510,7 +536,7 @@ v<!DOCTYPE html>
           const currentGrade = p.grade || 1;
           const currentOvr = calculateOvr(p.baseOvr || p.ovr, currentGrade);
           slotEl.innerHTML = `
-            <img src="${p.img || defaultFodderImg}">
+            <img src="${p.img || defaultFodderImg}" loading="lazy">
             <div class="p-name">${p.name}</div>
             <div class="p-ovr">${currentOvr} (+${currentGrade})</div>
           `;
@@ -526,14 +552,15 @@ v<!DOCTYPE html>
       tbody.innerHTML = '';
       if (!userData.inventory) return;
 
-      userData.inventory.forEach((item, index) => {
+      const benchItems = userData.inventory.slice(0, 50);
+      benchItems.forEach((item, index) => {
         const currentGrade = item.grade || 1;
         const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
         tbody.innerHTML += `
           <tr>
             <td>
               <div style="display:flex; align-items:center; gap:8px;">
-                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
+                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}" loading="lazy">
                 <div>${item.name} (+${currentGrade})</div>
               </div>
             </td>
@@ -572,35 +599,60 @@ v<!DOCTYPE html>
     /* Quản Lý Kho */
     function renderInventoryTable() {
       const tbody = document.getElementById('inventoryTableBody');
+      const paginationDiv = document.getElementById('inventoryPagination');
       tbody.innerHTML = '';
+      paginationDiv.innerHTML = '';
+
       if (!userData.inventory || userData.inventory.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #666;">Kho trống...</td></tr>`;
         return;
       }
 
-      userData.inventory.forEach((item, index) => {
+      const totalPages = Math.ceil(userData.inventory.length / itemsPerPage);
+      if (currentInventoryPage > totalPages) currentInventoryPage = totalPages;
+
+      const start = (currentInventoryPage - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = userData.inventory.slice(start, end);
+
+      pageItems.forEach((item, pageIdx) => {
+        const actualIndex = start + pageIdx;
         const currentGrade = item.grade || 1;
         const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
+        const sColor = item.seasonColor || '#00d2ff';
+        const sCode = item.season || 'NORM';
+
         tbody.innerHTML += `
           <tr>
             <td>
               <div style="display:flex; align-items:center; gap:10px;">
-                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
+                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}" loading="lazy">
                 <div>
                   <div style="font-weight: bold; color: #fff;">${item.name}</div>
                   <div style="font-size: 10px; color: #aaa;">Lương: ${item.salary || 20}</div>
                 </div>
               </div>
             </td>
-            <td>${item.salary || 20}</td>
+            <td><span style="font-size:10px; font-weight:bold; background:${sColor}; color:#000; padding:2px 6px; border-radius:4px;">${sCode}</span></td>
             <td style="color: var(--accent-gold); font-weight: bold;">${currentOvr}</td>
             <td><span class="card-grade">+${currentGrade}</span></td>
             <td>
-              <button class="btn-action-table" onclick="selectMainCard(${index})">Ép Thẻ</button>
+              <button class="btn-action-table" onclick="selectMainCard(${actualIndex})">Ép Thẻ</button>
             </td>
           </tr>
         `;
       });
+
+      for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= currentInventoryPage - 2 && p <= currentInventoryPage + 2)) {
+          paginationDiv.innerHTML += `<button class="page-btn ${p === currentInventoryPage ? 'active' : ''}" onclick="changeInventoryPage(${p})">${p}</button>`;
+        }
+      }
+    }
+
+    function changeInventoryPage(page) {
+      currentInventoryPage = page;
+      renderInventoryTable();
     }
 
     /* Phòng Thay Đồ */
@@ -609,12 +661,13 @@ v<!DOCTYPE html>
       tbody.innerHTML = '';
       if (!userData.inventory) return;
 
-      userData.inventory.forEach((item, index) => {
+      const sampleItems = userData.inventory.slice(0, 30);
+      sampleItems.forEach((item, index) => {
         tbody.innerHTML += `
           <tr>
             <td>
               <div style="display:flex; align-items:center; gap:8px;">
-                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}">
+                <img class="mini-card-avatar" src="${item.img || defaultFodderImg}" loading="lazy">
                 <div><strong>${item.name}</strong> (#${item.number || 7})</div>
               </div>
             </td>
@@ -643,7 +696,7 @@ v<!DOCTYPE html>
       showToast("Lưu chỉnh sửa thành công!");
     }
 
-    /* ÉP THẺ & HOẠT ẢNH HOÀNH TRÁNG */
+    /* Ép Thẻ */
     function buyQuickFodder(ovr) {
       const priceMap = { 100: 100000000, 110: 2000000000, 120: 50000000000, 135: 3000000000000 };
       const cost = priceMap[ovr];
@@ -653,7 +706,7 @@ v<!DOCTYPE html>
       }
       userData.bp -= cost;
       if (!userData.inventory) userData.inventory = [];
-      userData.inventory.push({ id: Date.now() + Math.random(), name: `Phôi ${ovr}`, baseOvr: ovr, ovr: ovr, grade: 1, img: defaultFodderImg, salary: 15 });
+      userData.inventory.push({ id: Date.now() + Math.random(), name: `Phôi ${ovr}`, season: 'NORM', seasonColor: '#adb5bd', baseOvr: ovr, ovr: ovr, grade: 1, img: defaultFodderImg, salary: 15 });
       saveDataOnline();
       updateUI();
       if (selectedMainIndex !== null) renderFodderSelection();
@@ -666,10 +719,18 @@ v<!DOCTYPE html>
       const card = userData.inventory[index];
       const currentGrade = card.grade || 1;
       const currentOvr = calculateOvr(card.baseOvr || card.ovr, currentGrade);
+      const sColor = card.seasonColor || '#00d2ff';
+      const sCode = card.season || 'NORM';
       
       document.getElementById('mainUpgradeSlot').innerHTML = `
-        <div class="card-top"><span class="card-ovr">${currentOvr}</span><span class="card-grade">+${currentGrade}</span></div>
-        <img class="card-img" src="${card.img || defaultFodderImg}">
+        <div class="card-top">
+          <span class="card-ovr">${currentOvr}</span>
+          <span class="card-season" style="background:${sColor};">${sCode}</span>
+          <span class="card-grade">+${currentGrade}</span>
+        </div>
+        <div class="card-img-container">
+          <img class="card-img" src="${card.img || defaultFodderImg}">
+        </div>
         <div class="card-name">${card.name}</div>
       `;
       switchTab('upgradeTab');
@@ -685,7 +746,8 @@ v<!DOCTYPE html>
         return;
       }
 
-      userData.inventory.forEach((item, index) => {
+      const fodderItems = userData.inventory.slice(0, 40);
+      fodderItems.forEach((item, index) => {
         if (index === selectedMainIndex) return;
         const isSelected = selectedFodderIndices.includes(index);
         const currentGrade = item.grade || 1;
@@ -693,7 +755,7 @@ v<!DOCTYPE html>
         container.innerHTML += `
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; background: rgba(255,255,255,0.03); margin-bottom: 4px; border-radius: 4px;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <img src="${item.img || defaultFodderImg}" style="width: 25px; height: 25px; border-radius: 50%;">
+              <img src="${item.img || defaultFodderImg}" style="width: 25px; height: 25px; object-fit: contain;" loading="lazy">
               <span style="font-size: 11px; font-weight: bold;">${item.name} (+${currentGrade}) - OVR ${currentOvr}</span>
             </div>
             <button class="btn-action-table" style="background: ${isSelected ? '#ff4757' : '#00b894'}; color: #fff;" onclick="toggleFodder(${index})">${isSelected ? 'Bỏ chọn' : 'Chọn'}</button>
@@ -725,7 +787,6 @@ v<!DOCTYPE html>
       document.getElementById('successRateText').innerText = totalRate + "%";
     }
 
-    /* Bắt đầu Chuỗi Hoạt Ảnh Ép Thẻ */
     function startUpgradeAnimation() {
       if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
         showToast("Chưa chọn thẻ chính!");
@@ -736,14 +797,13 @@ v<!DOCTYPE html>
       const btn = document.getElementById('btnExecuteUpgrade');
       btn.disabled = true;
 
-      // 1. Thẻ rung lắc phát sáng
       mainCardSlot.classList.add('shaking');
 
       setTimeout(() => {
         mainCardSlot.classList.remove('shaking');
         btn.disabled = false;
         executeUpgradeLogic();
-      }, 2000); // Rung 2 giây rồi nổ kết quả
+      }, 1500);
     }
 
     function executeUpgradeLogic() {
@@ -771,11 +831,9 @@ v<!DOCTYPE html>
       saveDataOnline();
       updateUI();
 
-      // Giữ nguyên vị trí thẻ để ép tiếp
       selectedMainIndex = currentMainIndex;
       selectedFodderIndices = [];
 
-      // Hiển thị Màn Hình Kết Quả Lóe Sáng
       showUpgradeFX(mainCard, isSuccess);
     }
 
@@ -788,10 +846,10 @@ v<!DOCTYPE html>
 
       const currentGrade = card.grade || 1;
       const currentOvr = calculateOvr(card.baseOvr || card.ovr, currentGrade);
+      const sColor = card.seasonColor || '#00d2ff';
+      const sCode = card.season || 'NORM';
 
       modal.style.display = 'flex';
-      
-      // Flash sáng trắng
       flash.style.opacity = '1';
       setTimeout(() => { flash.style.opacity = '0'; }, 300);
 
@@ -804,14 +862,18 @@ v<!DOCTYPE html>
       }
 
       slot.innerHTML = `
-        <div class="card-top"><span class="card-ovr">${currentOvr}</span><span class="card-grade">+${currentGrade}</span></div>
-        <img class="card-img" src="${card.img || defaultFodderImg}">
+        <div class="card-top">
+          <span class="card-ovr">${currentOvr}</span>
+          <span class="card-season" style="background:${sColor};">${sCode}</span>
+          <span class="card-grade">+${currentGrade}</span>
+        </div>
+        <div class="card-img-container">
+          <img class="card-img" src="${card.img || defaultFodderImg}">
+        </div>
         <div class="card-name">${card.name}</div>
       `;
 
-      setTimeout(() => {
-        resultBox.classList.add('show');
-      }, 200);
+      setTimeout(() => { resultBox.classList.add('show'); }, 200);
     }
 
     function closeUpgradeFX() {
@@ -820,14 +882,21 @@ v<!DOCTYPE html>
       resultBox.classList.remove('show');
       modal.style.display = 'none';
 
-      // Load lại khung ép thẻ chính
       if (selectedMainIndex !== null && userData.inventory[selectedMainIndex]) {
         const card = userData.inventory[selectedMainIndex];
         const currentGrade = card.grade || 1;
         const currentOvr = calculateOvr(card.baseOvr || card.ovr, currentGrade);
+        const sColor = card.seasonColor || '#00d2ff';
+        const sCode = card.season || 'NORM';
         document.getElementById('mainUpgradeSlot').innerHTML = `
-          <div class="card-top"><span class="card-ovr">${currentOvr}</span><span class="card-grade">+${currentGrade}</span></div>
-          <img class="card-img" src="${card.img || defaultFodderImg}">
+          <div class="card-top">
+            <span class="card-ovr">${currentOvr}</span>
+            <span class="card-season" style="background:${sColor};">${sCode}</span>
+            <span class="card-grade">+${currentGrade}</span>
+          </div>
+          <div class="card-img-container">
+            <img class="card-img" src="${card.img || defaultFodderImg}">
+          </div>
           <div class="card-name">${card.name}</div>
         `;
         renderFodderSelection();
@@ -837,8 +906,8 @@ v<!DOCTYPE html>
     /* TTCN */
     function renderMarket() {
       const items = [
-        { id: 'm1', name: "K. De Bruyne", ovr: 132, price: 50000000000, img: "https://media.fifacm.com/24/players/192985.png" },
-        { id: 'm2', name: "V. van Dijk", ovr: 130, price: 40000000000, img: "https://media.fifacm.com/24/players/203376.png" }
+        { id: 'm1', name: "K. De Bruyne", season: '25UCL', seasonColor: '#4cc9f0', ovr: 132, price: 50000000000, img: "https://media.fifacm.com/24/players/192985.png" },
+        { id: 'm2', name: "V. van Dijk", season: '24TS', seasonColor: '#00f5d4', ovr: 130, price: 40000000000, img: "https://media.fifacm.com/24/players/203376.png" }
       ];
 
       const tbodyMarket = document.getElementById('marketListTable');
@@ -848,12 +917,13 @@ v<!DOCTYPE html>
           <tr>
             <td>
               <div style="display:flex; align-items:center; gap:8px;">
-                <img class="mini-card-avatar" src="${item.img}">
+                <img class="mini-card-avatar" src="${item.img}" loading="lazy">
                 <div><strong>${item.name}</strong> (OVR ${item.ovr})</div>
               </div>
             </td>
+            <td><span style="font-size:10px; font-weight:bold; background:${item.seasonColor}; color:#000; padding:2px 6px; border-radius:4px;">${item.season}</span></td>
             <td style="color: var(--accent-gold);">${(item.price / 1e9).toFixed(0)} Tỷ BP</td>
-            <td><button class="btn-action-table" onclick="buyFromMarket('${item.name}', ${item.ovr}, ${item.price}, '${item.img}')">Mua</button></td>
+            <td><button class="btn-action-table" onclick="buyFromMarket('${item.name}', '${item.season}', '${item.seasonColor}', ${item.ovr}, ${item.price}, '${item.img}')">Mua</button></td>
           </tr>
         `;
       });
@@ -861,7 +931,8 @@ v<!DOCTYPE html>
       const tbodyMy = document.getElementById('myMarketTable');
       tbodyMy.innerHTML = '';
       if (userData.inventory) {
-        userData.inventory.forEach((item, index) => {
+        const mySellItems = userData.inventory.slice(0, 30);
+        mySellItems.forEach((item, index) => {
           const currentGrade = item.grade || 1;
           const currentOvr = calculateOvr(item.baseOvr || item.ovr, currentGrade);
           const sellPrice = currentOvr * 1000000000;
@@ -876,13 +947,13 @@ v<!DOCTYPE html>
       }
     }
 
-    function buyFromMarket(name, ovr, price, img) {
+    function buyFromMarket(name, season, seasonColor, ovr, price, img) {
       if (userData.bp < price) {
         showToast("Không đủ BP!");
         return;
       }
       userData.bp -= price;
-      userData.inventory.push({ id: Date.now() + Math.random(), name: name, baseOvr: ovr, ovr: ovr, grade: 1, img: img, salary: 25 });
+      userData.inventory.push({ id: Date.now() + Math.random(), name: name, season: season, seasonColor: seasonColor, baseOvr: ovr, ovr: ovr, grade: 1, img: img, salary: 25 });
       userData.quests[4] = userData.quests[4] || 'ready';
       saveDataOnline();
       updateUI();
@@ -897,7 +968,7 @@ v<!DOCTYPE html>
       showToast(`Bán thu về ${(price/1e9).toFixed(1)} Tỷ BP!`);
     }
 
-    /* Gói Thẻ */
+    /* Mở Gói Thẻ */
     function openPacks(count) {
       const resultGrid = document.getElementById('packResultGrid');
       resultGrid.innerHTML = '';
@@ -905,14 +976,30 @@ v<!DOCTYPE html>
       
       for (let i = 0; i < count; i++) {
         const randPlayer = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
-        const randOvr = Math.floor(Math.random() * (135 - 100 + 1)) + 100;
+        const randSeason = seasonDatabase[Math.floor(Math.random() * seasonDatabase.length)];
+        const baseOvr = Math.floor(Math.random() * (120 - 100 + 1)) + 100 + randSeason.ovrBoost;
         
-        userData.inventory.push({ id: Date.now() + Math.random(), name: randPlayer.name, baseOvr: randOvr, ovr: randOvr, grade: 1, img: randPlayer.img, salary: randPlayer.salary });
+        userData.inventory.push({ 
+          id: Date.now() + Math.random(), 
+          name: randPlayer.name, 
+          season: randSeason.code,
+          seasonColor: randSeason.color,
+          baseOvr: baseOvr, 
+          ovr: baseOvr, 
+          grade: 1, 
+          img: randPlayer.img, 
+          salary: randPlayer.salary 
+        });
         
         resultGrid.innerHTML += `
           <div class="main-card-slot" style="width: 110px; height: 160px; margin: 0;">
-            <div class="card-top"><span class="card-ovr" style="font-size:14px;">${randOvr}</span><span class="card-grade">+1</span></div>
-            <img class="card-img" style="width:45px; height:45px;" src="${randPlayer.img}">
+            <div class="card-top">
+              <span class="card-ovr" style="font-size:13px;">${baseOvr}</span>
+              <span style="font-size:8px; font-weight:bold; background:${randSeason.color}; color:#000; padding:1px 3px; border-radius:2px;">${randSeason.code}</span>
+            </div>
+            <div class="card-img-container" style="height:80px;">
+              <img class="card-img" style="width:70px; height:70px;" src="${randPlayer.img}" loading="lazy">
+            </div>
             <div class="card-name" style="font-size:10px;">${randPlayer.name}</div>
           </div>
         `;
@@ -1020,7 +1107,7 @@ v<!DOCTYPE html>
       animate();
     }
 
-    /* Admin */
+    /* Admin Panel */
     function listenToAllUsers() {
       db.ref('users').on('value', (snapshot) => {
         const users = snapshot.val();
