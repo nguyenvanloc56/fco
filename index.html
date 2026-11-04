@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Pro UI & Upgrade Fix</title>
+  <title>FC Online Simulator - Clean & Fixed</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   
   <!-- Firebase SDKs -->
@@ -50,7 +50,7 @@
     .input-group input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.6); color: #fff; outline: none; font-size: 14px; }
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 14px; color: #000; cursor: pointer; }
 
-    /* Thông báo tùy chỉnh trong game (thay thế alert) */
+    /* Toast Notification trong Game */
     #gameToast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-green); color: #fff; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; z-index: 2000; box-shadow: 0 5px 20px rgba(0,0,0,0.6); transition: transform 0.3s ease; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); }
 
@@ -101,7 +101,7 @@
 </head>
 <body>
 
-  <!-- Toast Thông báo tùy chỉnh -->
+  <!-- Toast Thông báo -->
   <div id="gameToast">Thông báo game</div>
 
   <!-- Modal Đăng nhập -->
@@ -226,8 +226,9 @@
   </main>
 
   <script>
+    // LƯU Ý: Thay thế đúng thông tin Firebase của bạn vào đây
     const firebaseConfig = {
-       apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
+      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
       authDomain: "fc-online-simulator.firebaseapp.com",
       databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
       projectId: "fc-online-simulator",
@@ -235,7 +236,6 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -279,15 +279,12 @@
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const username = document.getElementById('usernameInput'].value.trim();
-      const password = document.getElementById('passwordInput'].value.trim();
+      const username = document.getElementById('usernameInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
 
-      // Sửa lỗi xác thực tài khoản Admin chuẩn xác tuyệt đối
-      if (username.toLowerCase() === ADMIN_USERNAME) {
-        if (password !== ADMIN_PASSWORD) {
-          showToast("Sai mật khẩu Admin!");
-          return;
-        }
+      if (username.toLowerCase() === ADMIN_USERNAME && password !== ADMIN_PASSWORD) {
+        showToast("Sai mật khẩu Admin!");
+        return;
       }
       loginOnline(username, password);
     });
@@ -321,6 +318,8 @@
           saveDataOnline();
         }
         updateUI();
+      }).catch(err => {
+        showToast("Lỗi kết nối Firebase!");
       });
 
       renderShop();
@@ -337,7 +336,7 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
-      event.currentTarget.classList.add('active');
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
       if (tabId === 'upgradeTab') renderFodderSelection();
     }
 
@@ -490,7 +489,7 @@
     }
 
     function calculateSuccessRate() {
-      if (selectedMainIndex === null) return;
+      if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) return;
       const mainCard = userData.inventory[selectedMainIndex];
       const baseRate = Math.max(10, 100 - ((mainCard.grade || 1) * 12));
       const bonusRate = selectedFodderIndices.length * 15;
@@ -509,13 +508,11 @@
 
       const roll = Math.random() * 100;
       
-      // Sắp xếp index phôi giảm dần để xóa không bị lệch mảng
       selectedFodderIndices.sort((a, b) => b - a);
       selectedFodderIndices.forEach(idx => {
         userData.inventory.splice(idx, 1);
       });
 
-      // Lấy lại index chính xác của thẻ chính sau khi xóa phôi
       const currentMainIndex = userData.inventory.indexOf(mainCard);
 
       if (roll <= totalRate) {
@@ -529,12 +526,10 @@
       saveDataOnline();
       updateUI();
 
-      // GIỮ NGUYÊN CẦU THỦ VÀO PHÒNG ÉP ĐỂ NÂNG CẤP TIẾP NẾU THÀNH CÔNG
       if (roll <= totalRate && currentMainIndex > -1) {
         selectedMainIndex = currentMainIndex;
         selectedFodderIndices = [];
         
-        // Cập nhật lại giao diện thẻ chính ngay lập tức
         document.getElementById('mainUpgradeSlot').innerHTML = `
           <div class="card-top"><span class="card-ovr">${mainCard.ovr}</span><span class="card-grade">+${mainCard.grade}</span></div>
           <img class="card-img" src="${mainCard.img || defaultFodderImg}" alt="">
@@ -545,7 +540,7 @@
         selectedMainIndex = null;
         selectedFodderIndices = [];
         document.getElementById('mainUpgradeSlot').innerHTML = `<div style="color: #666; font-size: 13px; text-align: center; margin-top: 80px;">Chưa chọn thẻ chính</div>`;
-        document.getElementById('successRateText').innerText = "0%N";
+        document.getElementById('successRateText').innerText = "0%";
         renderFodderSelection();
       }
     }
