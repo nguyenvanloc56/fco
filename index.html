@@ -143,23 +143,24 @@
   </main>
 
   <script>
-    // CẤU HÌNH FIREBASE CỦA BẠN
+    // CẤU HÌNH FIREBASE CỦA BẠN (Thay thế thông số của bạn ở đây)
     const firebaseConfig = {
-      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8",
+      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
       authDomain: "fc-online-simulator.firebaseapp.com",
       databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
       projectId: "fc-online-simulator",
       storageBucket: "fc-online-simulator.firebasestorage.app",
       messagingSenderId: "220897790682",
-      appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
-    };
-
+      appId: "1:220897790682:web:3f92984ae37d58603cf3e3" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Cài đặt tài khoản Admin và Mật khẩu tùy ý tại đây
+    // Tài khoản Admin và Mật khẩu quản trị
     const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "5613"; // Đổi mật khẩu admin của bạn ở đây
+    const ADMIN_PASSWORD = "..."; 
+
+    // Mức vốn BP khởi tạo mặc định cho tài khoản mới (100 Tỷ BP)
+    const INITIAL_BP = 100000000000;
 
     const shopFodderList = [
       { id: 'f100', name: "Phôi 100", ovr: 100, price: 100000000 },
@@ -173,7 +174,7 @@
     ];
 
     let currentUser = null;
-    let userData = { bp: 10000000000, inventory: [] };
+    let userData = { bp: INITIAL_BP, inventory: [] };
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -203,7 +204,6 @@
       db.ref('users/' + username).once('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          // Kiểm tra nếu tài khoản đã có mật khẩu trên server
           if (data.password && data.password !== password) {
             alert("Sai mật khẩu cho tài khoản này!");
             location.reload();
@@ -211,9 +211,12 @@
           }
           userData = data;
           if (!userData.inventory) userData.inventory = [];
+          if (userData.bp === undefined) {
+            userData.bp = INITIAL_BP;
+            saveDataOnline();
+          }
         } else {
-          // Tạo mới tài khoản kèm mật khẩu
-          userData = { password: password, bp: 10000000000, inventory: [] };
+          userData = { password: password, bp: INITIAL_BP, inventory: [] };
           saveDataOnline();
         }
         updateUI();
