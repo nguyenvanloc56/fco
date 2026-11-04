@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Secure Login</title>
+  <title>FC Online Simulator - Full Features & Images</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   
   <!-- Firebase SDKs -->
@@ -29,7 +29,7 @@
     .bp-display { color: var(--accent-gold); font-weight: bold; border-color: var(--accent-gold); }
     .btn-logout { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 6px 14px; border-radius: 12px; cursor: pointer; font-weight: 600; }
     .btn-logout:hover { background: var(--accent-red); color: #fff; }
-    nav { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.3); }
+    nav { display: flex; justify-content: center; gap: 10px; padding: 15px; background: rgba(0,0,0,0.3); flex-wrap: wrap; }
     .nav-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     .nav-btn.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); color: #000; border-color: transparent; }
     .nav-btn.admin-btn { background: rgba(255, 71, 87, 0.15); border-color: var(--accent-red); color: var(--accent-red); }
@@ -37,12 +37,16 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; margin-top: 20px; }
-    .card { width: 170px; height: 250px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); position: relative; display: flex; flex-direction: column; align-items: center; padding: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
-    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; }
+    
+    /* Thiết kế Thẻ Cầu Thủ có Ảnh */
+    .card { width: 170px; height: 250px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); position: relative; display: flex; flex-direction: column; align-items: center; padding: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s; overflow: hidden; }
+    .card:hover { transform: translateY(-5px); }
+    .card-top { width: 100%; display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; }
     .card-ovr { font-size: 24px; font-weight: 900; color: var(--accent-gold); }
-    .card-pos { font-size: 14px; font-weight: 700; color: #fff; }
-    .card-img-placeholder { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.1); margin: 15px 0; display: flex; align-items: center; justify-content: center; font-size: 35px; color: rgba(255,255,255,0.3); }
-    .card-name { font-size: 15px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-grade { font-size: 14px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 2px 6px; border-radius: 4px; }
+    .card-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 10px 0; border: 2px solid rgba(255,255,255,0.2); background: #000; z-index: 2; }
+    .card-name { font-size: 15px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; z-index: 2; }
+    
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
     .auth-box { background: var(--panel-bg); border: 1px solid rgba(255,255,255,0.15); padding: 40px; border-radius: 16px; width: 360px; text-align: center; }
     .auth-box h2 { margin-bottom: 20px; color: var(--accent-green); font-size: 20px; }
@@ -60,11 +64,15 @@
     .btn-action { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
     .btn-edit { background: var(--accent-gold); color: #000; }
     .btn-delete { background: var(--accent-red); color: #fff; margin-left: 5px; }
+    
+    .upgrade-container { display: flex; gap: 40px; justify-content: center; align-items: flex-start; flex-wrap: wrap; margin-top: 20px; }
+    .upgrade-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 16px; width: 400px; text-align: center; }
+    .slot-area { width: 170px; height: 250px; border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; margin: 15px auto; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; background: rgba(0,0,0,0.2); position: relative; }
   </style>
 </head>
 <body>
 
-  <!-- Modal Đăng nhập & Mật khẩu -->
+  <!-- Modal Đăng nhập -->
   <div id="loginModal" class="modal-overlay">
     <div class="auth-box">
       <h2><i class="fa-solid fa-lock"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
@@ -97,6 +105,7 @@
     <button class="nav-btn active" onclick="switchTab('shopTab')">CHỢ PHÔI (100 - 135)</button>
     <button class="nav-btn" onclick="switchTab('packTab')">MỞ GÓI THẺ</button>
     <button class="nav-btn" onclick="switchTab('inventoryTab')">KHO THẺ</button>
+    <button class="nav-btn" onclick="switchTab('upgradeTab')">ÉP THẺ (NÂNG CẤP)</button>
     <button id="adminNavBtn" class="nav-btn admin-btn" style="display:none;" onclick="switchTab('adminTab')"><i class="fa-solid fa-user-gear"></i> QUẢN LÝ ADMIN</button>
   </nav>
 
@@ -114,15 +123,31 @@
       <div style="margin-top: 20px; display: flex; gap: 15px;">
         <button class="btn-submit" style="width: auto; padding: 12px 24px;" onclick="openPacks(1)">Mở x1</button>
         <button class="btn-submit" style="width: auto; padding: 12px 24px; background: linear-gradient(135deg, #00d2ff, #0055ff);" onclick="openPacks(10)">Mở x10</button>
-        <button class="btn-submit" style="width: auto; padding: 12px 24px; background: linear-gradient(135deg, #ff8800, #ff0055);" onclick="openPacks(20)">Mở x20</button>
       </div>
       <div class="grid-container" id="packResultGrid"></div>
     </div>
 
     <!-- Kho Thẻ -->
     <div id="inventoryTab" class="tab-content">
-      <h2>Kho Cầu Thủ & Phôi</h2>
+      <h2>Kho Cầu Thủ & Phôi (Bấm vào thẻ để chọn đưa vào Ép Thẻ)</h2>
       <div class="grid-container" id="inventoryGrid"></div>
+    </div>
+
+    <!-- Ép Thẻ -->
+    <div id="upgradeTab" class="tab-content">
+      <h2>Phòng Ép Thẻ (Nâng Cấp Cấp Độ)</h2>
+      <div class="upgrade-container">
+        <div class="upgrade-box">
+          <h3>Cầu Thủ Chính</h3>
+          <div id="mainUpgradeSlot" class="slot-area">Chưa chọn thẻ chính</div>
+          <button class="btn-submit" style="background: var(--accent-red); color: #fff; margin-top: 10px;" onclick="selectMainCardForUpgrade()">Chọn từ kho</button>
+        </div>
+        <div class="upgrade-box" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+          <h3 style="color: var(--accent-gold); margin-bottom: 10px;">Tỷ Lệ Thành Công</h3>
+          <div id="successRateDisplay" style="font-size: 36px; font-weight: bold; color: var(--accent-green); margin-bottom: 20px;">0%</div>
+          <button class="btn-submit" onclick="startUpgrade()">TIẾN HÀNH ÉP THẺ</button>
+        </div>
+      </div>
     </div>
 
     <!-- Admin Panel -->
@@ -143,51 +168,64 @@
   </main>
 
   <script>
-    // CẤU HÌNH FIREBASE CỦA BẠN (Thay thế thông số của bạn ở đây)
+    // CẤU HÌNH FIREBASE CỦA BẠN
     const firebaseConfig = {
-      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
+     apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
       authDomain: "fc-online-simulator.firebaseapp.com",
       databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
       projectId: "fc-online-simulator",
       storageBucket: "fc-online-simulator.firebasestorage.app",
       messagingSenderId: "220897790682",
-      appId: "1:220897790682:web:3f92984ae37d58603cf3e3" };
+      appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
+    };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Tài khoản Admin và Mật khẩu quản trị
     const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "..."; 
-
-    // Mức vốn BP khởi tạo mặc định cho tài khoản mới (100 Tỷ BP)
+    const ADMIN_PASSWORD = "1213";
     const INITIAL_BP = 100000000000;
 
+    // Danh sách cầu thủ kèm ảnh avatar
+    const playerDatabase = [
+      { name: "C. Ronaldo", img: "https://media.fifacm.com/24/players/20801.png" },
+      { name: "L. Messi", img: "https://media.fifacm.com/24/players/158023.png" },
+      { name: "K. Mbappé", img: "https://media.fifacm.com/24/players/231747.png" },
+      { name: "E. Haaland", img: "https://media.fifacm.com/24/players/239085.png" },
+      { name: "J. Bellingham", img: "https://media.fifacm.com/24/players/252371.png" },
+      { name: "Vinícius Jr.", img: "https://media.fifacm.com/24/players/238794.png" },
+      { name: "Z. Zidane", img: "https://media.fifacm.com/24/players/1397.png" },
+      { name: "R. Gullit", img: "https://media.fifacm.com/24/players/2141.png" },
+      { name: "Pelé", img: "https://media.fifacm.com/24/players/190042.png" },
+      { name: "Ronaldinho", img: "https://media.fifacm.com/24/players/28130.png" }
+    ];
+
+    const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
+
     const shopFodderList = [
-      { id: 'f100', name: "Phôi 100", ovr: 100, price: 100000000 },
-      { id: 'f105', name: "Phôi 105", ovr: 105, price: 500000000 },
-      { id: 'f110', name: "Phôi 110", ovr: 110, price: 2000000000 },
-      { id: 'f115', name: "Phôi 115", ovr: 115, price: 10000000000 },
-      { id: 'f120', name: "Phôi 120", ovr: 120, price: 50000000000 },
-      { id: 'f125', name: "Phôi 125", ovr: 125, price: 200000000000 },
-      { id: 'f130', name: "Phôi 130", ovr: 130, price: 800000000000 },
-      { id: 'f135', name: "Phôi 135", ovr: 135, price: 3000000000000 }
+      { id: 'f100', name: "Phôi 100", ovr: 100, price: 100000000, img: defaultFodderImg },
+      { id: 'f105', name: "Phôi 105", ovr: 105, price: 500000000, img: defaultFodderImg },
+      { id: 'f110', name: "Phôi 110", ovr: 110, price: 2000000000, img: defaultFodderImg },
+      { id: 'f115', name: "Phôi 115", ovr: 115, price: 10000000000, img: defaultFodderImg },
+      { id: 'f120', name: "Phôi 120", ovr: 120, price: 50000000000, img: defaultFodderImg },
+      { id: 'f125', name: "Phôi 125", ovr: 125, price: 200000000000, img: defaultFodderImg },
+      { id: 'f130', name: "Phôi 130", ovr: 130, price: 800000000000, img: defaultFodderImg },
+      { id: 'f135', name: "Phôi 135", ovr: 135, price: 3000000000000, img: defaultFodderImg }
     ];
 
     let currentUser = null;
     let userData = { bp: INITIAL_BP, inventory: [] };
+    let selectedMainCardIndex = null;
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value.trim();
 
-      if (username.toLowerCase() === ADMIN_USERNAME) {
-        if (password !== ADMIN_PASSWORD) {
-          alert("Sai mật khẩu Admin!");
-          return;
-        }
+      if (username.toLowerCase() === ADMIN_USERNAME && password !== ADMIN_PASSWORD) {
+        alert("Sai mật khẩu Admin!");
+        return;
       }
-
       loginOnline(username, password);
     });
 
@@ -225,16 +263,8 @@
       renderShop();
     }
 
-    function logout() {
-      location.reload();
-    }
-
-    function saveDataOnline() {
-      if (currentUser) {
-        db.ref('users/' + currentUser).set(userData);
-      }
-    }
-
+    function logout() { location.reload(); }
+    function saveDataOnline() { if (currentUser) db.ref('users/' + currentUser).set(userData); }
     function updateUI() {
       document.getElementById('bpCount').innerText = (userData.bp || 0).toLocaleString('vi-VN');
       renderInventory();
@@ -253,9 +283,9 @@
       shopFodderList.forEach(item => {
         shopGrid.innerHTML += `
           <div class="shop-card">
-            <div class="card">
-              <div class="card-top"><span class="card-ovr">${item.ovr}</span><span class="card-pos">ALL</span></div>
-              <div class="card-img-placeholder"><i class="fa-solid fa-cube"></i></div>
+            <div class="card" style="cursor:default;">
+              <div class="card-top"><span class="card-ovr">${item.ovr}</span><span class="card-grade">+1</span></div>
+              <img class="card-img" src="${item.img}" alt="Phôi">
               <div class="card-name">${item.name}</div>
             </div>
             <div style="font-weight: bold; color: var(--accent-gold); font-size: 13px;">${(item.price / 1e9).toFixed(1)} Tỷ BP</div>
@@ -276,29 +306,29 @@
       userData.bp -= totalCost;
       if (!userData.inventory) userData.inventory = [];
       for (let i = 0; i < qty; i++) {
-        userData.inventory.push({ id: Date.now() + Math.random(), name: fodder.name, ovr: fodder.ovr, grade: 1 });
+        userData.inventory.push({ id: Date.now() + Math.random(), name: fodder.name, ovr: fodder.ovr, grade: 1, img: fodder.img });
       }
       saveDataOnline();
       updateUI();
-      alert(`Đã mua ${qty}x ${fodder.name}!`);
+      alert(`Đã mua thành công ${qty}x ${fodder.name}!`);
     }
 
     function openPacks(count) {
       const resultGrid = document.getElementById('packResultGrid');
       resultGrid.innerHTML = '';
-      const names = ["Ronaldo", "Messi", "Mbappe", "Haaland", "Vinicius", "Bellingham", "Zidane", "Gullit", "Pelé", "Ronaldinho"];
       if (!userData.inventory) userData.inventory = [];
       
       for (let i = 0; i < count; i++) {
-        const randName = names[Math.floor(Math.random() * names.length)];
+        const randPlayer = playerDatabase[Math.floor(Math.random() * playerDatabase.length)];
         const randOvr = Math.floor(Math.random() * (135 - 100 + 1)) + 100;
-        userData.inventory.push({ id: Date.now() + Math.random(), name: randName, ovr: randOvr, grade: 1 });
+        
+        userData.inventory.push({ id: Date.now() + Math.random(), name: randPlayer.name, ovr: randOvr, grade: 1, img: randPlayer.img });
         
         resultGrid.innerHTML += `
-          <div class="card">
-            <div class="card-top"><span class="card-ovr">${randOvr}</span><span class="card-pos">FW</span></div>
-            <div class="card-img-placeholder"><i class="fa-solid fa-star"></i></div>
-            <div class="card-name">${randName}</div>
+          <div class="card" style="cursor:default;">
+            <div class="card-top"><span class="card-ovr">${randOvr}</span><span class="card-grade">+1</span></div>
+            <img class="card-img" src="${randPlayer.img}" alt="${randPlayer.name}">
+            <div class="card-name">${randPlayer.name}</div>
           </div>
         `;
       }
@@ -313,15 +343,62 @@
         invGrid.innerHTML = '<p style="color: #666;">Kho trống...</p>';
         return;
       }
-      userData.inventory.forEach(item => {
+      userData.inventory.forEach((item, index) => {
+        const cardImg = item.img || defaultFodderImg;
         invGrid.innerHTML += `
-          <div class="card">
-            <div class="card-top"><span class="card-ovr">${item.ovr}</span><span class="card-pos">ST</span></div>
-            <div class="card-img-placeholder"><i class="fa-solid fa-user"></i></div>
+          <div class="card" onclick="handleInventoryClick(${index})">
+            <div class="card-top"><span class="card-ovr">${item.ovr}</span><span class="card-grade">+${item.grade || 1}</span></div>
+            <img class="card-img" src="${cardImg}" alt="${item.name}">
             <div class="card-name">${item.name}</div>
           </div>
         `;
       });
+    }
+
+    function handleInventoryClick(index) {
+      selectedMainCardIndex = index;
+      const card = userData.inventory[index];
+      const cardImg = card.img || defaultFodderImg;
+      document.getElementById('mainUpgradeSlot').innerHTML = `
+        <div class="card" style="margin:0; border-color: var(--accent-green);">
+          <div class="card-top"><span class="card-ovr">${card.ovr}</span><span class="card-grade">+${card.grade || 1}</span></div>
+          <img class="card-img" src="${cardImg}" alt="${card.name}">
+          <div class="card-name">${card.name}</div>
+        </div>
+      `;
+      const currentGrade = card.grade || 1;
+      const rate = Math.max(10, 100 - (currentGrade * 15));
+      document.getElementById('successRateDisplay').innerText = rate + "%";
+      switchTab('upgradeTab');
+    }
+
+    function selectMainCardForUpgrade() {
+      switchTab('inventoryTab');
+      alert("Hãy bấm vào thẻ cầu thủ bạn muốn nâng cấp trong kho!");
+    }
+
+    function startUpgrade() {
+      if (selectedMainCardIndex === null || !userData.inventory[selectedMainCardIndex]) {
+        alert("Vui lòng chọn thẻ cầu thủ cần ép từ kho!");
+        return;
+      }
+      const card = userData.inventory[selectedMainCardIndex];
+      const currentGrade = card.grade || 1;
+      const successRate = Math.max(10, 100 - (currentGrade * 15));
+
+      const roll = Math.random() * 100;
+      if (roll <= successRate) {
+        card.grade = currentGrade + 1;
+        alert(`🎉 Chúc mừng! Ép thẻ thành công lên +${card.grade}!`);
+      } else {
+        userData.inventory.splice(selectedMainCardIndex, 1);
+        alert(`💥 Ép thẻ thất bại! Cầu thủ đã bay màu.`);
+      }
+      selectedMainCardIndex = null;
+      document.getElementById('mainUpgradeSlot').innerHTML = "Chưa chọn thẻ chính";
+      document.getElementById('successRateDisplay').innerText = "0%";
+      saveDataOnline();
+      updateUI();
     }
 
     function listenToAllUsers() {
@@ -329,12 +406,10 @@
         const users = snapshot.val();
         const tbody = document.getElementById('adminUserTable');
         tbody.innerHTML = '';
-
         if (users) {
           Object.keys(users).forEach(uName => {
             const uData = users[uName];
             const cardCount = uData.inventory ? uData.inventory.length : 0;
-
             tbody.innerHTML += `
               <tr>
                 <td><strong>${uName}</strong></td>
@@ -352,20 +427,17 @@
     }
 
     function adminEditBp(username, currentBp) {
-      const newBp = prompt(`Nhập số tiền BP mới cho tài khoản [${username}]:`, currentBp);
-      if (newBp !== null) {
-        const parsedBp = parseInt(newBp);
-        if (!isNaN(parsedBp)) {
-          db.ref(`users/${username}/bp`).set(parsedBp);
-          alert(`Đã cập nhật BP cho ${username}!`);
-        }
+      const newBp = prompt(`Nhập số BP mới cho [${username}]:`, currentBp);
+      if (newBp !== null && !isNaN(parseInt(newBp))) {
+        db.ref(`users/${username}/bp`).set(parseInt(newBp));
+        alert("Đã cập nhật BP thành công!");
       }
     }
 
     function adminDeleteUser(username) {
-      if (confirm(`Bạn có chắc chắn muốn xóa dữ liệu của tài khoản [${username}] không?`)) {
+      if (confirm(`Xóa tài khoản [${username}]?`)) {
         db.ref(`users/${username}`).remove();
-        alert(`Đã xóa tài khoản ${username}!`);
+        alert("Đã xóa tài khoản!");
       }
     }
   </script>
