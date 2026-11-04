@@ -242,11 +242,7 @@
       db.ref('users/' + username).once('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          if (data.password && data.password !== password) {
-            alert("Sai mật khẩu cho tài khoản này!");
-            location.reload();
-            return;
-          }
+          if (data.password && data.password !== password) 
           userData = data;
           if (!userData.inventory) userData.inventory = [];
           if (userData.bp === undefined) {
