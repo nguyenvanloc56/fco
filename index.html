@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Optimized & Click-To-Action</title>
+  <title>FC Online Simulator - Ultimate Lobby & Multi-Sell</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -14,7 +14,7 @@
   <style>
     :root {
       --bg-dark: #05080c;
-      --panel-bg: rgba(13, 20, 32, 0.96);
+      --panel-bg: rgba(13, 20, 32, 0.95);
       --panel-border: rgba(255, 255, 255, 0.12);
       --accent-green: #00ff88;
       --accent-blue: #00d2ff;
@@ -24,29 +24,39 @@
       --text-main: #f1f2f6;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
-    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 75px; overflow-x: hidden; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
     
-    header { background: rgba(8, 12, 18, 0.98); padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--panel-border); position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 18px; font-weight: 900; background: linear-gradient(45deg, #00d2ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .user-profile { display: flex; align-items: center; gap: 12px; }
-    .user-info, .bp-display { background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 20px; border: 1px solid var(--panel-border); display: flex; align-items: center; gap: 8px; font-size: 12px; }
-    .bp-display { color: var(--accent-gold); font-weight: bold; border-color: var(--accent-gold); }
-    .btn-logout { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; }
+    /* Giao diện Sảnh Sân Vận Động (Giống ảnh mẫu) */
+    .stadium-lobby {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: radial-gradient(circle, rgba(15,35,25,0.7) 0%, rgba(5,8,12,0.95) 100%), 
+                  url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+      display: flex; flex-direction: column; justify-content: space-between; z-index: 50; padding: 15px 30px;
+    }
 
-    nav { display: flex; justify-content: center; gap: 4px; padding: 8px; background: rgba(8, 12, 18, 0.98); border-top: 2px solid var(--panel-border); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; backdrop-filter: blur(10px); flex-wrap: wrap; }
-    .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #aaa; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s; }
-    .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
-    .nav-btn.active { background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); color: #000; border-color: transparent; }
-    .nav-btn.admin-btn { background: rgba(255, 71, 87, 0.15); border-color: var(--accent-red); color: var(--accent-red); }
+    .lobby-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+    .lobby-user-card { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 8px; backdrop-filter: blur(5px); }
+    .lobby-center-badge { background: rgba(0,0,0,0.7); border: 1px solid var(--accent-blue); padding: 6px 25px; border-radius: 20px; color: var(--accent-blue); font-weight: bold; font-size: 14px; letter-spacing: 1px; }
+    .lobby-right-group { display: flex; align-items: center; gap: 15px; }
+    .lobby-bp-box { background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); padding: 8px 18px; border-radius: 8px; color: var(--accent-gold); font-weight: bold; }
+    .lobby-gift-btn { background: var(--accent-red); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-    main { flex: 1; padding: 15px; max-width: 1400px; width: 100%; margin: 0 auto; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    .lobby-sidebar-left { display: flex; flex-direction: column; gap: 10px; z-index: 10; width: 160px; }
+    .lobby-side-btn { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 15px; border-radius: 6px; text-align: left; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); }
+    .lobby-side-btn:hover { background: rgba(0,255,136,0.2); border-color: var(--accent-green); color: var(--accent-green); }
 
-    #gameToast { position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 3000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
+    .lobby-footer-nav { display: flex; justify-content: center; gap: 15px; background: rgba(0,0,0,0.85); padding: 12px; border-top: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); z-index: 10; }
+    .lobby-nav-btn { background: transparent; border: none; color: #ccc; font-weight: bold; font-size: 13px; cursor: pointer; padding: 5px 15px; transition: 0.2s; text-transform: uppercase; }
+    .lobby-nav-btn:hover, .lobby-nav-btn.active { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-green); }
+
+    /* Nội dung game bên trong các tab */
+    .game-main-content { display: none; flex: 1; padding: 20px; max-width: 1400px; width: 100%; margin: 0 auto; z-index: 100; position: relative; background: var(--bg-dark); min-height: 100vh; }
+    .game-main-content.active { display: block; }
+
+    #gameToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 3000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(8px); }
     .auth-box { background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 30px; border-radius: 12px; width: 340px; text-align: center; }
     .input-group { margin-bottom: 12px; text-align: left; }
     .input-group label { display: block; margin-bottom: 4px; font-size: 11px; color: #aaa; }
@@ -57,10 +67,8 @@
     .squad-manage-container { display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 20px; }
     .squad-left-box, .squad-right-box { background: rgba(10, 16, 26, 0.95); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; }
 
-    /* Clickable row items with action popup on click */
-    .player-row-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; cursor: pointer; font-size: 12px; transition: background 0.15s; }
+    .player-row-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; cursor: pointer; font-size: 12px; transition: background 0.1s; }
     .player-row-item:hover { background: rgba(0,210,255,0.08); }
-    .player-row-item.active-selected { background: rgba(0,255,136,0.15); border-left: 3px solid var(--accent-green); }
 
     .click-action-bar { display: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #1a2538; border: 1px solid var(--accent-green); border-radius: 6px; padding: 4px 8px; gap: 6px; align-items: center; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
     .player-row-item.show-actions .click-action-bar { display: flex; }
@@ -89,7 +97,7 @@
     .fo4-right-panel { background: #121926; border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; }
     .fo4-fodder-table-container { background: rgba(0,0,0,0.6); border: 1px solid var(--panel-border); border-radius: 8px; overflow-y: auto; max-height: 380px; margin-top: 10px; }
 
-    #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+    #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 4000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
     .real-stage-box { display: flex; gap: 40px; align-items: center; justify-content: center; margin: 30px 0; }
     
     @keyframes shakeCard {
@@ -102,7 +110,7 @@
     }
     .shaking { animation: shakeCard 0.08s infinite; border-color: var(--accent-blue) !important; box-shadow: 0 0 40px var(--accent-blue); }
 
-    #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 3000; flex-direction: column; }
+    #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 4000; flex-direction: column; }
     .flash-screen { position: absolute; top:0; left:0; width:100%; height:100%; background: #fff; opacity:0; pointer-events:none; transition: opacity 0.5s ease; }
     .result-box-fx { text-align: center; transform: scale(0.5); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .result-box-fx.show { transform: scale(1.2); opacity: 1; }
@@ -149,6 +157,63 @@
 <body onclick="handleBodyClick(event)">
 
   <div id="gameToast">Thông báo game</div>
+
+  <!-- MODAL ĐĂNG NHẬP -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="auth-box">
+      <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
+      <p style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">Đã tối ưu siêu mượt & Giao diện chuẩn sân vận động</p>
+      <form id="loginForm">
+        <div class="input-group">
+          <label>Tên Đăng Nhập:</label>
+          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản...">
+        </div>
+        <div class="input-group">
+          <label>Mật Khẩu:</label>
+          <input type="password" id="passwordInput" required placeholder="Nhập mật khẩu...">
+        </div>
+        <button type="submit" class="btn-submit">VÀO GAME NGAY</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SẢNH CHỜ SÂN VẬN ĐỘNG (GIỐNG ẢNH MẪU) -->
+  <div id="stadiumLobbyView" class="stadium-lobby" style="display:none;">
+    <div class="lobby-header">
+      <div class="lobby-user-card">
+        <span id="lobbyUsername" style="font-weight: bold; font-size: 13px; color: #fff;">Khách</span>
+        <div style="font-size: 10px; color: var(--accent-green);">SVIP 2</div>
+      </div>
+      <div class="lobby-center-badge"><i class="fa-solid fa-globe"></i> iamrm.net</div>
+      <div class="lobby-right-group">
+        <div class="lobby-bp-box"><i class="fa-solid fa-coins"></i> <span id="lobbyBpCount">0</span> BP</div>
+        <button class="lobby-gift-btn" onclick="showToast('Nhập giftcode thành công!')">GIFT CODE</button>
+        <button class="btn-logout" onclick="logout()" style="padding: 8px 12px;">Thoát</button>
+      </div>
+    </div>
+
+    <div class="lobby-sidebar-left">
+      <button class="lobby-side-btn" onclick="openGameTab('questTab')"><i class="fa-solid fa-calendar-check" style="color:var(--accent-green)"></i> ĐIỂM DANH</button>
+      <button class="lobby-side-btn" onclick="openGameTab('matchTab')"><i class="fa-solid fa-trophy" style="color:var(--accent-gold)"></i> MÙA GIẢI</button>
+      <button class="lobby-side-btn" onclick="openGameTab('matchTab')"><i class="fa-solid fa-shield-halved" style="color:var(--accent-blue)"></i> XẾP HẠNG</button>
+      <button class="lobby-side-btn" onclick="openGameTab('settingsTab')"><i class="fa-solid fa-gear"></i> CÀI ĐẶT</button>
+      <button class="lobby-side-btn" onclick="openGameTab('settingsTab')"><i class="fa-solid fa-newspaper" style="color:#ff7700"></i> TIN TỨC</button>
+    </div>
+
+    <div class="lobby-footer-nav">
+      <button class="lobby-nav-btn active" onclick="openGameTab('squadManagerTab')">Quản lý CT</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('questTab')">Nhiệm vụ</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('marketTab')">TTCN</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('matchTab')">Theo dõi</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('upgradeTab')">Vật phẩm</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('packTab')">Shop</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('squadManagerTab')">CLB</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('questTab')">Sự kiện</button>
+    </div>
+  </div>
+
+  <!-- NÚT TRỞ LẠI SẢNH CHỜ -->
+  <button id="backToLobbyBtn" onclick="returnToLobby()" style="display:none; position:fixed; top:15px; right:15px; z-index:2000; background:rgba(0,0,0,0.8); border:1px solid var(--accent-green); color:var(--accent-green); padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;"><i class="fa-solid fa-house"></i> Về Sảnh</button>
 
   <!-- MODAL XEM THÔNG TIN CẦU THỦ -->
   <div id="playerInfoModal" class="modal-overlay" style="display:none;">
@@ -197,49 +262,10 @@
     </div>
   </div>
 
-  <!-- MODAL ĐĂNG NHẬP -->
-  <div id="loginModal" class="modal-overlay">
-    <div class="auth-box">
-      <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
-      <p style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">Tối ưu hóa lag & Bảo mật realtime</p>
-      <form id="loginForm">
-        <div class="input-group">
-          <label>Tên Đăng Nhập:</label>
-          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản bất kỳ...">
-        </div>
-        <div class="input-group">
-          <label>Mật Khẩu:</label>
-          <input type="password" id="passwordInput" required placeholder="Nhập mật khẩu...">
-        </div>
-        <button type="submit" class="btn-submit">VÀO GAME NGAY</button>
-      </form>
-    </div>
-  </div>
-
-  <header>
-    <div class="logo"><i class="fa-solid fa-trophy"></i> FC ONLINE SIMULATOR</div>
-    <div class="user-profile">
-      <div class="user-info"><i class="fa-solid fa-user"></i> <span id="displayUsername">Khách</span></div>
-      <div class="bp-display"><i class="fa-solid fa-coins"></i> <span id="bpCount">0</span> BP</div>
-      <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</button>
-    </div>
-  </header>
-
-  <!-- THANH ĐIỀU HƯỚNG -->
-  <nav>
-    <button class="nav-btn active" onclick="switchTab('squadManagerTab')">QUẢN LÝ CẦU THỦ</button>
-    <button class="nav-btn" onclick="switchTab('upgradeTab')">NÂNG CẤP CẦU THỦ</button>
-    <button class="nav-btn" onclick="switchTab('marketTab')">THỊ TRƯỜNG (TTCN)</button>
-    <button class="nav-btn" onclick="switchTab('packTab')">CỬA HÀNG</button>
-    <button class="nav-btn" onclick="switchTab('questTab')">NHIỆM VỤ</button>
-    <button class="nav-btn" onclick="switchTab('matchTab')">ĐÁ 3D</button>
-    <button class="nav-btn" onclick="switchTab('settingsTab')">CÀI ĐẶT</button>
-    <button id="adminNavBtn" class="nav-btn admin-btn" style="display:none;" onclick="switchTab('adminTab')"><i class="fa-solid fa-user-gear"></i> ADMIN</button>
-  </nav>
-
+  <!-- NỘI DUNG CÁC TAB GAME -->
   <main>
-    <!-- 1. QUẢN LÝ CẦU THỦ (CLICK ĐỂ HIỆN BẢNG THAO TÁC CHO CẢ ĐH CHÍNH VÀ KHO CHƯA ĐĂNG KÝ) -->
-    <div id="squadManagerTab" class="tab-content active">
+    <!-- 1. QUẢN LÝ CẦU THỦ -->
+    <div id="squadManagerTab" class="game-main-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <span style="font-size:12px; color:var(--accent-green); font-weight:bold;">Tổng lương: <span id="totalSalaryBadge">0</span>/250</span>
         <span style="font-size:11px; color:#aaa;"><i class="fa-solid fa-circle-info"></i> Bấm vào cầu thủ để hiển thị menu thao tác</span>
@@ -254,7 +280,7 @@
           <div id="squadMainListContainer" style="max-height:500px; overflow-y:auto;"></div>
         </div>
 
-        <!-- Cầu thủ chưa đăng ký (Kho) -->
+        <!-- Kho chưa đăng ký -->
         <div class="squad-right-box">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <h3 style="font-size:13px; color:var(--accent-blue);">Cầu Thủ Chưa Đăng Ký</h3>
@@ -281,17 +307,17 @@
     </div>
 
     <!-- 2. PHÒNG NÂNG CẤP CẦU THỦ -->
-    <div id="upgradeTab" class="tab-content">
+    <div id="upgradeTab" class="game-main-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <h2 style="font-size: 14px; color: var(--accent-gold);"><i class="fa-solid fa-hammer"></i> Nâng cấp cầu thủ</h2>
       </div>
 
       <div class="fo4-upgrade-layout">
         <div class="fo4-left-panel">
-          <div id="mainUpgradeSlot" class="main-card-slot" onclick="switchTab('squadManagerTab')" style="cursor:pointer;">
+          <div id="mainUpgradeSlot" class="main-card-slot" onclick="openGameTab('squadManagerTab')" style="cursor:pointer;">
             <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Bấm để chọn thẻ chính từ Kho</div>
           </div>
-          <button class="btn-submit" style="width: auto; padding: 6px 18px; font-size: 11px; margin-top: 10px;" onclick="switchTab('squadManagerTab')"><i class="fa-solid fa-shirt"></i> Chọn từ Kho chưa ĐK</button>
+          <button class="btn-submit" style="width: auto; padding: 6px 18px; font-size: 11px; margin-top: 10px;" onclick="openGameTab('squadManagerTab')"><i class="fa-solid fa-shirt"></i> Chọn từ Kho chưa ĐK</button>
 
           <div class="fo4-stats-box">
             <div class="fo4-stat-row"><span>Cấp thẻ</span><span id="statGradeTxt" style="color:var(--accent-red); font-weight:bold;">1 (+0)</span></div>
@@ -352,11 +378,11 @@
       </div>
     </div>
 
-    <!-- 3. THỊ TRƯỜNG (TTCN) -->
-    <div id="marketTab" class="tab-content">
+    <!-- 3. THỊ TRƯỜNG (TTCN - Có chọn nhiều cầu thủ để bán) -->
+    <div id="marketTab" class="game-main-content">
       <div class="market-sub-tabs">
         <button class="sub-tab-btn active" onclick="switchMarketSubTab('buySubTab', this)">Mua Cầu Thủ</button>
-        <button class="sub-tab-btn" onclick="switchMarketSubTab('sellSubTab', this)">Bán Cầu Thủ Nhanh</button>
+        <button class="sub-tab-btn" onclick="switchMarketSubTab('sellSubTab', this)">Bán Cầu Thủ (Chọn Nhiều)</button>
       </div>
 
       <div id="buySubTab" class="sub-tab-content active">
@@ -371,10 +397,17 @@
         </div>
       </div>
 
+      <!-- Mục Bán Nhiều Cầu Thủ -->
       <div id="sellSubTab" class="sub-tab-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4); padding:10px 15px; border-radius:8px; margin-bottom:10px; border:1px solid var(--panel-border);">
+          <div>
+            <input type="checkbox" id="selectAllMarketCheckbox" onclick="toggleSelectAllMarket(this)"> <label for="selectAllMarketCheckbox" style="font-size:12px; cursor:pointer;">Chọn tất cả kho để bán</label>
+          </div>
+          <button class="btn-action-table" style="background: var(--accent-gold); padding: 6px 15px;" onclick="sellMultiSelectedPlayers()">Bán Các Thẻ Đã Chọn</button>
+        </div>
         <div class="player-table-container">
           <table class="player-list-table">
-            <thead><tr><th>Cầu Thủ Kho</th><th>Mùa</th><th>OVR</th><th>Cấp Độ</th><th>Giá Trị Bán</th><th>Thao Tác</th></tr></thead>
+            <thead><tr><th>Chọn</th><th>Cầu Thủ Kho</th><th>Mùa</th><th>OVR</th><th>Cấp Độ</th><th>Giá Trị Bán</th></tr></thead>
             <tbody id="marketSellTableBody"></tbody>
           </table>
         </div>
@@ -382,7 +415,7 @@
     </div>
 
     <!-- 4. Cửa hàng -->
-    <div id="packTab" class="tab-content">
+    <div id="packTab" class="game-main-content">
       <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold);">Cửa Hàng Gói Thẻ VIP</h2>
       <div class="pack-shop-grid">
         <div class="pack-box">
@@ -393,8 +426,8 @@
     </div>
 
     <!-- 5. Nhiệm vụ -->
-    <div id="questTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 15px; color: var(--accent-green);"><i class="fa-solid fa-clipboard-list"></i> Nhiệm Vụ Hàng Ngày</h2>
+    <div id="questTab" class="game-main-content">
+      <h2 style="font-size: 14px; margin-bottom: 15px; color: var(--accent-green);"><i class="fa-solid fa-clipboard-list"></i> Điểm Danh & Nhiệm Vụ Hàng Ngày</h2>
       <div class="quest-card">
         <div>
           <h3 style="font-size: 13px; margin-bottom: 3px;">Đăng Nhập Hằng Ngày</h3>
@@ -405,7 +438,7 @@
     </div>
 
     <!-- 6. Đá 3D -->
-    <div id="matchTab" class="tab-content">
+    <div id="matchTab" class="game-main-content">
       <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Đá Xếp Hạng Mô Phỏng 3D</h2>
       <div id="canvas-container">
         <div class="controls-hint"><i class="fa-solid fa-gamepad"></i> Điều khiển: [WASD] hoặc [Phím Mũi Tên] để di chuyển</div>
@@ -414,7 +447,7 @@
     </div>
 
     <!-- 7. Cài đặt Đồ họa -->
-    <div id="settingsTab" class="tab-content">
+    <div id="settingsTab" class="game-main-content">
       <h2 style="font-size: 14px; margin-bottom: 15px; color: var(--accent-blue);"><i class="fa-solid fa-gear"></i> Cài Đặt Game & Đồ Họa</h2>
       <div class="settings-group">
         <h3>Chất Lượng Đồ Họa 3D</h3>
@@ -427,8 +460,8 @@
       </div>
     </div>
 
-    <!-- 8. ADMIN (XEM ONLINE/OFFLINE, SỬA BP, XÓA TK) -->
-    <div id="adminTab" class="tab-content">
+    <!-- 8. ADMIN -->
+    <div id="adminTab" class="game-main-content">
       <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản Người Chơi (ADMIN REALTIME)</h2>
       <div style="overflow-x: auto;">
         <table class="admin-table">
@@ -457,7 +490,6 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
-
     let useOnlineFirebase = false;
     let db = null;
 
@@ -551,11 +583,11 @@
 
     function loginSmart(username, password) {
       currentUser = username;
-      document.getElementById('displayUsername').innerText = username;
       document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('lobbyUsername').innerText = username;
+      document.getElementById('stadiumLobbyView').style.display = 'flex';
 
       if (username.toLowerCase() === ADMIN_USERNAME) {
-        document.getElementById('adminNavBtn').style.display = 'inline-block';
         renderAdminUserTable();
       }
 
@@ -611,7 +643,8 @@
     }
 
     function updateUI() {
-      document.getElementById('bpCount').innerText = (userData.bp || 0).toLocaleString('vi-VN');
+      const formattedBp = (userData.bp || 0).toLocaleString('vi-VN');
+      document.getElementById('lobbyBpCount').innerText = formattedBp;
       renderSquadManager();
       renderMarketBuy();
       renderMarketSell();
@@ -621,15 +654,22 @@
       }
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+    function openGameTab(tabId) {
+      document.getElementById('stadiumLobbyView').style.display = 'none';
+      document.getElementById('backToLobbyBtn').style.display = 'block';
+      document.querySelectorAll('.game-main-content').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
-      event.currentTarget.classList.add('active');
       if (tabId === 'squadManagerTab') renderSquadManager();
       if (tabId === 'marketTab') { renderMarketBuy(); renderMarketSell(); }
       if (tabId === 'upgradeTab') renderFo4FodderTable();
       if (tabId === 'adminTab') renderAdminUserTable();
+    }
+
+    function returnToLobby() {
+      document.querySelectorAll('.game-main-content').forEach(el => el.classList.remove('active'));
+      document.getElementById('backToLobbyBtn').style.display = 'none';
+      document.getElementById('stadiumLobbyView').style.display = 'flex';
+      updateUI();
     }
 
     function switchMarketSubTab(subTabId, btn) {
@@ -641,7 +681,6 @@
       if (subTabId === 'sellSubTab') renderMarketSell();
     }
 
-    /* Bấm ra ngoài để đóng menu hành động click */
     function handleBodyClick(e) {
       if (!e.target.closest('.player-row-item')) {
         document.querySelectorAll('.player-row-item').forEach(el => el.classList.remove('show-actions'));
@@ -656,7 +695,7 @@
       rowEl.classList.toggle('show-actions');
     }
 
-    /* QUẢN LÝ CẦU THỦ: BẤM ĐỂ HIỆN MENU (ÁP DỤNG CẢ ĐH CHÍNH VÀ KHO CHƯA ĐK) */
+    /* QUẢN LÝ CẦU THỦ */
     function renderSquadManager() {
       const mainContainer = document.getElementById('squadMainListContainer');
       mainContainer.innerHTML = '';
@@ -688,7 +727,6 @@
       }
       document.getElementById('totalSalaryBadge').innerText = totalSalary;
 
-      // Kho chưa đăng ký bên phải
       const tbodyInv = document.getElementById('inventoryTableBody');
       tbodyInv.innerHTML = '';
       document.getElementById('inventoryCountBadge').innerText = `${userData.inventory.length}/100`;
@@ -735,7 +773,6 @@
 
             <div class="click-action-bar">
               <button class="action-btn" title="Xóa/Bán" onclick="sellInventoryPlayer(${realIdx})"><i class="fa-solid fa-trash-can"></i></button>
-              <button class="action-btn" title="Đưa lên TTCN" onclick="sendPlayerToMarket(${realIdx})"><i class="fa-solid fa-cart-shopping"></i></button>
               <button class="action-btn" title="Nâng cấp" onclick="goToUpgradeCard(${realIdx})"><i class="fa-solid fa-arrow-up"></i></button>
               <button class="action-btn" title="Xem thông tin" onclick="showPlayerInfo(${realIdx})"><i class="fa-solid fa-magnifying-glass"></i></button>
               <button class="action-btn btn-transfer" onclick="assignToSquadFromInv(${realIdx})">Cho đá chính</button>
@@ -766,15 +803,11 @@
       showToast(`Đã bán ${item.name} thu về ${(earned/1e9).toFixed(1)} Tỷ BP!`);
     }
 
-    function sendPlayerToMarket(invIdx) {
-      showToast(`Đã đưa ${userData.inventory[invIdx].name} lên TTCN thành công!`);
-    }
-
     function goToUpgradeCard(invIdx) {
       selectedMainIndex = invIdx;
       selectedFodderIndices = [];
       updateMainUpgradeSlotUI();
-      switchTab('upgradeTab');
+      openGameTab('upgradeTab');
       showToast("Đã chọn thẻ chính để nâng cấp!");
     }
 
@@ -791,10 +824,7 @@
         </div>
       `;
       document.getElementById('infoDetailsText').innerHTML = `
-        <b>Tên:</b> ${item.name}<br>
-        <b>Mùa:</b> ${item.season || 'ICON'}<br>
-        <b>OVR:</b> ${ovr} | <b>Cấp:</b> +${grade}<br>
-        <b>Lương:</b> ${item.salary || 20} | <b>Vị trí:</b> ${item.pos || 'CM'}
+        <b>Tên:</b> ${item.name}<br><b>Mùa:</b> ${item.season || 'ICON'}<br><b>OVR:</b> ${ovr} | <b>Cấp:</b> +${grade}<br><b>Lương:</b> ${item.salary || 20}
       `;
       document.getElementById('playerInfoModal').style.display = 'flex';
     }
@@ -813,9 +843,7 @@
         </div>
       `;
       document.getElementById('infoDetailsText').innerHTML = `
-        <b>Cầu thủ đá chính đội hình</b><br>
-        <b>Tên:</b> ${item.name}<br>
-        <b>OVR:</b> ${ovr} | <b>Lương:</b> ${item.salary || 20}
+        <b>Cầu thủ đá chính</b><br><b>Tên:</b> ${item.name}<br><b>OVR:</b> ${ovr} | <b>Lương:</b> ${item.salary || 20}
       `;
       document.getElementById('playerInfoModal').style.display = 'flex';
     }
@@ -842,7 +870,7 @@
       showToast("Đội hình chính đã đủ 11 cầu thủ!");
     }
 
-    /* NÂNG CẤP CẦU THỦ (CHỈ LẤY TỪ KHO CHƯA ĐĂNG KÝ) */
+    /* NÂNG CẤP CẦU THỦ */
     function buyQuickFodder(ovr) {
       const priceMap = { 100: 100000000, 110: 2000000000, 120: 50000000000 };
       const cost = priceMap[ovr];
@@ -862,7 +890,7 @@
         pos: 'CM'
       });
       saveDataOnline(); updateUI();
-      showToast(`Đã mua Phôi ${ovr} vào kho chưa đăng ký!`);
+      showToast(`Đã mua Phôi ${ovr} vào kho!`);
     }
 
     function updateMainUpgradeSlotUI() {
@@ -1029,7 +1057,7 @@
       document.getElementById('resultBoxFx').classList.remove('show');
     }
 
-    /* MUA VÀ BÁN NHANH TTCN */
+    /* MUA VÀ BÁN NHIỀU CẦU THỦ TRÊN TTCN */
     function renderMarketBuy() {
       const tbodyBuy = document.getElementById('marketBuyTableBody');
       if (!tbodyBuy) return;
@@ -1107,15 +1135,36 @@
         const priceVal = ovr * 100000000;
         tbodySell.innerHTML += `
           <tr>
+            <td><input type="checkbox" class="market-sell-checkbox" value="${index}"></td>
             <td><div style="display:flex; align-items:center; gap:8px;"><img class="mini-card-avatar" src="${item.img}"><div><strong>${item.name}</strong></div></div></td>
             <td><span style="background:${item.seasonColor || '#ffb700'}; color:#000; padding:1px 4px; border-radius:3px; font-size:9px;">${item.season || 'ICON'}</span></td>
             <td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td>
             <td><span class="card-grade">+${grade}</span></td>
             <td style="color:var(--accent-gold); font-weight:bold;">${(priceVal/1e9).toFixed(1)} Tỷ BP</td>
-            <td><button class="btn-action-table" style="background:var(--accent-red); color:#fff;" onclick="sellInventoryPlayer(${index})">Bán Ngay</button></td>
           </tr>
         `;
       });
+    }
+
+    function toggleSelectAllMarket(master) {
+      document.querySelectorAll('.market-sell-checkbox').forEach(cb => cb.checked = master.checked);
+    }
+
+    function sellMultiSelectedPlayers() {
+      const checkboxes = document.querySelectorAll('.market-sell-checkbox:checked');
+      if (checkboxes.length === 0) { showToast("Chưa chọn cầu thủ để bán!"); return; }
+      const indicesToRemove = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
+      let totalEarned = 0;
+      indicesToRemove.forEach(index => {
+        const item = userData.inventory[index];
+        const grade = item.grade || 1;
+        const ovr = calculateOvr(item.baseOvr, grade);
+        totalEarned += (ovr * 100000000);
+        userData.inventory.splice(index, 1);
+      });
+      userData.bp += totalEarned;
+      saveDataOnline(); updateUI();
+      showToast(`Đã bán ${indicesToRemove.length} cầu thủ, thu về ${(totalEarned / 1e9).toFixed(1)} Tỷ BP!`);
     }
 
     function claimQuest(rewardBp) {
@@ -1169,7 +1218,6 @@
       return baseOvr + (grade - 1);
     }
 
-    /* BẢNG ADMIN (HIỂN THỊ ONLINE/OFFLINE, SỬA BP, XÓA TÀI KHOẢN) */
     function renderAdminUserTable() {
       const tbody = document.getElementById('adminUserTable');
       if (!tbody) return;
@@ -1201,7 +1249,7 @@
           try {
             const uData = JSON.parse(localStorage.getItem('fco_user_' + uName));
             const lastActive = parseInt(localStorage.getItem('fco_online_' + uName) || '0');
-            const isOnline = (Date.now() - lastActive) < 30000; // Hoạt động trong 30 giây gần nhất
+            const isOnline = (Date.now() - lastActive) < 30000;
             tbody.innerHTML += buildAdminRow(uName, isOnline, uData.bp || 0, uData.inventory?.length || 0);
           } catch(e) {}
         });
