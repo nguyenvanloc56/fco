@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Ultimate Edition</title>
+  <title>FC Online Simulator - Real PC Upgrade Edition</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -33,7 +33,6 @@
     .bp-display { color: var(--accent-gold); font-weight: bold; border-color: var(--accent-gold); }
     .btn-logout { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; }
 
-    /* Thanh điều hướng ở phía dưới */
     nav { display: flex; justify-content: center; gap: 4px; padding: 8px; background: rgba(8, 12, 18, 0.98); border-top: 2px solid var(--panel-border); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; backdrop-filter: blur(10px); flex-wrap: wrap; }
     .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #aaa; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s; }
     .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
@@ -44,7 +43,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Thông báo tách xa thanh điều hướng và tự biến mất sau 2s */
     #gameToast { position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 3000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
@@ -56,7 +54,6 @@
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 13px; color: #000; cursor: pointer; transition: 0.2s; }
     .btn-submit:hover { filter: brightness(1.1); }
 
-    /* Sân Cỏ & Đội Hình */
     .squad-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
     .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 530px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
     .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.15); transform: translateY(-50%); }
@@ -68,32 +65,37 @@
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
     .pos-select { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.8); color: var(--accent-green); border: 1px solid var(--accent-green); font-size: 9px; font-weight: bold; border-radius: 3px; outline: none; cursor: pointer; padding: 1px; z-index: 5; }
 
-    /* GIAO DIỆN PHÒNG ÉP THẺ GIỐNG FCO PC THẬT */
-    .upgrade-pc-room { background: linear-gradient(135deg, #090d16, #111a2d); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(255,183,0,0.2); display: flex; flex-direction: column; align-items: center; position: relative; }
-    .upgrade-center-stage { display: flex; justify-content: center; align-items: center; gap: 40px; width: 100%; margin: 20px 0; flex-wrap: wrap; }
-    .fodder-slots-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-    .fodder-slot-box { width: 90px; height: 120px; background: rgba(0,0,0,0.5); border: 2px dashed rgba(255,255,255,0.2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: 0.2s; }
+    /* GIAO DIỆN PHÒNG ÉP THẺ 2 NỬA CHUẨN FCO PC */
+    .upgrade-split-room { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: linear-gradient(135deg, #090d16, #111a2d); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(255,183,0,0.2); }
+    .upgrade-half-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    
+    .fodder-slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; margin: 15px 0; }
+    .fodder-slot-box { width: 100%; height: 110px; background: rgba(0,0,0,0.6); border: 2px dashed rgba(255,255,255,0.2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: 0.2s; }
     .fodder-slot-box:hover { border-color: var(--accent-blue); background: rgba(0,210,255,0.1); }
     .fodder-slot-box.filled { border-style: solid; border-color: var(--accent-blue); background: rgba(0,210,255,0.15); }
     
-    .main-card-slot { width: 180px; height: 260px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; box-shadow: var(--glow-gold); transition: all 0.3s ease; overflow: hidden; }
+    .main-card-slot { width: 170px; height: 240px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; box-shadow: var(--glow-gold); transition: all 0.3s ease; overflow: hidden; margin: 10px 0; }
     .card-top { width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 2; }
     .card-ovr { font-size: 20px; font-weight: 900; color: var(--accent-gold); }
     .card-season { font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; color: #000; text-transform: uppercase; }
     .card-grade { font-size: 11px; font-weight: bold; background: var(--accent-red); color: #fff; padding: 1px 5px; border-radius: 3px; }
-    .card-img-container { width: 100%; height: 140px; display: flex; justify-content: center; align-items: center; margin: 5px 0; position: relative; }
-    .card-img { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
+    .card-img-container { width: 100%; height: 130px; display: flex; justify-content: center; align-items: center; margin: 5px 0; position: relative; }
+    .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
     .card-name { font-size: 13px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
+    /* Màn hình Đập Thẻ Real (Hiện ra khi bấm Tiếp Theo) */
+    #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+    .real-stage-box { display: flex; gap: 40px; align-items: center; justify-content: center; margin: 30px 0; }
+    
     @keyframes shakeCard {
       0% { transform: translate(0, 0) rotate(0deg); }
-      20% { transform: translate(-4px, 4px) rotate(-3deg); }
-      40% { transform: translate(4px, -4px) rotate(3deg); }
-      60% { transform: translate(-4px, -4px) rotate(-1deg); }
-      80% { transform: translate(4px, 4px) rotate(1deg); }
+      20% { transform: translate(-5px, 5px) rotate(-3deg); }
+      40% { transform: translate(5px, -5px) rotate(3deg); }
+      60% { transform: translate(-5px, -5px) rotate(-1deg); }
+      80% { transform: translate(5px, 5px) rotate(1deg); }
       100% { transform: translate(0, 0) rotate(0deg); }
     }
-    .shaking { animation: shakeCard 0.08s infinite; border-color: var(--accent-blue) !important; box-shadow: 0 0 35px var(--accent-blue); }
+    .shaking { animation: shakeCard 0.08s infinite; border-color: var(--accent-blue) !important; box-shadow: 0 0 40px var(--accent-blue); }
 
     #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 3000; flex-direction: column; }
     .flash-screen { position: absolute; top:0; left:0; width:100%; height:100%; background: #fff; opacity:0; pointer-events:none; transition: opacity 0.5s ease; }
@@ -106,19 +108,17 @@
     .player-list-table th, .player-list-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
     .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; }
     .mini-card-avatar { width: 45px; height: 45px; object-fit: contain; }
-    .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
+    .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; margin-right: 4px; }
 
-    .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 12px; margin-bottom: 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-    .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 6px 8px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 10px; transition: 0.2s; }
+    .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; width: 100%; }
+    .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 5px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 10px; transition: 0.2s; }
     .btn-quick-buy:hover { background: var(--accent-blue); color: #000; }
 
     .pack-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
     .pack-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
     
-    /* Giao diện Nhiệm vụ */
     .quest-card { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     
-    /* Cài đặt đồ họa */
     .settings-group { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; margin-bottom: 15px; }
     .settings-group h3 { color: var(--accent-blue); margin-bottom: 12px; font-size: 14px; }
     .graphics-options { display: flex; gap: 10px; }
@@ -136,7 +136,31 @@
 
   <div id="gameToast">Thông báo game</div>
 
-  <!-- Modal Ép Thẻ FX -->
+  <!-- MÀN HÌNH ĐẬP THẺ REAL (HIỆN RA KHI BẤM TIẾP THEO) -->
+  <div id="realUpgradeScreen">
+    <h2 style="color: var(--accent-gold); font-size: 22px; margin-bottom: 10px;"><i class="fa-solid fa-fire"></i> PHÒNG NÂNG CẤP CHÍNH THỨC</h2>
+    <p style="color: #aaa; font-size: 12px; margin-bottom: 25px;">Kiểm tra kỹ nguyên liệu trước khi ấn nút Tiến Hành Nâng Cấp!</p>
+    
+    <div class="real-stage-box">
+      <!-- Thẻ chính trong phòng real -->
+      <div id="realMainCardSlot"></div>
+      <div style="font-size: 32px; font-weight: bold; color: var(--accent-green);">+</div>
+      <!-- Các phôi đã chọn hiển thị bên cạnh -->
+      <div id="realFoddersPreviewBox" style="display: flex; gap: 10px;"></div>
+    </div>
+
+    <div style="background: rgba(0,0,0,0.6); padding: 15px 30px; border-radius: 12px; border: 1px solid var(--panel-border); text-align: center; margin-bottom: 25px;">
+      <span style="font-size: 12px; color: #aaa;">Tỷ lệ thành công:</span>
+      <div id="realSuccessRateText" style="font-size: 28px; font-weight: bold; color: var(--accent-green);">0%</div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+      <button class="btn-submit" style="background: rgba(255,255,255,0.1); color:#fff; width: auto; padding: 10px 25px;" onclick="closeRealUpgradeScreen()">QUAY LẠI</button>
+      <button class="btn-submit" style="width: auto; padding: 12px 40px; font-size: 15px;" onclick="startRealUpgradeAction()">TIẾN HÀNH NÂNG CẤP</button>
+    </div>
+  </div>
+
+  <!-- Modal Kết Quả Ép Thẻ FX -->
   <div id="upgradeEffectModal">
     <div class="flash-screen" id="flashScreen"></div>
     <div class="result-box-fx" id="resultBoxFx">
@@ -153,7 +177,7 @@
       <p style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">Chế độ: Lưu tự động (Offline Safe Mode)</p>
       <form id="loginForm">
         <div class="input-group">
-          <label>Tên Tài Khoản:</label>
+          <label>Tên Đăng Nhập:</label>
           <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản bất kỳ...">
         </div>
         <div class="input-group">
@@ -174,7 +198,7 @@
     </div>
   </header>
 
-  <!-- Thanh công cụ nằm ở dưới cùng -->
+  <!-- Thanh điều hướng -->
   <nav>
     <button class="nav-btn active" onclick="switchTab('squadTab')">ĐỘI HÌNH</button>
     <button class="nav-btn" onclick="switchTab('inventoryTab')">KHO & SẮP XẾP</button>
@@ -248,49 +272,42 @@
       </div>
     </div>
 
-    <!-- 3. Phòng ép thẻ chuẩn phong cách FC Online PC -->
+    <!-- 3. Phòng ép thẻ chia 2 nửa + Nút Tiếp Theo -->
     <div id="upgradeTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold); text-align: center;"><i class="fa-solid fa-hammer"></i> PHÒNG NÂNG CẤP CẦU THỦ (FC ONLINE PC)</h2>
+      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold); text-align: center;"><i class="fa-solid fa-hammer"></i> PHÒNG NÂNG CẤP CẦU THỦ</h2>
       
-      <div class="upgrade-pc-room">
-        <div style="font-size: 12px; color: #aaa; margin-bottom: 5px;">Thẻ Cầu Thủ Chính</div>
-        <!-- Vị trí đặt thẻ chính -->
-        <div id="mainUpgradeSlot" class="main-card-slot" onclick="switchTab('inventoryTab')">
-          <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Bấm để chọn thẻ chính từ Kho</div>
-        </div>
-        <button class="btn-submit" style="width: auto; padding: 5px 15px; font-size: 11px; margin-top: 8px;" onclick="switchTab('inventoryTab')">Đổi Thẻ Chính</button>
-
-        <div style="width: 100%; margin: 20px 0; border-top: 1px solid var(--panel-border);"></div>
-
-        <div style="font-size: 12px; color: var(--accent-blue); margin-bottom: 8px; font-weight: bold;">Nguyên Liệu Phôi (Chọn tối đa 5 phôi - Phôi càng cao tăng càng nhiều %)</div>
-        
-        <!-- Các khe đặt phôi chuẩn PC -->
-        <div class="fodder-slots-container" id="fodderSlotsContainer">
-          <div class="fodder-slot-box" onclick="openFodderSelector(0)"><i class="fa-solid fa-plus" style="color: #666;"></i></div>
-          <div class="fodder-slot-box" onclick="openFodderSelector(1)"><i class="fa-solid fa-plus" style="color: #666;"></i></div>
-          <div class="fodder-slot-box" onclick="openFodderSelector(2)"><i class="fa-solid fa-plus" style="color: #666;"></i></div>
-          <div class="fodder-slot-box" onclick="openFodderSelector(3)"><i class="fa-solid fa-plus" style="color: #666;"></i></div>
-          <div class="fodder-slot-box" onclick="openFodderSelector(4)"><i class="fa-solid fa-plus" style="color: #666;"></i></div>
-        </div>
-
-        <div style="width: 100%; margin: 20px 0; border-top: 1px solid var(--panel-border);"></div>
-
-        <h3 style="font-size: 12px; color: #aaa; margin-bottom: 6px;">Mua Phôi Nhanh (100 - 150)</h3>
-        <div class="quick-fodder-shop" style="width: 100%; max-width: 600px;">
-          <button class="btn-quick-buy" onclick="buyQuickFodder(100)">Phôi 100 (0.1B)</button>
-          <button class="btn-quick-buy" onclick="buyQuickFodder(110)">Phôi 110 (2B)</button>
-          <button class="btn-quick-buy" onclick="buyQuickFodder(120)">Phôi 120 (50B)</button>
-          <button class="btn-quick-buy" onclick="buyQuickFodder(130)">Phôi 130 (500B)</button>
-          <button class="btn-quick-buy" onclick="buyQuickFodder(140)">Phôi 140 (2000B)</button>
-          <button class="btn-quick-buy" onclick="buyQuickFodder(150)">Phôi 150 (10000B)</button>
-        </div>
-
-        <div style="background: rgba(0,0,0,0.5); width: 100%; max-width: 600px; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--panel-border); margin-top: 10px;">
-          <div>
-            <span style="font-size: 11px; color: #aaa;">Tỷ lệ thành công tổng cộng:</span>
-            <div id="successRateText" style="font-size: 24px; font-weight: bold; color: var(--accent-green);">0%</div>
+      <div class="upgrade-split-room">
+        <!-- Nửa trái: Thẻ chính -->
+        <div class="upgrade-half-box">
+          <h3 style="font-size: 12px; color: var(--accent-gold); margin-bottom: 10px;">1. Thẻ Cầu Thủ Chính</h3>
+          <div id="mainUpgradeSlot" class="main-card-slot" onclick="switchTab('inventoryTab')">
+            <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Bấm để chọn thẻ chính từ Kho</div>
           </div>
-          <button class="btn-submit" style="width: auto; padding: 12px 35px; font-size: 14px;" onclick="startUpgradeAnimation()">TIẾN HÀNH NÂNG CẤP</button>
+          <button class="btn-submit" style="width: auto; padding: 6px 18px; font-size: 11px;" onclick="switchTab('inventoryTab')">Chọn Từ Kho</button>
+        </div>
+
+        <!-- Nửa phải: Phôi nguyên liệu & Nút Tiếp Theo -->
+        <div class="upgrade-half-box">
+          <h3 style="font-size: 12px; color: var(--accent-blue); margin-bottom: 5px;">2. Chọn Phôi Nguyên Liệu (Tối đa 5 phôi)</h3>
+          
+          <div class="quick-fodder-shop">
+            <button class="btn-quick-buy" onclick="buyQuickFodder(100)">Phôi 100 (0.1B)</button>
+            <button class="btn-quick-buy" onclick="buyQuickFodder(110)">Phôi 110 (2B)</button>
+            <button class="btn-quick-buy" onclick="buyQuickFodder(120)">Phôi 120 (50B)</button>
+            <button class="btn-quick-buy" onclick="buyQuickFodder(130)">Phôi 130 (500B)</button>
+            <button class="btn-quick-buy" onclick="buyQuickFodder(140)">Phôi 140 (2B)</button>
+            <button class="btn-quick-buy" onclick="buyQuickFodder(150)">Phôi 150 (10B)</button>
+          </div>
+
+          <div class="fodder-slots-grid" id="fodderSlotsContainer"></div>
+
+          <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--panel-border); padding-top: 15px;">
+            <div>
+              <span style="font-size: 11px; color: #aaa;">Tỷ lệ dự kiến:</span>
+              <div id="previewSuccessRate" style="font-size: 20px; font-weight: bold; color: var(--accent-green);">0%</div>
+            </div>
+            <button class="btn-submit" style="width: auto; padding: 10px 30px; background: linear-gradient(135deg, var(--accent-gold), #ff7700); color: #000;" onclick="openRealUpgradeScreen()">TIẾP THEO <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -373,19 +390,25 @@
           <button class="btn-gfx" onclick="setGraphics('ultra', this)">Siêu Nét (Ultra)</button>
         </div>
       </div>
-      <div class="settings-group">
-        <h3>Âm Thanh & Hiệu Ứng</h3>
-        <button class="btn-submit" style="width: auto; padding: 8px 16px;" onclick="showToast('Đã lưu cài đặt thành công!')">Lưu Thay Đổi</button>
-      </div>
     </div>
 
-    <!-- 9. Admin -->
+    <!-- 9. ADMIN -->
     <div id="adminTab" class="tab-content">
-      <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Admin</h2>
-      <table class="admin-table">
-        <thead><tr><th>Người Chơi</th><th>BP</th><th>Thẻ</th><th>Thao Tác</th></tr></thead>
-        <tbody id="adminUserTable"></tbody>
-      </table>
+      <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản Người Chơi (ADMIN)</h2>
+      <div style="overflow-x: auto;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tên Đăng Nhập</th>
+              <th>Mật Khẩu</th>
+              <th>Số Dư BP</th>
+              <th>Số Thẻ Kho</th>
+              <th>Thao Tác Admin</th>
+            </tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
+      </div>
     </div>
   </main>
 
@@ -399,7 +422,7 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
-
+    
     let useOnlineFirebase = false;
     let db = null;
 
@@ -457,17 +480,15 @@
     let currentUser = null;
     let userData = { bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {} };
     let selectedMainIndex = null;
-    let selectedFodderIndices = [null, null, null, null, null]; // 5 khe phôi chuẩn PC
+    let selectedFodderIndices = [null, null, null, null, null];
     let activeFodderSlotIndex = null;
     let activeTargetSlot = null;
 
-    // Công thức cộng OVR theo cấp thẻ (+2 tăng 1, +3 tăng 2, +4 tăng 3,...)
     function calculateOvr(baseOvr, grade) {
       if (grade <= 1) return baseOvr;
       return baseOvr + (grade - 1);
     }
 
-    // Thông báo tự biến mất sau 2 giây và nằm cao tránh thanh điều hướng
     let toastTimeout = null;
     function showToast(message) {
       const toast = document.getElementById('gameToast');
@@ -498,7 +519,7 @@
 
       if (username.toLowerCase() === ADMIN_USERNAME) {
         document.getElementById('adminNavBtn').style.display = 'inline-block';
-        if (useOnlineFirebase) listenToAllUsers();
+        renderAdminUserTable();
       }
 
       if (useOnlineFirebase) {
@@ -547,6 +568,9 @@
       renderInventoryTable();
       renderMarket();
       renderFodderSlotsUI();
+      if (currentUser && currentUser.toLowerCase() === ADMIN_USERNAME) {
+        renderAdminUserTable();
+      }
     }
 
     function switchTab(tabId) {
@@ -555,6 +579,7 @@
       document.getElementById(tabId).classList.add('active');
       event.currentTarget.classList.add('active');
       if (tabId === 'marketTab') renderMarket();
+      if (tabId === 'adminTab') renderAdminUserTable();
     }
 
     /* Đội Hình */
@@ -593,7 +618,7 @@
       if (!userData.slotPositions) userData.slotPositions = {};
       userData.slotPositions[slotIndex] = newPos;
       saveDataOnline();
-      showToast(`Đã đổi vị trí slot thành ${newPos}`);
+      showToast(`Đã đổi vị trí thành ${newPos}`);
     }
 
     function openSquadSelector(slotIndex) {
@@ -654,7 +679,7 @@
       showToast("Đội hình đầy!");
     }
 
-    /* Kho & Sắp xếp OVR */
+    /* Kho & Sắp xếp */
     function renderInventoryTable() {
       const tbody = document.getElementById('inventoryTableBody');
       tbody.innerHTML = '';
@@ -671,7 +696,7 @@
         return sortOrder === 'desc' ? ovrB - ovrA : ovrA - ovrB;
       });
 
-      sortedList.forEach((item, index) => {
+      sortedList.forEach((item) => {
         const grade = item.grade || 1;
         const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
         tbody.innerHTML += `<tr><td><div style="display:flex; align-items:center; gap:10px;"><img class="mini-card-avatar" src="${item.img || defaultFodderImg}"><div><strong>${item.name}</strong></div></div></td><td><span style="font-size:9px; font-weight:bold; background:${item.seasonColor || '#adb5bd'}; color:#000; padding:2px 6px; border-radius:4px;">${item.season || 'NORM'}</span></td><td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td><td><span class="card-grade">+${grade}</span></td><td><button class="btn-action-table" onclick="selectMainCardDirect('${item.id}')">Chọn Ép Thẻ</button></td></tr>`;
@@ -702,7 +727,7 @@
       slot.innerHTML = `<div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${card.seasonColor || '#00d2ff'};">${card.season || 'NORM'}</span><span class="card-grade">+${grade}</span></div><div class="card-img-container"><img class="card-img" src="${card.img || defaultFodderImg}"></div><div class="card-name">${card.name}</div>`;
     }
 
-    /* Mua Phôi Nhanh & Phòng Ép Thẻ PC */
+    /* Mua Phôi Nhanh & Phòng Ép Thẻ */
     function buyQuickFodder(ovr) {
       const priceMap = { 100: 100000000, 110: 2000000000, 120: 50000000000, 130: 500000000000, 140: 2000000000000, 150: 10000000000000 };
       const cost = priceMap[ovr];
@@ -762,7 +787,6 @@
       if (selectedMainIndex !== null && userData.inventory[selectedMainIndex]) {
         const mainCard = userData.inventory[selectedMainIndex];
         const grade = mainCard.grade || 1;
-        // Tỷ lệ cơ bản tùy theo cấp thẻ
         let baseRate = Math.max(15, 100 - (grade * 15));
         totalRate += baseRate;
       }
@@ -775,11 +799,10 @@
           const item = userData.inventory[invIdx];
           const grade = item.grade || 1;
           const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
-          // Phôi càng cao cộng càng nhiều % thành công
           let bonusRate = Math.floor(ovr * 0.8) + (grade * 5);
           totalRate += bonusRate;
 
-          box.innerHTML = `<img src="${item.img || defaultFodderImg}" style="width:45px; height:45px; object-fit:contain;"><div style="font-size:9px; color:var(--accent-gold); font-weight:bold;">OVR ${ovr}</div><button onclick="event.stopPropagation(); removeFodder(${slotIdx})" style="position:absolute; top:2px; right:2px; background:red; color:#fff; border:none; font-size:9px; border-radius:50%; width:16px; height:16px; cursor:pointer;">×</button>`;
+          box.innerHTML = `<img src="${item.img || defaultFodderImg}" style="width:40px; height:40px; object-fit:contain;"><div style="font-size:9px; color:var(--accent-gold); font-weight:bold;">OVR ${ovr}</div><button onclick="event.stopPropagation(); removeFodder(${slotIdx})" style="position:absolute; top:2px; right:2px; background:red; color:#fff; border:none; font-size:9px; border-radius:50%; width:16px; height:16px; cursor:pointer;">×</button>`;
         } else {
           box.innerHTML = `<i class="fa-solid fa-plus" style="color: #666;"></i>`;
         }
@@ -788,7 +811,7 @@
       });
 
       const finalRate = selectedMainIndex !== null ? Math.min(100, totalRate) : 0;
-      document.getElementById('successRateText').innerText = finalRate + "%";
+      document.getElementById('previewSuccessRate').innerText = finalRate + "%";
     }
 
     function removeFodder(slotIdx) {
@@ -796,11 +819,68 @@
       renderFodderSlotsUI();
     }
 
-    function startUpgradeAnimation() {
-      if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) { showToast("Chưa chọn thẻ chính!"); return; }
-      const slot = document.getElementById('mainUpgradeSlot');
-      slot.classList.add('shaking');
-      setTimeout(() => { slot.classList.remove('shaking'); executeUpgradeLogic(); }, 1500);
+    /* MỞ MÀN HÌNH ĐẬP THẺ REAL KHI BẤM "TIẾP THEO" */
+    function openRealUpgradeScreen() {
+      if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
+        showToast("Vui lòng chọn thẻ chính trước!");
+        return;
+      }
+      const mainCard = userData.inventory[selectedMainIndex];
+      const grade = mainCard.grade || 1;
+      const ovr = calculateOvr(mainCard.baseOvr || mainCard.ovr, grade);
+
+      // Render thẻ chính trong phòng real
+      document.getElementById('realMainCardSlot').innerHTML = `
+        <div class="main-card-slot" id="realCardAnimBox">
+          <div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${mainCard.seasonColor || '#00d2ff'};">${mainCard.season || 'NORM'}</span><span class="card-grade">+${grade}</span></div>
+          <div class="card-img-container"><img class="card-img" src="${mainCard.img || defaultFodderImg}"></div>
+          <div class="card-name">${mainCard.name}</div>
+        </div>
+      `;
+
+      // Render các phôi đã chọn bên cạnh
+      let foddersBox = document.getElementById('realFoddersPreviewBox');
+      foddersBox.innerHTML = '';
+      let totalRate = Math.max(15, 100 - (grade * 15));
+      let hasFodder = false;
+
+      selectedFodderIndices.forEach(invIdx => {
+        if (invIdx !== null && userData.inventory[invIdx]) {
+          hasFodder = true;
+          const item = userData.inventory[invIdx];
+          const fGrade = item.grade || 1;
+          const fOvr = calculateOvr(item.baseOvr || item.ovr, fGrade);
+          totalRate += Math.floor(fOvr * 0.8) + (fGrade * 5);
+          foddersBox.innerHTML += `
+            <div style="width:75px; height:105px; background:rgba(0,0,0,0.6); border:1px solid var(--accent-blue); border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:5px;">
+              <img src="${item.img || defaultFodderImg}" style="width:35px; height:35px; object-fit:contain;">
+              <div style="font-size:9px; color:var(--accent-gold); font-weight:bold; margin-top:2px;">OVR ${fOvr}</div>
+            </div>
+          `;
+        }
+      });
+
+      if (!hasFodder) {
+        foddersBox.innerHTML = `<span style="font-size:12px; color:#888;">(Không dùng phôi)</span>`;
+      }
+
+      document.getElementById('realSuccessRateText').innerText = Math.min(100, totalRate) + "%";
+      document.getElementById('realUpgradeScreen').style.display = 'flex';
+    }
+
+    function closeRealUpgradeScreen() {
+      document.getElementById('realUpgradeScreen').style.display = 'none';
+    }
+
+    /* BẤM NÂNG CẤP TRONG MÀN HÌNH REAL MỚI BẮT ĐẦU HIỆU ỨNG */
+    function startRealUpgradeAction() {
+      const cardBox = document.getElementById('realCardAnimBox');
+      cardBox.classList.add('shaking');
+      setTimeout(() => {
+        cardBox.classList.remove('shaking');
+        closeRealUpgradeScreen();
+        executeUpgradeLogic();
+      }, 1500);
     }
 
     function executeUpgradeLogic() {
@@ -817,14 +897,12 @@
       const rate = Math.min(100, totalRate);
       const isSuccess = Math.random() * 100 <= rate;
 
-      // Xóa các phôi đã dùng (sắp xếp giảm dần index để không lệch mảng)
       let validFodders = selectedFodderIndices.filter(x => x !== null).sort((a,b) => b - a);
       validFodders.forEach(idx => userData.inventory.splice(idx, 1));
 
       const currentMainIndex = userData.inventory.indexOf(mainCard);
       if (isSuccess) {
         mainCard.grade = (mainCard.grade || 1) + 1;
-        if (mainCard.grade === 3) claimQuestReward(2, 0); // Hoàn thành nhiệm vụ ép thẻ +3
       } else if ((mainCard.grade || 1) > 1) {
         mainCard.grade -= 1;
       }
@@ -857,7 +935,7 @@
       document.getElementById('resultBoxFx').classList.remove('show');
     }
 
-    /* Mở gói & Bán nhiều */
+    /* Mở gói & Bán */
     function buyAndOpenPack(count, cost) {
       if (userData.bp < cost) { showToast("Không đủ BP!"); return; }
       userData.bp -= cost;
@@ -872,7 +950,7 @@
         grid.innerHTML += `<div class="main-card-slot" style="width:110px; height:160px; margin:0;"><div class="card-top"><span class="card-ovr" style="font-size:13px;">${ovr}</span><span style="font-size:8px; background:${s.color}; color:#000; padding:1px 3px; border-radius:2px;">${s.code}</span></div><div class="card-img-container" style="height:80px;"><img class="card-img" style="width:70px; height:70px;" src="${p.img}"></div><div class="card-name" style="font-size:10px;">${p.name}</div></div>`;
       }
       saveDataOnline(); updateUI();
-      showToast(`Đã mở ${count} gói thành công!`);
+      showToast(`Đã mở ${count} gói!`);
     }
 
     function renderMarket() {
@@ -911,29 +989,18 @@
       showToast(`Đã bán ${indicesToRemove.length} cầu thủ, thu về ${(totalEarned / 1e9).toFixed(1)} Tỷ BP!`);
     }
 
-    /* Nhiệm vụ */
     function claimQuest(questId, rewardBp) {
       userData.bp += rewardBp;
       saveDataOnline(); updateUI();
-      showToast(`Nhận thưởng thành công: ${(rewardBp/1e9).toFixed(1)} Tỷ BP!`);
+      showToast(`Nhận thưởng: ${(rewardBp/1e9).toFixed(1)} Tỷ BP!`);
     }
 
-    function claimQuestReward(questId, rewardBp) {
-      if(rewardBp > 0) {
-        userData.bp += rewardBp;
-        saveDataOnline(); updateUI();
-      }
-      showToast("Nhiệm vụ hoàn thành!");
-    }
-
-    /* Đồ họa */
     function setGraphics(level, btn) {
       document.querySelectorAll('.btn-gfx').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
-      showToast(`Đã chuyển đồ họa sang mức: ${level.toUpperCase()}`);
+      showToast(`Đồ họa: ${level.toUpperCase()}`);
     }
 
-    /* Trận đấu 3D */
     let matchInit = false;
     function start3DMatch() {
       showToast("Trận đấu 3D bắt đầu!");
@@ -968,32 +1035,93 @@
       animate();
     }
 
-    /* Admin Panel */
-    function listenToAllUsers() {
-      if (!useOnlineFirebase) return;
-      db.ref('users').on('value', (snapshot) => {
-        const users = snapshot.val();
-        const tbody = document.getElementById('adminUserTable');
-        tbody.innerHTML = '';
-        if (users) {
-          Object.keys(users).forEach(uName => {
-            const uData = users[uName];
-            tbody.innerHTML += `<tr><td><strong>${uName}</strong></td><td style="color:var(--accent-gold);">${(uData.bp || 0).toLocaleString()} BP</td><td>${uData.inventory?.length || 0} Thẻ</td><td><button class="btn-action-table" onclick="adminEditBp('${uName}', ${uData.bp || 0})">Sửa BP</button></td></tr>`;
-          });
+    /* BẢNG ADMIN */
+    function renderAdminUserTable() {
+      const tbody = document.getElementById('adminUserTable');
+      tbody.innerHTML = '';
+
+      if (useOnlineFirebase) {
+        db.ref('users').once('value', (snapshot) => {
+          const users = snapshot.val();
+          tbody.innerHTML = '';
+          if (users) {
+            Object.keys(users).forEach(uName => {
+              const uData = users[uName];
+              tbody.innerHTML += buildAdminUserRow(uName, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
+            });
+          }
+        });
+      } else {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key.startsWith('fco_user_')) {
+            const uName = key.replace('fco_user_', '');
+            try {
+              const uData = JSON.parse(localStorage.getItem(key));
+              tbody.innerHTML += buildAdminUserRow(uName, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
+            } catch(e) {}
+          }
         }
-      });
+      }
+    }
+
+    function buildAdminUserRow(uName, pass, bp, cardCount) {
+      return `
+        <tr>
+          <td><strong style="color:var(--accent-blue);">${uName}</strong></td>
+          <td><span style="color:var(--accent-green); font-family:monospace;">${pass}</span></td>
+          <td style="color:var(--accent-gold); font-weight:bold;">${(bp).toLocaleString()} BP</td>
+          <td>${cardCount} Thẻ</td>
+          <td>
+            <button class="btn-action-table" onclick="adminEditBp('${uName}', ${bp})">Sửa BP</button>
+            <button class="btn-action-table" style="background:var(--accent-blue); color:#000;" onclick="adminChangePass('${uName}')">Đổi MK</button>
+            <button class="btn-action-table" style="background:var(--accent-red); color:#fff;" onclick="adminDeleteUser('${uName}')">Xóa Acc</button>
+          </td>
+        </tr>
+      `;
     }
 
     function adminEditBp(username, currentBp) {
-      const newBp = prompt(`Nhập BP mới cho [${username}]:`, currentBp);
+      const newBp = prompt(`Nhập số BP mới cho tài khoản [${username}]:`, currentBp);
       if (newBp !== null && !isNaN(parseInt(newBp))) {
         if (useOnlineFirebase) {
           db.ref(`users/${username}/bp`).set(parseInt(newBp));
         } else {
-          userData.bp = parseInt(newBp);
-          saveDataOnline(); updateUI();
+          const key = 'fco_user_' + username;
+          let uData = JSON.parse(localStorage.getItem(key));
+          uData.bp = parseInt(newBp);
+          localStorage.setItem(key, JSON.stringify(uData));
         }
-        showToast("Đã đổi BP thành công!");
+        showToast(`Đã đổi BP cho [${username}]!`);
+        renderAdminUserTable();
+      }
+    }
+
+    function adminChangePass(username) {
+      const newPass = prompt(`Nhập MẬT KHẨU MỚI cho tài khoản [${username}]:`);
+      if (newPass && newPass.trim() !== '') {
+        if (useOnlineFirebase) {
+          db.ref(`users/${username}/password`).set(newPass.trim());
+        } else {
+          const key = 'fco_user_' + username;
+          let uData = JSON.parse(localStorage.getItem(key));
+          uData.password = newPass.trim();
+          localStorage.setItem(key, JSON.stringify(uData));
+        }
+        showToast(`Đã cập nhật mật khẩu cho [${username}]!`);
+        renderAdminUserTable();
+      }
+    }
+
+    function adminDeleteUser(username) {
+      if (confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN tài khoản [${username}]?`)) {
+        if (useOnlineFirebase) {
+          db.ref(`users/${username}`).remove();
+        } else {
+          localStorage.removeItem('fco_user_' + username);
+        }
+        showToast(`Đã xóa tài khoản [${username}]!`);
+        renderAdminUserTable();
       }
     }
   </script>
