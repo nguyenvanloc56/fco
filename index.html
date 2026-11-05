@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Real PC Upgrade Edition</title>
+  <title>FC Online Simulator - Ultimate Dressing Room & Perf</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -65,15 +65,7 @@
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
     .pos-select { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.8); color: var(--accent-green); border: 1px solid var(--accent-green); font-size: 9px; font-weight: bold; border-radius: 3px; outline: none; cursor: pointer; padding: 1px; z-index: 5; }
 
-    /* GIAO DIỆN PHÒNG ÉP THẺ 2 NỬA CHUẨN FCO PC */
-    .upgrade-split-room { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: linear-gradient(135deg, #090d16, #111a2d); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(255,183,0,0.2); }
-    .upgrade-half-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
-    
-    .fodder-slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; margin: 15px 0; }
-    .fodder-slot-box { width: 100%; height: 110px; background: rgba(0,0,0,0.6); border: 2px dashed rgba(255,255,255,0.2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: 0.2s; }
-    .fodder-slot-box:hover { border-color: var(--accent-blue); background: rgba(0,210,255,0.1); }
-    .fodder-slot-box.filled { border-style: solid; border-color: var(--accent-blue); background: rgba(0,210,255,0.15); }
-    
+    /* Khung thẻ cầu thủ chuẩn FCO PC */
     .main-card-slot { width: 170px; height: 240px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; box-shadow: var(--glow-gold); transition: all 0.3s ease; overflow: hidden; margin: 10px 0; }
     .card-top { width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 2; }
     .card-ovr { font-size: 20px; font-weight: 900; color: var(--accent-gold); }
@@ -83,7 +75,14 @@
     .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
     .card-name { font-size: 13px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
-    /* Màn hình Đập Thẻ Real (Hiện ra khi bấm Tiếp Theo) */
+    .upgrade-split-room { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: linear-gradient(135deg, #090d16, #111a2d); border: 2px solid var(--accent-gold); border-radius: 16px; padding: 25px; box-shadow: 0 0 30px rgba(255,183,0,0.2); }
+    .upgrade-half-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+    
+    .fodder-slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; margin: 15px 0; }
+    .fodder-slot-box { width: 100%; height: 110px; background: rgba(0,0,0,0.6); border: 2px dashed rgba(255,255,255,0.2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; transition: 0.2s; }
+    .fodder-slot-box:hover { border-color: var(--accent-blue); background: rgba(0,210,255,0.1); }
+    .fodder-slot-box.filled { border-style: solid; border-color: var(--accent-blue); background: rgba(0,210,255,0.15); }
+
     #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
     .real-stage-box { display: flex; gap: 40px; align-items: center; justify-content: center; margin: 30px 0; }
     
@@ -103,10 +102,10 @@
     .result-box-fx.show { transform: scale(1.2); opacity: 1; }
     .result-title { font-size: 36px; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
-    .player-table-container { background: rgba(13, 20, 32, 0.85); border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; }
+    .player-table-container { background: rgba(13, 20, 32, 0.85); border: 1px solid var(--panel-border); border-radius: 10px; overflow: hidden; max-height: 520px; overflow-y: auto; }
     .player-list-table { width: 100%; border-collapse: collapse; }
     .player-list-table th, .player-list-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
-    .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; }
+    .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; position: sticky; top: 0; z-index: 5; }
     .mini-card-avatar { width: 45px; height: 45px; object-fit: contain; }
     .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; margin-right: 4px; }
 
@@ -118,7 +117,6 @@
     .pack-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
     
     .quest-card { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    
     .settings-group { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; margin-bottom: 15px; }
     .settings-group h3 { color: var(--accent-blue); margin-bottom: 12px; font-size: 14px; }
     .graphics-options { display: flex; gap: 10px; }
@@ -136,16 +134,34 @@
 
   <div id="gameToast">Thông báo game</div>
 
-  <!-- MÀN HÌNH ĐẬP THẺ REAL (HIỆN RA KHI BẤM TIẾP THEO) -->
+  <!-- PHÒNG THAY ĐỒ (CUSTOM MINIFACE MODAL) -->
+  <div id="dressingRoomModal" class="modal-overlay" style="display:none;">
+    <div style="background:var(--panel-bg); border:1px solid var(--panel-border); padding:25px; border-radius:16px; width:420px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+      <h3 style="color:var(--accent-gold); margin-bottom:15px; font-size:16px;"><i class="fa-solid fa-shirt"></i> PHÒNG THAY ĐỒ MINIFACE</h3>
+      <div id="dressingPreviewCard" style="margin: 0 auto 15px auto; width:140px; height:200px;"></div>
+      <div class="input-group">
+        <label>Nhập Link URL Ảnh Trực Tiếp (.png / .webp):</label>
+        <input type="text" id="customMinifaceUrl" placeholder="https://s1.fifaaddict.com/...">
+      </div>
+      <div class="input-group" style="margin-top: 10px;">
+        <label>Hoặc Tải Ảnh Từ Máy Tính:</label>
+        <input type="file" id="customMinifaceFile" accept="image/*" style="font-size:11px; color:#aaa;" onchange="previewLocalImage(event)">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-submit" style="background:rgba(255,255,255,0.1); color:#fff;" onclick="document.getElementById('dressingRoomModal').style.display='none'">Hủy</button>
+        <button class="btn-submit" onclick="applyCustomMiniface()">Lưu Miniface</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÀN HÌNH ĐẬP THẺ REAL -->
   <div id="realUpgradeScreen">
     <h2 style="color: var(--accent-gold); font-size: 22px; margin-bottom: 10px;"><i class="fa-solid fa-fire"></i> PHÒNG NÂNG CẤP CHÍNH THỨC</h2>
-    <p style="color: #aaa; font-size: 12px; margin-bottom: 25px;">Kiểm tra kỹ nguyên liệu trước khi ấn nút Tiến Hành Nâng Cấp!</p>
+    <p style="color: #aaa; font-size: 12px; margin-bottom: 25px;">Kiểm tra kỹ nguyên liệu trước khi ấn tiến hành nâng cấp!</p>
     
     <div class="real-stage-box">
-      <!-- Thẻ chính trong phòng real -->
       <div id="realMainCardSlot"></div>
       <div style="font-size: 32px; font-weight: bold; color: var(--accent-green);">+</div>
-      <!-- Các phôi đã chọn hiển thị bên cạnh -->
       <div id="realFoddersPreviewBox" style="display: flex; gap: 10px;"></div>
     </div>
 
@@ -160,7 +176,7 @@
     </div>
   </div>
 
-  <!-- Modal Kết Quả Ép Thẻ FX -->
+  <!-- MODAL ÉP THẺ FX -->
   <div id="upgradeEffectModal">
     <div class="flash-screen" id="flashScreen"></div>
     <div class="result-box-fx" id="resultBoxFx">
@@ -170,7 +186,7 @@
     </div>
   </div>
 
-  <!-- Modal Đăng nhập -->
+  <!-- MODAL ĐĂNG NHẬP -->
   <div id="loginModal" class="modal-overlay">
     <div class="auth-box">
       <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
@@ -198,12 +214,12 @@
     </div>
   </header>
 
-  <!-- Thanh điều hướng -->
+  <!-- THANH ĐIỀU HƯỚNG -->
   <nav>
     <button class="nav-btn active" onclick="switchTab('squadTab')">ĐỘI HÌNH</button>
     <button class="nav-btn" onclick="switchTab('inventoryTab')">KHO & SẮP XẾP</button>
     <button class="nav-btn" onclick="switchTab('upgradeTab')">PHÒNG ÉP THẺ</button>
-    <button class="nav-btn" onclick="switchTab('marketTab')">CHỢ & BÁN</button>
+    <button class="nav-btn" onclick="switchTab('marketTab')">TTCN & BÁN</button>
     <button class="nav-btn" onclick="switchTab('packTab')">MỞ GÓI</button>
     <button class="nav-btn" onclick="switchTab('questTab')">NHIỆM VỤ</button>
     <button class="nav-btn" onclick="switchTab('matchTab')">ĐÁ 3D</button>
@@ -216,7 +232,16 @@
     <div id="squadTab" class="tab-content active">
       <div class="squad-container">
         <div>
-          <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-green);">Sơ Đồ Đội Hình (Bấm vị trí để chọn cầu thủ)</h2>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h2 style="font-size: 14px; color: var(--accent-green);">Sơ Đồ Đội Hình (Bấm vị trí để chọn)</h2>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <label style="font-size: 11px; color: #aaa;">Sắp xếp OVR:</label>
+              <select id="sortSquadOrderSelect" onchange="renderSquadBench()" style="background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--panel-border); padding: 4px 8px; border-radius: 4px; font-size: 11px; outline: none;">
+                <option value="desc">Cao đến Thấp</option>
+                <option value="asc">Thấp đến Cao</option>
+              </select>
+            </div>
+          </div>
           <div class="pitch">
             <div class="pitch-line-center"></div>
             <div class="pitch-row">
@@ -242,7 +267,7 @@
         </div>
         <div>
           <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">Danh Sách Dự Bị</h2>
-          <div class="player-table-container" style="max-height: 520px; overflow-y: auto;">
+          <div class="player-table-container">
             <table class="player-list-table">
               <thead><tr><th>Cầu thủ</th><th>OVR</th><th>Thao tác</th></tr></thead>
               <tbody id="squadBenchTable"></tbody>
@@ -266,18 +291,17 @@
       </div>
       <div class="player-table-container">
         <table class="player-list-table">
-          <thead><tr><th>Cầu Thủ</th><th>Mùa</th><th>OVR</th><th>Cấp độ</th><th>Ép Thẻ</th></tr></thead>
+          <thead><tr><th>Cầu Thủ</th><th>Mùa</th><th>OVR</th><th>Cấp độ</th><th>Thao Tác</th></tr></thead>
           <tbody id="inventoryTableBody"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- 3. Phòng ép thẻ chia 2 nửa + Nút Tiếp Theo -->
+    <!-- 3. Phòng ép thẻ -->
     <div id="upgradeTab" class="tab-content">
       <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-gold); text-align: center;"><i class="fa-solid fa-hammer"></i> PHÒNG NÂNG CẤP CẦU THỦ</h2>
       
       <div class="upgrade-split-room">
-        <!-- Nửa trái: Thẻ chính -->
         <div class="upgrade-half-box">
           <h3 style="font-size: 12px; color: var(--accent-gold); margin-bottom: 10px;">1. Thẻ Cầu Thủ Chính</h3>
           <div id="mainUpgradeSlot" class="main-card-slot" onclick="switchTab('inventoryTab')">
@@ -286,7 +310,6 @@
           <button class="btn-submit" style="width: auto; padding: 6px 18px; font-size: 11px;" onclick="switchTab('inventoryTab')">Chọn Từ Kho</button>
         </div>
 
-        <!-- Nửa phải: Phôi nguyên liệu & Nút Tiếp Theo -->
         <div class="upgrade-half-box">
           <h3 style="font-size: 12px; color: var(--accent-blue); margin-bottom: 5px;">2. Chọn Phôi Nguyên Liệu (Tối đa 5 phôi)</h3>
           
@@ -312,18 +335,23 @@
       </div>
     </div>
 
-    <!-- 4. Chợ & Bán nhiều -->
+    <!-- 4. TTCN & Bán nhiều -->
     <div id="marketTab" class="tab-content">
-      <h2 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">Thị Trường - Bán Nhiều Cầu Thủ</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="font-size: 14px; color: var(--accent-blue);">Thị Trường Chuyển Nhượng (TTCN) & Bán Thẻ</h2>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="marketSearchInput" placeholder="Tìm kiếm cầu thủ..." oninput="renderMarket()" style="background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--panel-border); padding: 5px 10px; border-radius: 4px; font-size: 11px; outline: none; width: 180px;">
+        </div>
+      </div>
       <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--panel-border);">
         <div>
-          <input type="checkbox" id="selectAllCheckbox" onclick="toggleSelectAll(this)"> <label for="selectAllCheckbox" style="font-size: 12px; cursor: pointer;">Chọn tất cả</label>
+          <input type="checkbox" id="selectAllCheckbox" onclick="toggleSelectAll(this)"> <label for="selectAllCheckbox" style="font-size: 12px; cursor: pointer;">Chọn tất cả kho để bán</label>
         </div>
         <button class="btn-action-table" style="background: var(--accent-gold);" onclick="sellSelectedPlayers()">Bán Các Thẻ Đã Chọn</button>
       </div>
       <div class="player-table-container">
         <table class="player-list-table">
-          <thead><tr><th><i class="fa-solid fa-check"></i></th><th>Cầu Thủ</th><th>Mùa</th><th>OVR</th><th>Giá Bán</th></tr></thead>
+          <thead><tr><th><i class="fa-solid fa-check"></i></th><th>Cầu Thủ</th><th>Mùa</th><th>OVR</th><th>Giá Trị / Mua Bán</th></tr></thead>
           <tbody id="myMarketTable"></tbody>
         </table>
       </div>
@@ -422,7 +450,7 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
-    
+
     let useOnlineFirebase = false;
     let db = null;
 
@@ -454,27 +482,58 @@
       { code: "NORM", color: "#adb5bd", ovrBoost: 0 }
     ];
 
+    // Cập nhật đầy đủ 50 cầu thủ với link miniface chuẩn từ code cũ của bạn + mở rộng TTCN
     const playerDatabase = [
-      { name: "Pelé", baseOvr: 125, img: "https://s1.fifaaddict.com/fo4/players/kjjgrbaaj.png?20210828" },
+      { name: "Pelé", baseOvr: 125, img: "https://s1.fifaaddict.com/fo4/players/kjjgrbaaj.png?20210828", salary: 28 },
       { name: "Ronaldo Nazário", baseOvr: 124, img: "https://s1.fifaaddict.com/fo4/players/agwqvbzp.png?20260720" },
-      { name: "Z. Zidane", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/ymkykpmvb.png?20210828" },
-      { name: "R. Gullit", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/opymozaok.png?20210828" },
-      { name: "C. Ronaldo", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/zllarwzny.png?20210828" },
-      { name: "L. Messi", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/njqpggqmj.png?20210828" },
-      { name: "K. Mbappé", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/dydgollwn.png?20210828" },
-      { name: "E. Haaland", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/opaklmdjr.png?20210828" },
-      { name: "J. Bellingham", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/pkvalobrj.png?20210828" },
-      { name: "K. De Bruyne", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opavrybzr.png?20210828" },
-      { name: "V. van Dijk", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/aavpqpbnk.png?20210828" },
+      { name: "Z. Zidane", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/ymkykpmvb.png?20210828", salary: 28 },
+      { name: "R. Gullit", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/opymozaok.png?20210828", salary: 27 },
+      { name: "C. Ronaldo", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/zllarwzny.png?20210828", salary: 26 },
+      { name: "L. Messi", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/njqpggqmj.png?20210828", salary: 26 },
+      { name: "K. Mbappé", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/dydgollwn.png?20210828", salary: 25 },
+      { name: "E. Haaland", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/opaklmdjr.png?20210828", salary: 25 },
+      { name: "J. Bellingham", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/pkvalobrj.png?20210828", salary: 24 },
+      { name: "Jude Bellingham", baseOvr: 119, img: "https://media.fifacm.com/24/players/252371.png" },
+      { name: "K. De Bruyne", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opavrybzr.png?20210828", salary: 25 },
+      { name: "V. van Dijk", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/aavpqpbnk.png?20210828", salary: 25 },
+      { name: "Virgil van Dijk", baseOvr: 118, img: "https://media.fifacm.com/24/players/203376.png" },
       { name: "Neymar Jr", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkdgobnrl.png?20260720" },
       { name: "Karim Benzema", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/bqavvqlw.png?20260720" },
       { name: "Robert Lewandowski", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/wgvloqwl.png?20260720" },
       { name: "Mohamed Salah", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/royvrqqrp.png?20260720" },
       { name: "Luka Modrić", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/pvojygpym.png?20260720" },
-      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828" },
-      { name: "Vinícius Jr.", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjvaaakbk.png?20210828" },
+      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 24 },
+      { name: "Vinícius Jr.", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjvaaakbk.png?20210828", salary: 25 },
       { name: "Toni Kroos", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vmyykmzok.png?20260720" },
-      { name: "N'Golo Kanté", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/rrmzgobw.png?20260720" }
+      { name: "N'Golo Kanté", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/rrmzgobw.png?20260720" },
+      { name: "Sadio Mané", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/mzzdvpmdq.png?20260720" },
+      { name: "Harry Kane", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjvnrkmqq.png?20260720" },
+      { name: "Bruno Fernandes", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/dydmdwqzl.png?20260720" },
+      { name: "Marcus Rashford", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/kqwmvrra.png?20260720" },
+      { name: "Bukayo Saka", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/zmvvrbajm.png?20260720" },
+      { name: "Phil Foden", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/qymzkakwm.png?20260720" },
+      { name: "Declan Rice", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/gzogpjbyo.png?20260720" },
+      { name: "Rodri", baseOvr: 115, img: "https://media.fifacm.com/24/players/231866.png" },
+      { name: "Federico Valverde", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/bmgjanwbg.png?20260720" },
+      { name: "Thibaut Courtois", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/bmdvzzwvv.png?20260720" },
+      { name: "Alisson", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/ronpgbdvo.png?20260720" },
+      { name: "Manuel Neuer", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/gmlkggyq.png?20260720" },
+      { name: "Ruben Dias", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/zllabojyz.png?20260720" },
+      { name: "William Saliba", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/lonkjdojl.png?20260720" },
+      { name: "Achraf Hakimi", baseOvr: 114, img: "https://media.fifacm.com/24/players/235212.png" },
+      { name: "Theo Hernández", baseOvr: 114, img: "https://media.fifacm.com/24/players/232656.png" },
+      { name: "Jamal Musiala", baseOvr: 114, img: "https://media.fifacm.com/24/players/256790.png" },
+      { name: "Florian Wirtz", baseOvr: 114, img: "https://media.fifacm.com/24/players/255535.png" },
+      { name: "Victor Osimhen", baseOvr: 114, img: "https://media.fifacm.com/24/players/246306.png" },
+      { name: "Lautaro Martínez", baseOvr: 114, img: "https://media.fifacm.com/24/players/231443.png" },
+      { name: "Antoine Griezmann", baseOvr: 113, img: "https://media.fifacm.com/24/players/194765.png" },
+      { name: "Bernardo Silva", baseOvr: 113, img: "https://media.fifacm.com/24/players/218667.png" },
+      { name: "Rafael Leão", baseOvr: 113, img: "https://media.fifacm.com/24/players/241721.png" },
+      { name: "Ousmane Dembélé", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/kjgwqokja.png?20260720" },
+      { name: "Kingsley Coman", baseOvr: 113, img: "https://media.fifacm.com/24/players/213345.png" },
+      { name: "Serge Gnabry", baseOvr: 113, img: "https://media.fifacm.com/24/players/207865.png" },
+      { name: "Leon Goretzka", baseOvr: 113, img: "https://media.fifacm.com/24/players/209658.png" },
+      { name: "Joshua Kimmich", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/mzqadmjyp.png?20260720" }
     ];
 
     let currentUser = null;
@@ -483,6 +542,8 @@
     let selectedFodderIndices = [null, null, null, null, null];
     let activeFodderSlotIndex = null;
     let activeTargetSlot = null;
+    let editingDressingPlayerId = null;
+    let localPreviewBase64 = null;
 
     function calculateOvr(baseOvr, grade) {
       if (grade <= 1) return baseOvr;
@@ -580,9 +641,10 @@
       event.currentTarget.classList.add('active');
       if (tabId === 'marketTab') renderMarket();
       if (tabId === 'adminTab') renderAdminUserTable();
+      if (tabId === 'inventoryTab') renderInventoryTable();
     }
 
-    /* Đội Hình */
+    /* Đội Hình & Dự Bị (Có sắp xếp OVR) */
     function renderSquad() {
       const defaultPositions = ["LW", "ST", "RW", "CAM", "CM", "CDM", "LB", "CB", "CB", "RB", "GK"];
       for (let i = 0; i < 11; i++) {
@@ -658,10 +720,21 @@
       const tbody = document.getElementById('squadBenchTable');
       tbody.innerHTML = '';
       if (!userData.inventory) return;
-      userData.inventory.slice(0, 40).forEach((item, index) => {
+      
+      const sortOrder = document.getElementById('sortSquadOrderSelect')?.value || 'desc';
+      let sortedList = [...userData.inventory];
+      sortedList.sort((a, b) => {
+        const ovrA = calculateOvr(a.baseOvr || a.ovr, a.grade || 1);
+        const ovrB = calculateOvr(b.baseOvr || b.ovr, b.grade || 1);
+        return sortOrder === 'desc' ? ovrB - ovrA : ovrA - ovrB;
+      });
+
+      // Tối ưu hóa render chống lag (giới hạn hiển thị 50 thẻ đầu)
+      sortedList.slice(0, 50).forEach((item) => {
         const grade = item.grade || 1;
         const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
-        tbody.innerHTML += `<tr><td><div style="display:flex; align-items:center; gap:8px;"><img class="mini-card-avatar" src="${item.img || defaultFodderImg}"><div>${item.name} (+${grade})</div></div></td><td style="color:var(--accent-gold);">${ovr}</td><td><button class="btn-action-table" onclick="assignToSquad(${index})">Vào sân</button></td></tr>`;
+        const realIdx = userData.inventory.findIndex(x => x.id === item.id);
+        tbody.innerHTML += `<tr><td><div style="display:flex; align-items:center; gap:8px;"><img class="mini-card-avatar" src="${item.img || defaultFodderImg}"><div>${item.name} (+${grade})</div></div></td><td style="color:var(--accent-gold);">${ovr}</td><td><button class="btn-action-table" onclick="assignToSquad(${realIdx})">Vào sân</button></td></tr>`;
       });
     }
 
@@ -679,7 +752,7 @@
       showToast("Đội hình đầy!");
     }
 
-    /* Kho & Sắp xếp */
+    /* Kho & Sắp xếp OVR (Tối ưu chống lag) */
     function renderInventoryTable() {
       const tbody = document.getElementById('inventoryTableBody');
       tbody.innerHTML = '';
@@ -696,10 +769,21 @@
         return sortOrder === 'desc' ? ovrB - ovrA : ovrA - ovrB;
       });
 
-      sortedList.forEach((item) => {
+      sortedList.slice(0, 60).forEach((item) => {
         const grade = item.grade || 1;
         const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
-        tbody.innerHTML += `<tr><td><div style="display:flex; align-items:center; gap:10px;"><img class="mini-card-avatar" src="${item.img || defaultFodderImg}"><div><strong>${item.name}</strong></div></div></td><td><span style="font-size:9px; font-weight:bold; background:${item.seasonColor || '#adb5bd'}; color:#000; padding:2px 6px; border-radius:4px;">${item.season || 'NORM'}</span></td><td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td><td><span class="card-grade">+${grade}</span></td><td><button class="btn-action-table" onclick="selectMainCardDirect('${item.id}')">Chọn Ép Thẻ</button></td></tr>`;
+        tbody.innerHTML += `
+          <tr>
+            <td><div style="display:flex; align-items:center; gap:10px;"><img class="mini-card-avatar" src="${item.img || defaultFodderImg}"><div><strong>${item.name}</strong></div></div></td>
+            <td><span style="font-size:9px; font-weight:bold; background:${item.seasonColor || '#adb5bd'}; color:#000; padding:2px 6px; border-radius:4px;">${item.season || 'NORM'}</span></td>
+            <td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td>
+            <td><span class="card-grade">+${grade}</span></td>
+            <td>
+              <button class="btn-action-table" onclick="selectMainCardDirect('${item.id}')">Ép Thẻ</button>
+              <button class="btn-action-table" style="background:var(--accent-blue); color:#000;" onclick="openDressingRoom('${item.id}')">Thay Đồ</button>
+            </td>
+          </tr>
+        `;
       });
     }
 
@@ -725,6 +809,64 @@
       const grade = card.grade || 1;
       const ovr = calculateOvr(card.baseOvr || card.ovr, grade);
       slot.innerHTML = `<div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${card.seasonColor || '#00d2ff'};">${card.season || 'NORM'}</span><span class="card-grade">+${grade}</span></div><div class="card-img-container"><img class="card-img" src="${card.img || defaultFodderImg}"></div><div class="card-name">${card.name}</div>`;
+    }
+
+    /* PHÒNG THAY ĐỒ (DRESSING ROOM) */
+    function openDressingRoom(itemId) {
+      editingDressingPlayerId = itemId;
+      const item = userData.inventory.find(x => x.id == itemId);
+      if (!item) return;
+      document.getElementById('customMinifaceUrl').value = '';
+      document.getElementById('customMinifaceFile').value = '';
+      localPreviewBase64 = null;
+      renderDressingPreview(item.img || defaultFodderImg, item);
+      document.getElementById('dressingRoomModal').style.display = 'flex';
+    }
+
+    function renderDressingPreview(imgSrc, item) {
+      const previewBox = document.getElementById('dressingPreviewCard');
+      const grade = item.grade || 1;
+      const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
+      previewBox.innerHTML = `
+        <div class="main-card-slot" style="margin:0; width:100%; height:100%;">
+          <div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${item.seasonColor || '#00d2ff'};">${item.season || 'NORM'}</span><span class="card-grade">+${grade}</span></div>
+          <div class="card-img-container"><img class="card-img" src="${imgSrc}"></div>
+          <div class="card-name">${item.name}</div>
+        </div>
+      `;
+    }
+
+    function previewLocalImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          localPreviewBase64 = e.target.result;
+          const item = userData.inventory.find(x => x.id == editingDressingPlayerId);
+          renderDressingPreview(localPreviewBase64, item);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function applyCustomMiniface() {
+      const urlInput = document.getElementById('customMinifaceUrl').value.trim();
+      const item = userData.inventory.find(x => x.id == editingDressingPlayerId);
+      if (!item) return;
+
+      if (localPreviewBase64) {
+        item.img = localPreviewBase64;
+      } else if (urlInput !== '') {
+        item.img = urlInput;
+      } else {
+        showToast("Vui lòng nhập link hoặc chọn tệp ảnh!");
+        return;
+      }
+
+      saveDataOnline();
+      updateUI();
+      document.getElementById('dressingRoomModal').style.display = 'none';
+      showToast("Đã cập nhật Miniface thành công!");
     }
 
     /* Mua Phôi Nhanh & Phòng Ép Thẻ */
@@ -819,7 +961,6 @@
       renderFodderSlotsUI();
     }
 
-    /* MỞ MÀN HÌNH ĐẬP THẺ REAL KHI BẤM "TIẾP THEO" */
     function openRealUpgradeScreen() {
       if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
         showToast("Vui lòng chọn thẻ chính trước!");
@@ -829,7 +970,6 @@
       const grade = mainCard.grade || 1;
       const ovr = calculateOvr(mainCard.baseOvr || mainCard.ovr, grade);
 
-      // Render thẻ chính trong phòng real
       document.getElementById('realMainCardSlot').innerHTML = `
         <div class="main-card-slot" id="realCardAnimBox">
           <div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${mainCard.seasonColor || '#00d2ff'};">${mainCard.season || 'NORM'}</span><span class="card-grade">+${grade}</span></div>
@@ -838,7 +978,6 @@
         </div>
       `;
 
-      // Render các phôi đã chọn bên cạnh
       let foddersBox = document.getElementById('realFoddersPreviewBox');
       foddersBox.innerHTML = '';
       let totalRate = Math.max(15, 100 - (grade * 15));
@@ -872,7 +1011,6 @@
       document.getElementById('realUpgradeScreen').style.display = 'none';
     }
 
-    /* BẤM NÂNG CẤP TRONG MÀN HÌNH REAL MỚI BẮT ĐẦU HIỆU ỨNG */
     function startRealUpgradeAction() {
       const cardBox = document.getElementById('realCardAnimBox');
       cardBox.classList.add('shaking');
@@ -935,7 +1073,7 @@
       document.getElementById('resultBoxFx').classList.remove('show');
     }
 
-    /* Mở gói & Bán */
+    /* Mở gói & TTCN (Thêm nhiều cầu thủ & Mua/Bán trực tiếp) */
     function buyAndOpenPack(count, cost) {
       if (userData.bp < cost) { showToast("Không đủ BP!"); return; }
       userData.bp -= cost;
@@ -956,16 +1094,46 @@
     function renderMarket() {
       const tbodyMy = document.getElementById('myMarketTable');
       tbodyMy.innerHTML = '';
-      if (!userData.inventory || userData.inventory.length === 0) {
-        tbodyMy.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #666;">Kho trống...</td></tr>`;
-        return;
-      }
-      userData.inventory.forEach((item, index) => {
-        const grade = item.grade || 1;
-        const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
-        const sellPrice = ovr * 1000000000;
-        tbodyMy.innerHTML += `<tr><td><input type="checkbox" class="player-checkbox" value="${index}"></td><td><div style="display:flex; align-items:center; gap:8px;"><img src="${item.img || defaultFodderImg}" style="width:30px; height:30px; object-fit:contain;"><span>${item.name} (+${grade})</span></div></td><td><span style="background:${item.seasonColor || '#adb5bd'}; color:#000; padding:1px 4px; border-radius:3px; font-size:9px; font-weight:bold;">${item.season || 'NORM'}</span></td><td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td><td>${(sellPrice / 1e9).toFixed(1)}B BP</td></tr>`;
+      
+      const searchKey = document.getElementById('marketSearchInput')?.value.toLowerCase() || '';
+
+      // Hiển thị danh sách cầu thủ trong TTCN để mua nhanh hoặc xem
+      let filteredMarket = playerDatabase.filter(p => p.name.toLowerCase().includes(searchKey));
+
+      filteredMarket.slice(0, 40).forEach((p) => {
+        const price = p.baseOvr * 200000000;
+        tbodyMy.innerHTML += `
+          <tr>
+            <td><i class="fa-solid fa-store" style="color:var(--accent-blue)"></i></td>
+            <td><div style="display:flex; align-items:center; gap:8px;"><img src="${p.img || defaultFodderImg}" style="width:30px; height:30px; object-fit:contain;"><span>${p.name}</span></div></td>
+            <td><span style="background:#00d2ff; color:#000; padding:1px 4px; border-radius:3px; font-size:9px; font-weight:bold;">ICON/NORM</span></td>
+            <td style="color:var(--accent-gold); font-weight:bold;">${p.baseOvr}</td>
+            <td>
+              <span style="color:var(--accent-gold); margin-right:10px;">${(price/1e9).toFixed(1)}B BP</span>
+              <button class="btn-action-table" style="background:var(--accent-green)" onclick="buyPlayerFromMarket('${p.name}', ${p.baseOvr}, '${p.img}')">Mua Ngay</button>
+            </td>
+          </tr>
+        `;
       });
+    }
+
+    function buyPlayerFromMarket(name, baseOvr, img) {
+      const price = baseOvr * 200000000;
+      if (userData.bp < price) { showToast("Không đủ BP để mua!"); return; }
+      userData.bp -= price;
+      if (!userData.inventory) userData.inventory = [];
+      userData.inventory.push({
+        id: Date.now() + Math.random(),
+        name: name,
+        season: 'ICON',
+        seasonColor: '#ffb700',
+        baseOvr: baseOvr,
+        ovr: baseOvr + 8,
+        grade: 1,
+        img: img
+      });
+      saveDataOnline(); updateUI();
+      showToast(`Đã mua thành công cầu thủ ${name}!`);
     }
 
     function toggleSelectAll(master) {
@@ -974,14 +1142,14 @@
 
     function sellSelectedPlayers() {
       const checkboxes = document.querySelectorAll('.player-checkbox:checked');
-      if (checkboxes.length === 0) { showToast("Chưa chọn cầu thủ!"); return; }
+      if (checkboxes.length === 0) { showToast("Chưa chọn cầu thủ trong kho!"); return; }
       const indicesToRemove = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort((a, b) => b - a);
       let totalEarned = 0;
       indicesToRemove.forEach(index => {
         const item = userData.inventory[index];
         const grade = item.grade || 1;
         const ovr = calculateOvr(item.baseOvr || item.ovr, grade);
-        totalEarned += (ovr * 1000000000);
+        totalEarned += (ovr * 100000000);
         userData.inventory.splice(index, 1);
       });
       userData.bp += totalEarned;
