@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Ultimate Edition (Custom Stats & Fodder 100-150)</title>
+  <title>FC Online Simulator - Fixed Auth Edition</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -33,7 +33,7 @@
     .bp-display { color: var(--accent-gold); font-weight: bold; border-color: var(--accent-gold); }
     .btn-logout { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 5px 10px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 11px; }
 
-    /* Thanh công cụ nằm ở dưới */
+    /* Thanh điều hướng ở phía dưới */
     nav { display: flex; justify-content: center; gap: 4px; padding: 8px; background: rgba(8, 12, 18, 0.98); border-top: 2px solid var(--panel-border); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; backdrop-filter: blur(10px); flex-wrap: wrap; }
     .nav-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #aaa; padding: 6px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; transition: 0.2s; }
     .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
@@ -54,7 +54,7 @@
     .input-group input { width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--panel-border); background: rgba(0,0,0,0.6); color: #fff; outline: none; font-size: 13px; }
     .btn-submit { width: 100%; padding: 10px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-green)); border: none; border-radius: 6px; font-weight: bold; font-size: 13px; color: #000; cursor: pointer; }
 
-    /* Giao diện Sân Cỏ & Đội Hình */
+    /* Sân Cỏ & Đội Hình */
     .squad-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
     .pitch { background: radial-gradient(circle, #1a421c 0%, #091a0a 100%); border: 2px solid rgba(0,255,136,0.3); border-radius: 12px; height: 530px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; box-shadow: inset 0 0 60px rgba(0,0,0,0.8); }
     .pitch-line-center { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.15); transform: translateY(-50%); }
@@ -66,7 +66,7 @@
     .pitch-slot .p-ovr { font-size: 10px; color: var(--accent-gold); font-weight: bold; }
     .pos-select { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.8); color: var(--accent-green); border: 1px solid var(--accent-green); font-size: 9px; font-weight: bold; border-radius: 3px; outline: none; cursor: pointer; padding: 1px; z-index: 5; }
 
-    /* Thẻ Cầu Thủ / Ép Thẻ */
+    /* Thẻ Cầu Thủ & Ép Thẻ */
     .upgrade-room { display: grid; grid-template-columns: 290px 1fr; gap: 20px; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: 14px; padding: 20px; position: relative; }
     .upgrade-left-panel { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
     .main-card-slot { width: 170px; height: 240px; background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 12px; border: 2px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; padding: 10px; position: relative; margin: 10px 0; box-shadow: var(--glow-gold); transition: all 0.3s ease; overflow: hidden; }
@@ -132,16 +132,17 @@
   <div id="loginModal" class="modal-overlay">
     <div class="auth-box">
       <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
+      <p id="authNoticeText" style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">Chế độ: Tự động lưu thiết bị (Offline Safe Mode)</p>
       <form id="loginForm">
         <div class="input-group">
           <label>Tên Tài Khoản:</label>
-          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản...">
+          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản bất kỳ...">
         </div>
         <div class="input-group">
           <label>Mật Khẩu:</label>
           <input type="password" id="passwordInput" required placeholder="Nhập mật khẩu...">
         </div>
-        <button type="submit" class="btn-submit">VÀO GAME</button>
+        <button type="submit" class="btn-submit">VÀO GAME NGAY</button>
       </form>
     </div>
   </div>
@@ -315,6 +316,7 @@
   </main>
 
   <script>
+    // Cấu hình Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
       authDomain: "fc-online-simulator.firebaseapp.com",
@@ -325,8 +327,20 @@
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+
+    let useOnlineFirebase = false;
+    let db = null;
+
+    // Kiểm tra cấu hình Firebase
+    try {
+      if (firebaseConfig.apiKey !== "YOUR_API_KEY" && firebaseConfig.databaseURL.indexOf("YOUR_PROJECT_ID") === -1) {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        useOnlineFirebase = true;
+      }
+    } catch (e) {
+      useOnlineFirebase = false;
+    }
 
     const ADMIN_USERNAME = "admin";
     const ADMIN_PASSWORD = "123";
@@ -348,58 +362,55 @@
 
     // 50 cầu thủ với chỉ số gốc (baseOvr) riêng biệt, huyền thoại/giải nghệ chỉ số cao
     const playerDatabase = [
-[
-  { name: "C. Ronaldo", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/zllarwzny.png?20210828", salary: 26 },
-  { name: "L. Messi", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/njqpggqmj.png?20210828", salary: 26 },
-  { name: "K. Mbappé", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/dydgollwn.png?20210828", salary: 25 },
-  { name: "E. Haaland", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/opaklmdjr.png?20210828", salary: 25 },
-  { name: "J. Bellingham", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/pkvalobrj.png?20210828", salary: 24 },
-  { name: "Z. Zidane", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/ymkykpmvb.png?20210828", salary: 28 },
-  { name: "R. Gullit", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/opymozaok.png?20210828", salary: 27 },
-  { name: "Pelé", baseOvr: 125, img: "https://s1.fifaaddict.com/fo4/players/kjjgrbaaj.png?20210828", salary: 28 },
-  { name: "K. De Bruyne", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opavrybzr.png?20210828", salary: 25 },
-  { name: "V. van Dijk", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/aavpqpbnk.png?20210828", salary: 25 },
-  { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 24 },
-  { name: "Vinícius Jr.", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjvaaakbk.png?20210828", salary: 25 },
-  { name: "Neymar Jr", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkdgobnrl.png?20260720" },
-  { name: "Karim Benzema", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/bqavvqlw.png?20260720" },
-  { name: "Robert Lewandowski", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/wgvloqwl.png?20260720" },
-  { name: "Mohamed Salah", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/royvrqqrp.png?20260720" },
-  { name: "Luka Modrić", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/pvojygpym.png?20260720" },
-  { name: "Toni Kroos", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vmyykmzok.png?20260720" },
-  { name: "N'Golo Kanté", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/rrmzgobw.png?20260720" },
-  { name: "Sadio Mané", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/mzzdvpmdq.png?20260720" },
-  { name: "Harry Kane", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjvnrkmqq.png?20260720" },
-  { name: "Bruno Fernandes", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/dydmdwqzl.png?20260720" },
-  { name: "Marcus Rashford", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/kqwmvrra.png?20260720" },
-  { name: "Bukayo Saka", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/zmvvrbajm.png?20260720" },
-  { name: "Phil Foden", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/qymzkakwm.png?20260720" },
-  { name: "Declan Rice", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/gzogpjbyo.png?20260720" },
-  { name: "Rodri", baseOvr: 115, img: "https://media.fifacm.com/24/players/231866.png" },
-  { name: "Federico Valverde", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/bmgjanwbg.png?20260720" },
-  { name: "Thibaut Courtois", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/bmdvzzwvv.png?20260720" },
-  { name: "Alisson", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/ronpgbdvo.png?20260720" },
-  { name: "Manuel Neuer", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/gmlkggyq.png?20260720" },
-  { name: "Virgil van Dijk", baseOvr: 118, img: "https://media.fifacm.com/24/players/203376.png" },
-  { name: "Ruben Dias", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/zllabojyz.png?20260720" },
-  { name: "William Saliba", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/lonkjdojl.png?20260720" },
-  { name: "Achraf Hakimi", baseOvr: 114, img: "https://media.fifacm.com/24/players/235212.png" },
-  { name: "Theo Hernández", baseOvr: 114, img: "https://media.fifacm.com/24/players/232656.png" },
-  { name: "Jude Bellingham", baseOvr: 119, img: "https://media.fifacm.com/24/players/252371.png" },
-  { name: "Jamal Musiala", baseOvr: 114, img: "https://media.fifacm.com/24/players/256790.png" },
-  { name: "Florian Wirtz", baseOvr: 114, img: "https://media.fifacm.com/24/players/255535.png" },
-  { name: "Victor Osimhen", baseOvr: 114, img: "https://media.fifacm.com/24/players/246306.png" },
-  { name: "Lautaro Martínez", baseOvr: 114, img: "https://media.fifacm.com/24/players/231443.png" },
-  { name: "Antoine Griezmann", baseOvr: 113, img: "https://media.fifacm.com/24/players/194765.png" },
-  { name: "Bernardo Silva", baseOvr: 113, img: "https://media.fifacm.com/24/players/218667.png" },
-  { name: "Rafael Leão", baseOvr: 113, img: "https://media.fifacm.com/24/players/241721.png" },
-  { name: "Ousmane Dembélé", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/kjgwqokja.png?20260720" },
-  { name: "Kingsley Coman", baseOvr: 113, img: "https://media.fifacm.com/24/players/213345.png" },
-  { name: "Serge Gnabry", baseOvr: 113, img: "https://media.fifacm.com/24/players/207865.png" },
-  { name: "Leon Goretzka", baseOvr: 113, img: "https://media.fifacm.com/24/players/209658.png" },
-  { name: "Joshua Kimmich", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/mzqadmjyp.png?20260720" },
-  { name: "Ronaldo Nazário", baseOvr: 124, img: "https://s1.fifaaddict.com/fo4/players/agwqvbzp.png?20260720" }
-];
+      { name: "Pelé", baseOvr: 115, img: "https://media.fifacm.com/24/players/190042.png" },
+      { name: "Ronaldo Nazário", baseOvr: 114, img: "https://media.fifacm.com/24/players/105.png" },
+      { name: "Z. Zidane", baseOvr: 113, img: "https://media.fifacm.com/24/players/1397.png" },
+      { name: "R. Gullit", baseOvr: 113, img: "https://media.fifacm.com/24/players/2141.png" },
+      { name: "C. Ronaldo", baseOvr: 112, img: "https://media.fifacm.com/24/players/20801.png" },
+      { name: "L. Messi", baseOvr: 112, img: "https://media.fifacm.com/24/players/158023.png" },
+      { name: "K. Mbappé", baseOvr: 110, img: "https://media.fifacm.com/24/players/231747.png" },
+      { name: "E. Haaland", baseOvr: 110, img: "https://media.fifacm.com/24/players/239085.png" },
+      { name: "J. Bellingham", baseOvr: 109, img: "https://media.fifacm.com/24/players/252371.png" },
+      { name: "K. De Bruyne", baseOvr: 109, img: "https://media.fifacm.com/24/players/192985.png" },
+      { name: "V. van Dijk", baseOvr: 108, img: "https://media.fifacm.com/24/players/203376.png" },
+      { name: "Neymar Jr", baseOvr: 108, img: "https://media.fifacm.com/24/players/190871.png" },
+      { name: "Karim Benzema", baseOvr: 107, img: "https://media.fifacm.com/24/players/165153.png" },
+      { name: "Robert Lewandowski", baseOvr: 107, img: "https://media.fifacm.com/24/players/188545.png" },
+      { name: "Mohamed Salah", baseOvr: 107, img: "https://media.fifacm.com/24/players/209331.png" },
+      { name: "Luka Modrić", baseOvr: 107, img: "https://media.fifacm.com/24/players/177003.png" },
+      { name: "Toni Kroos", baseOvr: 106, img: "https://media.fifacm.com/24/players/182521.png" },
+      { name: "N'Golo Kanté", baseOvr: 106, img: "https://media.fifacm.com/24/players/215914.png" },
+      { name: "Sadio Mané", baseOvr: 106, img: "https://media.fifacm.com/24/players/208722.png" },
+      { name: "Harry Kane", baseOvr: 106, img: "https://media.fifacm.com/24/players/202126.png" },
+      { name: "Son Heung-min", baseOvr: 106, img: "https://media.fifacm.com/24/players/200104.png" },
+      { name: "Vinícius Jr.", baseOvr: 106, img: "https://media.fifacm.com/24/players/238794.png" },
+      { name: "Bruno Fernandes", baseOvr: 105, img: "https://media.fifacm.com/24/players/212198.png" },
+      { name: "Marcus Rashford", baseOvr: 105, img: "https://media.fifacm.com/24/players/231677.png" },
+      { name: "Bukayo Saka", baseOvr: 105, img: "https://media.fifacm.com/24/players/246669.png" },
+      { name: "Phil Foden", baseOvr: 105, img: "https://media.fifacm.com/24/players/237692.png" },
+      { name: "Declan Rice", baseOvr: 105, img: "https://media.fifacm.com/24/players/234396.png" },
+      { name: "Rodri", baseOvr: 105, img: "https://media.fifacm.com/24/players/231866.png" },
+      { name: "Federico Valverde", baseOvr: 105, img: "https://media.fifacm.com/24/players/239053.png" },
+      { name: "Thibaut Courtois", baseOvr: 105, img: "https://media.fifacm.com/24/players/192119.png" },
+      { name: "Alisson", baseOvr: 104, img: "https://media.fifacm.com/24/players/212831.png" },
+      { name: "Manuel Neuer", baseOvr: 104, img: "https://media.fifacm.com/24/players/167495.png" },
+      { name: "Ruben Dias", baseOvr: 104, img: "https://media.fifacm.com/24/players/239818.png" },
+      { name: "William Saliba", baseOvr: 104, img: "https://media.fifacm.com/24/players/243812.png" },
+      { name: "Achraf Hakimi", baseOvr: 104, img: "https://media.fifacm.com/24/players/235212.png" },
+      { name: "Theo Hernández", baseOvr: 104, img: "https://media.fifacm.com/24/players/232656.png" },
+      { name: "Jamal Musiala", baseOvr: 104, img: "https://media.fifacm.com/24/players/256790.png" },
+      { name: "Florian Wirtz", baseOvr: 104, img: "https://media.fifacm.com/24/players/255535.png" },
+      { name: "Victor Osimhen", baseOvr: 104, img: "https://media.fifacm.com/24/players/246306.png" },
+      { name: "Lautaro Martínez", baseOvr: 104, img: "https://media.fifacm.com/24/players/231443.png" },
+      { name: "Antoine Griezmann", baseOvr: 103, img: "https://media.fifacm.com/24/players/194765.png" },
+      { name: "Bernardo Silva", baseOvr: 103, img: "https://media.fifacm.com/24/players/218667.png" },
+      { name: "Rafael Leão", baseOvr: 103, img: "https://media.fifacm.com/24/players/241721.png" },
+      { name: "Ousmane Dembélé", baseOvr: 103, img: "https://media.fifacm.com/24/players/231410.png" },
+      { name: "Kingsley Coman", baseOvr: 103, img: "https://media.fifacm.com/24/players/213345.png" },
+      { name: "Serge Gnabry", baseOvr: 103, img: "https://media.fifacm.com/24/players/207865.png" },
+      { name: "Leon Goretzka", baseOvr: 103, img: "https://media.fifacm.com/24/players/209658.png" },
+      { name: "Joshua Kimmich", baseOvr: 103, img: "https://media.fifacm.com/24/players/212622.png" }
+    ];
 
     let currentUser = null;
     let userData = { bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {} };
@@ -423,45 +434,67 @@
       setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
+    // Xử lý đăng nhập thông minh (Dùng LocalStorage nếu không có Firebase thật)
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value.trim();
+
       if (username.toLowerCase() === ADMIN_USERNAME && password !== ADMIN_PASSWORD) {
         showToast("Sai mật khẩu Admin!");
-        
+        return;
       }
-      loginOnline(username, password);
+      loginSmart(username, password);
     });
 
-    function loginOnline(username, password) {
+    function loginSmart(username, password) {
       currentUser = username;
       document.getElementById('displayUsername').innerText = username;
       document.getElementById('loginModal').style.display = 'none';
 
       if (username.toLowerCase() === ADMIN_USERNAME) {
         document.getElementById('adminNavBtn').style.display = 'inline-block';
-        listenToAllUsers();
+        if (useOnlineFirebase) listenToAllUsers();
       }
 
-      db.ref('users/' + username).once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          userData = data;
-          if (!userData.inventory) userData.inventory = [];
-          if (!userData.squad) userData.squad = {};
-          if (!userData.slotPositions) userData.slotPositions = {};
-          if (userData.bp === undefined) { userData.bp = INITIAL_BP; saveDataOnline(); }
+      if (useOnlineFirebase) {
+        db.ref('users/' + username).once('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            userData = data;
+            if (!userData.inventory) userData.inventory = [];
+            if (!userData.squad) userData.squad = {};
+            if (!userData.slotPositions) userData.slotPositions = {};
+            if (userData.bp === undefined) { userData.bp = INITIAL_BP; saveDataOnline(); }
+          } else {
+            userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {} };
+            saveDataOnline();
+          }
+          updateUI();
+        });
+      } else {
+        const localData = localStorage.getItem('fco_user_' + username);
+        if (localData) {
+          userData = JSON.parse(localData);
         } else {
           userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, slotPositions: {} };
           saveDataOnline();
         }
         updateUI();
-      });
+        showToast("Đã đăng nhập thành công (Lưu dữ liệu máy)");
+      }
     }
 
     function logout() { location.reload(); }
-    function saveDataOnline() { if (currentUser) db.ref('users/' + currentUser).set(userData); }
+
+    function saveDataOnline() {
+      if (!currentUser) return;
+      if (useOnlineFirebase) {
+        db.ref('users/' + currentUser).set(userData);
+      } else {
+        localStorage.setItem('fco_user_' + currentUser, JSON.stringify(userData));
+      }
+    }
 
     function updateUI() {
       document.getElementById('bpCount').innerText = (userData.bp || 0).toLocaleString('vi-VN');
@@ -799,6 +832,7 @@
 
     /* Admin Panel */
     function listenToAllUsers() {
+      if (!useOnlineFirebase) return;
       db.ref('users').on('value', (snapshot) => {
         const users = snapshot.val();
         const tbody = document.getElementById('adminUserTable');
@@ -815,7 +849,13 @@
     function adminEditBp(username, currentBp) {
       const newBp = prompt(`Nhập BP mới cho [${username}]:`, currentBp);
       if (newBp !== null && !isNaN(parseInt(newBp))) {
-        db.ref(`users/${username}/bp`).set(parseInt(newBp));
+        if (useOnlineFirebase) {
+          db.ref(`users/${username}/bp`).set(parseInt(newBp));
+        } else {
+          userData.bp = parseInt(newBp);
+          saveDataOnline();
+          updateUI();
+        }
         showToast("Đã đổi BP!");
       }
     }
