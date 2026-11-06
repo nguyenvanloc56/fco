@@ -52,7 +52,7 @@
     .game-main-content { display: none; flex: 1; padding: 20px; max-width: 1400px; width: 100%; margin: 0 auto; z-index: 100; position: relative; background: var(--bg-dark); min-height: 100vh; }
     .game-main-content.active { display: block; }
 
-    #gameToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 5000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
+    #gameToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 6000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.2s ease, opacity 0.2s ease; opacity: 0; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 4000; backdrop-filter: blur(8px); }
@@ -88,18 +88,19 @@
     .card-img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
     .card-name { font-size: 13px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
-    .fo4-upgrade-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; background: rgba(10, 16, 26, 0.95); border: 2px solid var(--panel-border); border-radius: 12px; padding: 20px; }
-    .fo4-left-panel { background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-    .fo4-stats-box { width: 100%; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 12px; }
-    .fo4-stat-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    /* Giao diện Nâng Cấp chuẩn Video Mẫu */
+    .upgrade-container-v2 { display: grid; grid-template-columns: 340px 1fr; gap: 20px; background: rgba(10, 16, 26, 0.95); border: 2px solid var(--panel-border); border-radius: 12px; padding: 20px; }
+    .up-left-col { display: flex; flex-direction: column; gap: 12px; align-items: center; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid var(--panel-border); }
+    .up-right-col { background: rgba(18, 25, 38, 0.9); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; }
     
-    .fo4-right-panel { background: #121926; border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; }
+    .up-tabs-header { display: flex; gap: 10px; border-bottom: 1px solid var(--panel-border); padding-bottom: 10px; margin-bottom: 10px; align-items: center; justify-content: space-between; }
+    .up-tab-btn { background: transparent; border: none; color: #888; font-weight: bold; font-size: 12px; cursor: pointer; padding: 4px 10px; transition: 0.2s; }
+    .up-tab-btn.active { color: var(--accent-green); border-bottom: 2px solid var(--accent-green); }
     
-    .upgrade-rate-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; overflow: hidden; font-size: 11px; }
-    .upgrade-rate-table th, .upgrade-rate-table td { padding: 8px 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .upgrade-rate-table th { background: rgba(0,0,0,0.8); color: var(--accent-green); font-size: 10px; text-transform: uppercase; }
-    
-    .fo4-fodder-table-container { background: rgba(0,0,0,0.6); border: 1px solid var(--panel-border); border-radius: 8px; overflow-y: auto; max-height: 250px; margin-top: 10px; }
+    .up-sub-panel { display: none; }
+    .up-sub-panel.active { display: block; }
+
+    .fo4-fodder-table-container { background: rgba(0,0,0,0.6); border: 1px solid var(--panel-border); border-radius: 8px; overflow-y: auto; max-height: 380px; margin-top: 5px; }
 
     #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
     .real-stage-box { display: flex; gap: 40px; align-items: center; justify-content: center; margin: 30px 0; }
@@ -126,10 +127,6 @@
     .player-list-table th { background: rgba(0,0,0,0.6); color: #888; font-weight: 600; text-transform: uppercase; font-size: 10px; position: sticky; top: 0; z-index: 5; }
     .mini-card-avatar { width: 40px; height: 40px; object-fit: contain; }
     .btn-action-table { background: #00b894; color: #000; border: none; padding: 5px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; margin-right: 4px; }
-
-    .quick-fodder-shop { background: rgba(0,0,0,0.3); border: 1px solid var(--panel-border); border-radius: 8px; padding: 10px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; width: 100%; }
-    .btn-quick-buy { background: rgba(0,210,255,0.15); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 5px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 10px; transition: 0.2s; }
-    .btn-quick-buy:hover { background: var(--accent-blue); color: #000; }
 
     .pack-shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
     .pack-box { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
@@ -265,7 +262,7 @@
     </div>
   </div>
 
-  <!-- MÀN HÌNH ĐẬP THẺ REAL -->
+  <!-- MÀN HÌNH ĐẬP THẺ REAL (GIỐNG VIDEO) -->
   <div id="realUpgradeScreen">
     <h2 style="color: var(--accent-gold); font-size: 22px; margin-bottom: 10px;"><i class="fa-solid fa-fire"></i> PHÒNG NÂNG CẤP CHÍNH THỨC</h2>
     <p style="color: #aaa; font-size: 12px; margin-bottom: 25px;">Tiến trình sẽ tiếp tục nâng cấp cầu thủ...</p>
@@ -346,97 +343,87 @@
       </div>
     </div>
 
-    <!-- 2. PHÒNG NÂNG CẤP CẦU THỦ -->
+    <!-- 2. PHÒNG NÂNG CẤP CẦU THỦ (CHUẨN HỆT VIDEO MẪU) -->
     <div id="upgradeTab" class="game-main-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <h2 style="font-size: 14px; color: var(--accent-gold);"><i class="fa-solid fa-hammer"></i> Nâng cấp cầu thủ</h2>
       </div>
 
-      <div class="fo4-upgrade-layout">
-        <div class="fo4-left-panel">
-          <div id="mainUpgradeSlot" class="main-card-slot" onclick="openGameTab('squadManagerTab')" style="cursor:pointer;">
-            <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Bấm để chọn thẻ chính từ Kho</div>
+      <div class="upgrade-container-v2">
+        <!-- Cột trái: Thẻ cầu thủ chính & Nút thay đổi cầu thủ -->
+        <div class="up-left-col">
+          <div id="mainUpgradeSlot" class="main-card-slot" style="margin: 0;">
+            <div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Chưa chọn thẻ</div>
           </div>
-          <button class="btn-submit" style="width: auto; padding: 6px 18px; font-size: 11px; margin-top: 10px;" onclick="openGameTab('squadManagerTab')"><i class="fa-solid fa-shirt"></i> Chọn từ Kho chưa ĐK</button>
+          <button class="btn-submit" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.1); color:#fff; font-size: 12px;" onclick="openSelectMainPlayerModal()"><i class="fa-solid fa-arrow-right-arrow-left"></i> Thay đổi cầu thủ</button>
 
-          <div class="fo4-stats-box">
-            <div class="fo4-stat-row"><span>Cấp thẻ</span><span id="statGradeTxt" style="color:var(--accent-red); font-weight:bold;">1 (+0)</span></div>
-            <div class="fo4-stat-row"><span>OVR</span><span id="statOvrTxt" style="color:var(--accent-gold); font-weight:bold;">0</span></div>
-            <div class="fo4-stat-row"><span>Đặc điểm</span><span>0 (+0)</span></div>
-            <div class="fo4-stat-row"><span>Kỹ thuật</span><span style="color:var(--accent-gold);">★★★★★★</span></div>
-            <div class="fo4-stat-row"><span>Giá</span><span id="statPriceTxt" style="color:var(--accent-gold);">0 BP</span></div>
+          <div style="width:100%; font-size:11px; background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid var(--panel-border);">
+            <div style="display:flex; justify-content:space-between; padding:3px 0;"><span>Cấp thẻ:</span><span id="statGradeTxt" style="color:var(--accent-red); font-weight:bold;">+1</span></div>
+            <div style="display:flex; justify-content:space-between; padding:3px 0;"><span>Đặc điểm:</span><span>0</span></div>
+            <div style="display:flex; justify-content:space-between; padding:3px 0;"><span>Kỹ thuật:</span><span style="color:var(--accent-gold);">★★★★★</span></div>
+            <div style="display:flex; justify-content:space-between; padding:3px 0;"><span>Giá:</span><span id="statPriceTxt" style="color:var(--accent-gold);">0 BP</span></div>
           </div>
         </div>
 
-        <div class="fo4-right-panel">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <h3 style="font-size: 13px; color: #fff;">Bảng Tỷ Lệ Nâng Cấp Chuẩn</h3>
-              <p style="font-size: 10px; color: #888;">Tỷ lệ thành công và mức tăng OVR khi đập thẻ.</p>
+        <!-- Cột phải: Tabs chọn phôi (Cầu thủ đang sở hữu / Mua cầu thủ) -->
+        <div class="up-right-col">
+          <div class="up-tabs-header">
+            <div style="display:flex; gap:15px;">
+              <button class="up-tab-btn active" onclick="switchUpgradeTab('ownedSubPanel', this)">Cầu thủ đang sở hữu</button>
+              <button class="up-tab-btn" onclick="switchUpgradeTab('marketSubPanel', this)">Mua cầu thủ</button>
             </div>
-            <span id="fodderCountBadge" style="font-size: 14px; font-weight: bold; color: var(--accent-green);">0/5</span>
+            <span id="fodderCountBadge" style="font-size: 13px; font-weight: bold; color: var(--accent-green);">0/5</span>
           </div>
 
-          <table class="upgrade-rate-table">
-            <thead>
-              <tr>
-                <th>Cấp Thẻ</th>
-                <th>Tăng OVR</th>
-                <th>Tổng OVR</th>
-                <th>Tỷ Lệ Thành Công</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><span class="card-grade">1 ➔ 2</span></td><td style="color:var(--accent-green);">+1</td><td>+1</td><td style="color:var(--accent-green); font-weight:bold;">100%</td></tr>
-              <tr><td><span class="card-grade">2 ➔ 3</span></td><td style="color:var(--accent-green);">+1</td><td>+2</td><td style="color:var(--accent-green); font-weight:bold;">81%</td></tr>
-              <tr><td><span class="card-grade">3 ➔ 4</span></td><td style="color:var(--accent-green);">+2</td><td>+4</td><td style="color:var(--accent-green); font-weight:bold;">64%</td></tr>
-              <tr><td><span class="card-grade">4 ➔ 5</span></td><td style="color:var(--accent-green);">+2</td><td>+6</td><td style="color:var(--accent-green); font-weight:bold;">50%</td></tr>
-              <tr><td><span class="card-grade">5 ➔ 6</span></td><td style="color:var(--accent-green);">+2</td><td>+8</td><td style="color:var(--accent-gold); font-weight:bold;">26%</td></tr>
-              <tr><td><span class="card-grade">6 ➔ 7</span></td><td style="color:var(--accent-green);">+3</td><td>+11</td><td style="color:var(--accent-gold); font-weight:bold;">15%</td></tr>
-              <tr><td><span class="card-grade">7 ➔ 8</span></td><td style="color:var(--accent-green);">+4</td><td>+15</td><td style="color:var(--accent-red); font-weight:bold;">7%</td></tr>
-              <tr><td><span class="card-grade">8 ➔ 9</span></td><td style="color:var(--accent-green);">+4</td><td>+19</td><td style="color:var(--accent-red); font-weight:bold;">4%</td></tr>
-              <tr><td><span class="card-grade">9 ➔ 10</span></td><td style="color:var(--accent-green);">+5</td><td>+24</td><td style="color:var(--accent-red); font-weight:bold;">2%</td></tr>
-            </tbody>
+          <!-- Tab 1: Cầu thủ đang sở hữu (Không có nút chọn tất cả, chọn thủ công từng thẻ giống TTCN) -->
+          <div id="ownedSubPanel" class="up-sub-panel active">
+            <div class="fo4-fodder-table-container" style="max-height: 380px;">
+              <table class="player-list-table">
+                <thead>
+                  <tr>
+                    <th>Vị trí</th>
+                    <th>Tên cầu thủ</th>
+                    <th>OVR</th>
+                    <th>Thẻ</th>
+                    <th>Chọn (Tối đa 5)</th>
+                  </tr>
+                </thead>
+                <tbody id="fo4FodderTableBody">
+                  <tr><td colspan="5" style="text-align:center; color:#666;">Vui lòng chọn thẻ chính trước</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Tab 2: Mua cầu thủ (Mua phôi nhanh) -->
+          <div id="marketSubPanel" class="up-sub-panel">
+            <div class="quick-fodder-shop" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px;">
+              <button class="btn-quick-buy" style="padding:10px;" onclick="buyQuickFodder(100)">Mua Phôi 100 (0.1B BP)</button>
+              <button class="btn-quick-buy" style="padding:10px;" onclick="buyQuickFodder(110)">Mua Phôi 110 (2B BP)</button>
+              <button class="btn-quick-buy" style="padding:10px;" onclick="buyQuickFodder(120)">Mua Phôi 120 (50B BP)</button>
+            </div>
+            <p style="font-size: 11px; color: #888; margin-top: 15px; text-align: center;">Phôi sau khi mua sẽ được đưa thẳng vào kho để chọn ở tab "Cầu thủ đang sở hữu".</p>
+          </div>
+
+          <!-- Nút Tiếp tục chuyển sang phòng đập thẻ -->
+          <div style="display:flex; justify-content:flex-end; margin-top:auto; border-top:1px solid var(--panel-border); padding-top:12px;">
+            <button class="btn-submit" style="width: auto; padding: 10px 35px; background: var(--accent-green); color: #000;" onclick="openRealUpgradeScreen()">Tiếp theo <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CHỌN NHANH THẺ CHÍNH TỪ KHO -->
+    <div id="selectMainPlayerModal" class="modal-overlay" style="display:none;">
+      <div style="background:var(--panel-bg); border:1px solid var(--panel-border); padding:20px; border-radius:12px; width:500px; max-height:80vh; display:flex; flex-direction:column;">
+        <h3 style="color:var(--accent-gold); margin-bottom:10px;"><i class="fa-solid fa-shirt"></i> Chọn thẻ chính nâng cấp từ Kho</h3>
+        <div class="player-table-container" style="flex:1; max-height:350px; overflow-y:auto;">
+          <table class="player-list-table">
+            <thead><tr><th>Vị trí</th><th>Tên cầu thủ</th><th>OVR</th><th>Cấp</th><th>Thao tác</th></tr></thead>
+            <tbody id="selectMainTableBody"></tbody>
           </table>
-
-          <div class="quick-fodder-shop" style="margin-top:10px;">
-            <button class="btn-quick-buy" onclick="buyQuickFodder(100)">Mua Phôi 100 (0.1B)</button>
-            <button class="btn-quick-buy" onclick="buyQuickFodder(110)">Mua Phôi 110 (2B)</button>
-            <button class="btn-quick-buy" onclick="buyQuickFodder(120)">Mua Phôi 120 (50B)</button>
-          </div>
-
-          <div class="fo4-fodder-table-container">
-            <table class="player-list-table">
-              <thead>
-                <tr>
-                  <th>Tăng</th>
-                  <th>Vị trí</th>
-                  <th>Tên cầu thủ</th>
-                  <th>OVR</th>
-                  <th>Thẻ</th>
-                  <th>Chọn Phôi</th>
-                </tr>
-              </thead>
-              <tbody id="fo4FodderTableBody">
-                <tr><td colspan="6" style="text-align:center; color:#666;">Vui lòng chọn thẻ chính trước để hiển thị danh sách nguyên liệu</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; border-top:1px solid var(--panel-border); padding-top:10px;">
-            <div>
-              <span style="font-size: 11px; color: #aaa;">Tỷ lệ nâng cấp:</span>
-              <div style="display:flex; gap:5px; margin-top:4px;" id="fo4RateBarsPreview">
-                <div style="width:25px; height:6px; background:var(--accent-green); border-radius:2px;"></div>
-                <div style="width:25px; height:6px; background:var(--accent-green); border-radius:2px;"></div>
-                <div style="width:25px; height:6px; background:rgba(255,255,255,0.1); border-radius:2px;"></div>
-                <div style="width:25px; height:6px; background:rgba(255,255,255,0.1); border-radius:2px;"></div>
-                <div style="width:25px; height:6px; background:rgba(255,255,255,0.1); border-radius:2px;"></div>
-              </div>
-            </div>
-            <button class="btn-submit" style="width: auto; padding: 10px 30px; background: var(--accent-gold); color: #000;" onclick="openRealUpgradeScreen()">Tiếp theo <i class="fa-solid fa-arrow-right"></i></button>
-          </div>
         </div>
+        <button class="btn-submit" style="margin-top:15px; background:rgba(255,255,255,0.1); color:#fff;" onclick="document.getElementById('selectMainPlayerModal').style.display='none'">Đóng</button>
       </div>
     </div>
 
@@ -552,7 +539,6 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
-
     let useOnlineFirebase = false;
     let db = null;
 
@@ -570,14 +556,6 @@
     const ADMIN_PASSWORD = "123";
     const INITIAL_BP = 100000000000;
     const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
-
-    const seasonDatabase = [
-      { code: "ICON", color: "#ffb700", ovrBoost: 8 },
-      { code: "IPRM", color: "#00d2ff", ovrBoost: 7 },
-      { code: "TOTY", color: "#0055ff", ovrBoost: 6 },
-      { code: "TOTS", color: "#9d4edd", ovrBoost: 5 },
-      { code: "NORM", color: "#adb5bd", ovrBoost: 0 }
-    ];
 
     const playerDatabase = [
       { name: "Pelé", baseOvr: 125, img: "https://s1.fifaaddict.com/fo4/players/kjjgrbaaj.png?20210828", salary: 28 },
@@ -637,6 +615,25 @@
           };
         }
       });
+      if (userData.inventory.length === 0) {
+        playerDatabase.slice(0, 15).forEach((p, i) => {
+          userData.inventory.push({
+            id: 'inv_' + i,
+            name: p.name,
+            season: 'ICON',
+            seasonColor: '#ffb700',
+            baseOvr: p.baseOvr,
+            ovr: p.baseOvr,
+            grade: 1,
+            img: p.img,
+            salary: p.salary || 20,
+            pos: i % 2 === 0 ? 'ST' : 'CM'
+          });
+        });
+      }
+      if (selectedMainIndex === null && userData.inventory.length > 0) {
+        selectedMainIndex = 0;
+      }
     }
 
     let toastTimeout = null;
@@ -730,6 +727,7 @@
       renderMarketBuy();
       renderMarketSell();
       renderFo4FodderTable();
+      updateMainUpgradeSlotUI();
       if (currentUser && currentUser.toLowerCase() === ADMIN_USERNAME) {
         renderAdminUserTable();
       }
@@ -742,7 +740,11 @@
       document.getElementById(tabId).classList.add('active');
       if (tabId === 'squadManagerTab') renderSquadManager();
       if (tabId === 'marketTab') { renderMarketBuy(); renderMarketSell(); }
-      if (tabId === 'upgradeTab') renderFo4FodderTable();
+      if (tabId === 'upgradeTab') {
+        initDefaultSquad();
+        updateMainUpgradeSlotUI();
+        renderFo4FodderTable();
+      }
       if (tabId === 'adminTab') renderAdminUserTable();
     }
 
@@ -760,6 +762,13 @@
       btn.classList.add('active');
       if (subTabId === 'buySubTab') renderMarketBuy();
       if (subTabId === 'sellSubTab') renderMarketSell();
+    }
+
+    function switchUpgradeTab(panelId, btn) {
+      document.querySelectorAll('.up-sub-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.up-tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(panelId).classList.add('active');
+      btn.classList.add('active');
     }
 
     function handleBodyClick(e) {
@@ -825,6 +834,39 @@
       } else {
         showToast("Vui lòng nhập link hoặc chọn file ảnh!");
       }
+    }
+
+    /* CHỌN THẺ CHÍNH ĐỂ NÂNG CẤP */
+    function openSelectMainPlayerModal() {
+      const tbody = document.getElementById('selectMainTableBody');
+      tbody.innerHTML = '';
+      if (!userData.inventory || userData.inventory.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#666;">Kho trống</td></tr>`;
+      } else {
+        userData.inventory.forEach((item, idx) => {
+          const grade = item.grade || 1;
+          const ovr = calculateOvr(item.baseOvr, grade);
+          tbody.innerHTML += `
+            <tr>
+              <td><span style="color:var(--accent-green); font-weight:bold;">${item.pos || 'ST'}</span></td>
+              <td><div style="display:flex; align-items:center; gap:6px;"><img src="${item.img || defaultFodderImg}" style="width:30px; height:30px; object-fit:contain;"><span>${item.name}</span></div></td>
+              <td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td>
+              <td><span class="card-grade">+${grade}</span></td>
+              <td><button class="btn-action-table" onclick="selectMainPlayer(${idx})">Chọn</button></td>
+            </tr>
+          `;
+        });
+      }
+      document.getElementById('selectMainPlayerModal').style.display = 'flex';
+    }
+
+    function selectMainPlayer(invIdx) {
+      selectedMainIndex = invIdx;
+      selectedFodderIndices = [];
+      document.getElementById('selectMainPlayerModal').style.display = 'none';
+      updateMainUpgradeSlotUI();
+      renderFo4FodderTable();
+      showToast("Đã chọn thẻ chính!");
     }
 
     /* QUẢN LÝ CẦU THỦ */
@@ -1030,9 +1072,8 @@
     function updateMainUpgradeSlotUI() {
       const slot = document.getElementById('mainUpgradeSlot');
       if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
-        slot.innerHTML = `<div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Bấm để chọn thẻ chính từ Kho</div>`;
-        document.getElementById('statGradeTxt').innerText = "1 (+0)";
-        document.getElementById('statOvrTxt').innerText = "0";
+        slot.innerHTML = `<div style="color: #666; font-size: 11px; text-align: center; margin-top: 70px;">Chưa chọn thẻ</div>`;
+        document.getElementById('statGradeTxt').innerText = "+1";
         document.getElementById('statPriceTxt').innerText = "0 BP";
         return;
       }
@@ -1041,8 +1082,7 @@
       const ovr = calculateOvr(card.baseOvr, grade);
       slot.innerHTML = `<div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-season" style="background:${card.seasonColor || '#ffb700'};">${card.season || 'ICON'}</span><span class="card-grade">+${grade}</span></div><div class="card-img-container"><img class="card-img" src="${card.img || defaultFodderImg}"></div><div class="card-name">${card.name}</div>`;
       
-      document.getElementById('statGradeTxt').innerText = `${grade} (+${grade})`;
-      document.getElementById('statOvrTxt').innerText = `${ovr} (+1)`;
+      document.getElementById('statGradeTxt').innerText = `+${grade}`;
       document.getElementById('statPriceTxt').innerText = (ovr * 100000000).toLocaleString() + " BP";
     }
 
@@ -1051,7 +1091,7 @@
       if (!tbody) return;
       tbody.innerHTML = '';
       if (selectedMainIndex === null || !userData.inventory[selectedMainIndex]) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#666;">Vui lòng chọn thẻ chính trước từ kho chưa đăng ký</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#666;">Vui lòng chọn thẻ chính trước</td></tr>`;
         return;
       }
       
@@ -1063,11 +1103,10 @@
 
         tbody.innerHTML += `
           <tr>
-            <td><span style="background:var(--accent-green); color:#000; padding:2px 6px; border-radius:3px; font-weight:bold; font-size:10px;">+${grade}</span></td>
             <td><span style="color:var(--accent-green); font-weight:bold;">${item.pos || 'CM'}</span></td>
             <td><div style="display:flex; align-items:center; gap:6px;"><img src="${item.img || defaultFodderImg}" style="width:25px; height:25px; object-fit:contain;"><span>${item.name}</span></div></td>
             <td style="color:var(--accent-gold); font-weight:bold;">${ovr}</td>
-            <td><span class="card-grade">${grade}</span></td>
+            <td><span class="card-grade">+${grade}</span></td>
             <td><input type="checkbox" value="${invIdx}" ${isChecked ? 'checked' : ''} onchange="toggleFo4Fodder(${invIdx})"></td>
           </tr>
         `;
