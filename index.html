@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Online Simulator - Ultimate Lobby & Multi-Sell</title>
+  <title>FC Online Simulator - nguyenvanloc56.github.io/fco/</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -26,11 +26,11 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
     body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
     
-    /* Giao diện Sảnh Sân Vận Động (Giống ảnh mẫu) */
+    /* Giao diện Sảnh Sân Vận Động */
     .stadium-lobby {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background: radial-gradient(circle, rgba(15,35,25,0.7) 0%, rgba(5,8,12,0.95) 100%), 
-                  url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+                  var(--custom-lobby-bg, url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop')) no-repeat center center/cover;
       display: flex; flex-direction: column; justify-content: space-between; z-index: 50; padding: 15px 30px;
     }
 
@@ -41,22 +41,21 @@
     .lobby-bp-box { background: rgba(0,0,0,0.7); border: 1px solid var(--accent-gold); padding: 8px 18px; border-radius: 8px; color: var(--accent-gold); font-weight: bold; }
     .lobby-gift-btn { background: var(--accent-red); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-    .lobby-sidebar-left { display: flex; flex-direction: column; gap: 10px; z-index: 10; width: 160px; }
+    .lobby-sidebar-left { display: flex; flex-direction: column; gap: 10px; z-index: 10; width: 190px; }
     .lobby-side-btn { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 10px 15px; border-radius: 6px; text-align: left; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); }
     .lobby-side-btn:hover { background: rgba(0,255,136,0.2); border-color: var(--accent-green); color: var(--accent-green); }
 
-    .lobby-footer-nav { display: flex; justify-content: center; gap: 15px; background: rgba(0,0,0,0.85); padding: 12px; border-top: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); z-index: 10; }
+    .lobby-footer-nav { display: flex; justify-content: center; gap: 15px; background: rgba(0,0,0,0.85); padding: 12px; border-top: 2px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); z-index: 10; flex-wrap: wrap; }
     .lobby-nav-btn { background: transparent; border: none; color: #ccc; font-weight: bold; font-size: 13px; cursor: pointer; padding: 5px 15px; transition: 0.2s; text-transform: uppercase; }
     .lobby-nav-btn:hover, .lobby-nav-btn.active { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-green); }
 
-    /* Nội dung game bên trong các tab */
     .game-main-content { display: none; flex: 1; padding: 20px; max-width: 1400px; width: 100%; margin: 0 auto; z-index: 100; position: relative; background: var(--bg-dark); min-height: 100vh; }
     .game-main-content.active { display: block; }
 
-    #gameToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 3000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
+    #gameToast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(13, 20, 32, 0.98); border: 1px solid var(--accent-green); color: #fff; padding: 12px 28px; border-radius: 25px; font-weight: bold; font-size: 13px; z-index: 5000; box-shadow: 0 5px 25px rgba(0,0,0,0.8); transition: transform 0.25s ease, opacity 0.25s ease; opacity: 0; pointer-events: none; }
     #gameToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(8px); }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); display: flex; justify-content: center; align-items: center; z-index: 4000; backdrop-filter: blur(8px); }
     .auth-box { background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 30px; border-radius: 12px; width: 340px; text-align: center; }
     .input-group { margin-bottom: 12px; text-align: left; }
     .input-group label { display: block; margin-bottom: 4px; font-size: 11px; color: #aaa; }
@@ -95,9 +94,14 @@
     .fo4-stat-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     
     .fo4-right-panel { background: #121926; border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; }
-    .fo4-fodder-table-container { background: rgba(0,0,0,0.6); border: 1px solid var(--panel-border); border-radius: 8px; overflow-y: auto; max-height: 380px; margin-top: 10px; }
+    
+    .upgrade-rate-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; overflow: hidden; font-size: 11px; }
+    .upgrade-rate-table th, .upgrade-rate-table td { padding: 8px 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .upgrade-rate-table th { background: rgba(0,0,0,0.8); color: var(--accent-green); font-size: 10px; text-transform: uppercase; }
+    
+    .fo4-fodder-table-container { background: rgba(0,0,0,0.6); border: 1px solid var(--panel-border); border-radius: 8px; overflow-y: auto; max-height: 250px; margin-top: 10px; }
 
-    #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 4000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
+    #realUpgradeScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #0b172a 0%, #03070e 100%); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
     .real-stage-box { display: flex; gap: 40px; align-items: center; justify-content: center; margin: 30px 0; }
     
     @keyframes shakeCard {
@@ -110,7 +114,7 @@
     }
     .shaking { animation: shakeCard 0.08s infinite; border-color: var(--accent-blue) !important; box-shadow: 0 0 40px var(--accent-blue); }
 
-    #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 4000; flex-direction: column; }
+    #upgradeEffectModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 5000; flex-direction: column; }
     .flash-screen { position: absolute; top:0; left:0; width:100%; height:100%; background: #fff; opacity:0; pointer-events:none; transition: opacity 0.5s ease; }
     .result-box-fx { text-align: center; transform: scale(0.5); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .result-box-fx.show { transform: scale(1.2); opacity: 1; }
@@ -133,9 +137,6 @@
     .quest-card { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .settings-group { background: rgba(0,0,0,0.4); border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px; margin-bottom: 15px; }
     .settings-group h3 { color: var(--accent-blue); margin-bottom: 12px; font-size: 14px; }
-    .graphics-options { display: flex; gap: 10px; }
-    .btn-gfx { background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
-    .btn-gfx.active { background: var(--accent-green); color: #000; border-color: var(--accent-green); }
 
     #canvas-container { width: 100%; height: 450px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--panel-border); position: relative; }
     .controls-hint { position: absolute; bottom: 15px; left: 15px; background: rgba(0,0,0,0.85); padding: 12px 18px; border-radius: 8px; font-size: 12px; color: var(--accent-green); pointer-events: none; border: 1px solid var(--accent-green); }
@@ -162,11 +163,11 @@
   <div id="loginModal" class="modal-overlay">
     <div class="auth-box">
       <h2><i class="fa-solid fa-futbol"></i> ĐĂNG NHẬP HỆ THỐNG</h2>
-      <p style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">Đã tối ưu siêu mượt & Giao diện chuẩn sân vận động</p>
+      <p style="font-size: 11px; color: var(--accent-green); margin-top: 4px; margin-bottom: 12px;">nguyenvanloc56.github.io/fco/</p>
       <form id="loginForm">
         <div class="input-group">
           <label>Tên Đăng Nhập:</label>
-          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản...">
+          <input type="text" id="usernameInput" required placeholder="Nhập tên tài khoản (admin để vào panel)...">
         </div>
         <div class="input-group">
           <label>Mật Khẩu:</label>
@@ -177,14 +178,52 @@
     </div>
   </div>
 
-  <!-- SẢNH CHỜ SÂN VẬN ĐỘNG (GIỐNG ẢNH MẪU) -->
+  <!-- MODAL SÂN VẬN ĐỘNG -->
+  <div id="stadiumSettingsModal" class="modal-overlay" style="display:none;">
+    <div style="background:var(--panel-bg); border:1px solid var(--panel-border); padding:25px; border-radius:16px; width:400px; text-align:center;">
+      <h3 style="color:var(--accent-gold); margin-bottom:15px;"><i class="fa-solid fa-image"></i> CÀI ĐẶT SÂN VẬN ĐỘNG (NỀN SẢNH)</h3>
+      <div class="input-group">
+        <label>Nhập Link URL Ảnh Nền Sảnh Trực Tiếp (.jpg / .png):</label>
+        <input type="text" id="customStadiumUrl" placeholder="https://images.unsplash.com/...">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-submit" style="background:rgba(255,255,255,0.1); color:#fff;" onclick="document.getElementById('stadiumSettingsModal').style.display='none'">Hủy</button>
+        <button class="btn-submit" onclick="applyStadiumBackground()">Áp Dụng Nền</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PHÒNG THAY ĐỒ -->
+  <div id="dressingRoomModal" class="modal-overlay" style="display:none;">
+    <div style="background:var(--panel-bg); border:1px solid var(--panel-border); padding:25px; border-radius:16px; width:400px; text-align:center;">
+      <h3 style="color:var(--accent-blue); margin-bottom:15px;"><i class="fa-solid fa-shirt"></i> PHÒNG THAY ĐỒ (THAY MINIFACE)</h3>
+      <div class="input-group">
+        <label>Chọn cầu thủ trong kho:</label>
+        <select id="dressingPlayerSelect" style="width:100%; padding:8px; background:#000; color:#fff; border:1px solid var(--panel-border); border-radius:6px; font-size:12px;"></select>
+      </div>
+      <div class="input-group" style="margin-top:10px;">
+        <label>Nhập Link URL Ảnh Miniface Mới (.png):</label>
+        <input type="text" id="customMinifaceUrl" placeholder="https://s1.fifaaddict.com/...">
+      </div>
+      <div class="input-group" style="margin-top:10px;">
+        <label>Hoặc Tải File Ảnh Từ Máy:</label>
+        <input type="file" id="customMinifaceFile" accept="image/*" style="font-size:11px; color:#aaa;">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-submit" style="background:rgba(255,255,255,0.1); color:#fff;" onclick="document.getElementById('dressingRoomModal').style.display='none'">Hủy</button>
+        <button class="btn-submit" onclick="applyCustomMiniface()">Lưu Miniface</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SẢNH CHỜ SÂN VẬN ĐỘNG -->
   <div id="stadiumLobbyView" class="stadium-lobby" style="display:none;">
     <div class="lobby-header">
       <div class="lobby-user-card">
         <span id="lobbyUsername" style="font-weight: bold; font-size: 13px; color: #fff;">Khách</span>
         <div style="font-size: 10px; color: var(--accent-green);">SVIP 2</div>
       </div>
-      <div class="lobby-center-badge"><i class="fa-solid fa-globe"></i> iamrm.net</div>
+      <div class="lobby-center-badge"><i class="fa-solid fa-globe"></i> nguyenvanloc56.github.io/fco/</div>
       <div class="lobby-right-group">
         <div class="lobby-bp-box"><i class="fa-solid fa-coins"></i> <span id="lobbyBpCount">0</span> BP</div>
         <button class="lobby-gift-btn" onclick="showToast('Nhập giftcode thành công!')">GIFT CODE</button>
@@ -196,8 +235,9 @@
       <button class="lobby-side-btn" onclick="openGameTab('questTab')"><i class="fa-solid fa-calendar-check" style="color:var(--accent-green)"></i> ĐIỂM DANH</button>
       <button class="lobby-side-btn" onclick="openGameTab('matchTab')"><i class="fa-solid fa-trophy" style="color:var(--accent-gold)"></i> MÙA GIẢI</button>
       <button class="lobby-side-btn" onclick="openGameTab('matchTab')"><i class="fa-solid fa-shield-halved" style="color:var(--accent-blue)"></i> XẾP HẠNG</button>
-      <button class="lobby-side-btn" onclick="openGameTab('settingsTab')"><i class="fa-solid fa-gear"></i> CÀI ĐẶT</button>
-      <button class="lobby-side-btn" onclick="openGameTab('settingsTab')"><i class="fa-solid fa-newspaper" style="color:#ff7700"></i> TIN TỨC</button>
+      <button class="lobby-side-btn" onclick="openStadiumModal()"><i class="fa-solid fa-image" style="color:var(--accent-gold)"></i> SÂN VẬN ĐỘNG</button>
+      <button class="lobby-side-btn" onclick="openDressingRoomModal()"><i class="fa-solid fa-shirt" style="color:var(--accent-blue)"></i> PHÒNG THAY ĐỒ</button>
+      <button id="adminLobbyBtn" class="lobby-side-btn" style="display:none; background:rgba(255,71,87,0.3); border-color:var(--accent-red); color:var(--accent-red);" onclick="openGameTab('adminTab')"><i class="fa-solid fa-user-shield"></i> ADMIN PANEL</button>
     </div>
 
     <div class="lobby-footer-nav">
@@ -205,7 +245,7 @@
       <button class="lobby-nav-btn" onclick="openGameTab('questTab')">Nhiệm vụ</button>
       <button class="lobby-nav-btn" onclick="openGameTab('marketTab')">TTCN</button>
       <button class="lobby-nav-btn" onclick="openGameTab('matchTab')">Theo dõi</button>
-      <button class="lobby-nav-btn" onclick="openGameTab('upgradeTab')">Vật phẩm</button>
+      <button class="lobby-nav-btn" onclick="openGameTab('upgradeTab')">Nâng Cấp</button>
       <button class="lobby-nav-btn" onclick="openGameTab('packTab')">Shop</button>
       <button class="lobby-nav-btn" onclick="openGameTab('squadManagerTab')">CLB</button>
       <button class="lobby-nav-btn" onclick="openGameTab('questTab')">Sự kiện</button>
@@ -331,11 +371,33 @@
         <div class="fo4-right-panel">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <h3 style="font-size: 13px; color: #fff;">Cầu thủ sử dụng (Phôi)</h3>
-              <p style="font-size: 10px; color: #888;">Chỉ nhận phôi từ kho chưa đăng ký.</p>
+              <h3 style="font-size: 13px; color: #fff;">Bảng Tỷ Lệ Nâng Cấp Chuẩn</h3>
+              <p style="font-size: 10px; color: #888;">Tỷ lệ thành công và mức tăng OVR khi đập thẻ.</p>
             </div>
             <span id="fodderCountBadge" style="font-size: 14px; font-weight: bold; color: var(--accent-green);">0/5</span>
           </div>
+
+          <table class="upgrade-rate-table">
+            <thead>
+              <tr>
+                <th>Cấp Thẻ</th>
+                <th>Tăng OVR</th>
+                <th>Tổng OVR</th>
+                <th>Tỷ Lệ Thành Công</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="card-grade">1 ➔ 2</span></td><td style="color:var(--accent-green);">+1</td><td>+1</td><td style="color:var(--accent-green); font-weight:bold;">100%</td></tr>
+              <tr><td><span class="card-grade">2 ➔ 3</span></td><td style="color:var(--accent-green);">+1</td><td>+2</td><td style="color:var(--accent-green); font-weight:bold;">81%</td></tr>
+              <tr><td><span class="card-grade">3 ➔ 4</span></td><td style="color:var(--accent-green);">+2</td><td>+4</td><td style="color:var(--accent-green); font-weight:bold;">64%</td></tr>
+              <tr><td><span class="card-grade">4 ➔ 5</span></td><td style="color:var(--accent-green);">+2</td><td>+6</td><td style="color:var(--accent-green); font-weight:bold;">50%</td></tr>
+              <tr><td><span class="card-grade">5 ➔ 6</span></td><td style="color:var(--accent-green);">+2</td><td>+8</td><td style="color:var(--accent-gold); font-weight:bold;">26%</td></tr>
+              <tr><td><span class="card-grade">6 ➔ 7</span></td><td style="color:var(--accent-green);">+3</td><td>+11</td><td style="color:var(--accent-gold); font-weight:bold;">15%</td></tr>
+              <tr><td><span class="card-grade">7 ➔ 8</span></td><td style="color:var(--accent-green);">+4</td><td>+15</td><td style="color:var(--accent-red); font-weight:bold;">7%</td></tr>
+              <tr><td><span class="card-grade">8 ➔ 9</span></td><td style="color:var(--accent-green);">+4</td><td>+19</td><td style="color:var(--accent-red); font-weight:bold;">4%</td></tr>
+              <tr><td><span class="card-grade">9 ➔ 10</span></td><td style="color:var(--accent-green);">+5</td><td>+24</td><td style="color:var(--accent-red); font-weight:bold;">2%</td></tr>
+            </tbody>
+          </table>
 
           <div class="quick-fodder-shop" style="margin-top:10px;">
             <button class="btn-quick-buy" onclick="buyQuickFodder(100)">Mua Phôi 100 (0.1B)</button>
@@ -352,7 +414,7 @@
                   <th>Tên cầu thủ</th>
                   <th>OVR</th>
                   <th>Thẻ</th>
-                  <th>Chọn</th>
+                  <th>Chọn Phôi</th>
                 </tr>
               </thead>
               <tbody id="fo4FodderTableBody">
@@ -378,7 +440,7 @@
       </div>
     </div>
 
-    <!-- 3. THỊ TRƯỜNG (TTCN - Có chọn nhiều cầu thủ để bán) -->
+    <!-- 3. THỊ TRƯỜNG (TTCN) -->
     <div id="marketTab" class="game-main-content">
       <div class="market-sub-tabs">
         <button class="sub-tab-btn active" onclick="switchMarketSubTab('buySubTab', this)">Mua Cầu Thủ</button>
@@ -397,7 +459,6 @@
         </div>
       </div>
 
-      <!-- Mục Bán Nhiều Cầu Thủ -->
       <div id="sellSubTab" class="sub-tab-content">
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4); padding:10px 15px; border-radius:8px; margin-bottom:10px; border:1px solid var(--panel-border);">
           <div>
@@ -460,15 +521,16 @@
       </div>
     </div>
 
-    <!-- 8. ADMIN -->
+    <!-- 8. ADMIN PANEL -->
     <div id="adminTab" class="game-main-content">
-      <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản Người Chơi (ADMIN REALTIME)</h2>
+      <h2 style="color: var(--accent-red); font-size: 14px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản Người Chơi (ADMIN PANEL)</h2>
       <div style="overflow-x: auto;">
         <table class="admin-table">
           <thead>
             <tr>
               <th>Trạng thái</th>
               <th>Tên Đăng Nhập</th>
+              <th>Mật Khẩu</th>
               <th>Số Dư BP</th>
               <th>Số Thẻ Kho</th>
               <th>Thao Tác Admin</th>
@@ -490,6 +552,7 @@
       messagingSenderId: "220897790682",
       appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
     };
+
     let useOnlineFirebase = false;
     let db = null;
 
@@ -529,7 +592,22 @@
       { name: "K. De Bruyne", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opavrybzr.png?20210828", salary: 23 },
       { name: "V. van Dijk", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/aavpqpbnk.png?20210828", salary: 23 },
       { name: "Neymar Jr", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkdgobnrl.png?20260720", salary: 23 },
-      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 22 }
+      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 22 },
+      { name: "L. Modrić", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/mkyvpmvbr.png?20210828", salary: 22 },
+      { name: "T. Kroos", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/kpmvbymky.png?20210828", salary: 22 },
+      { name: "Sergio Ramos", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/vpbymkykm.png?20210828", salary: 22 },
+      { name: "Karim Benzema", baseOvr: 115, img: "https://s1.fifaaddict.com/fo4/players/ymkvpbmky.png?20210828", salary: 22 },
+      { name: "Mohamed Salah", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/pbymkymkv.png?20210828", salary: 21 },
+      { name: "Robert Lewandowski", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/mkvpbymky.png?20210828", salary: 21 },
+      { name: "Thibaut Courtois", baseOvr: 114, img: "https://s1.fifaaddict.com/fo4/players/bykmkympv.png?20210828", salary: 21 },
+      { name: "Sadio Mane", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/mkpvmbyky.png?20210828", salary: 21 },
+      { name: "Casemiro", baseOvr: 113, img: "https://s1.fifaaddict.com/fo4/players/vpkbymkym.png?20210828", salary: 21 },
+      { name: "N'Golo Kanté", baseOvr: 112, img: "https://s1.fifaaddict.com/fo4/players/ymkpvmbky.png?20210828", salary: 20 },
+      { name: "Paulo Dybala", baseOvr: 112, img: "https://s1.fifaaddict.com/fo4/players/pkmvbykym.png?20210828", salary: 20 },
+      { name: "Marcus Rashford", baseOvr: 111, img: "https://s1.fifaaddict.com/fo4/players/kymvpbmky.png?20210828", salary: 20 },
+      { name: "Bruno Fernandes", baseOvr: 111, img: "https://s1.fifaaddict.com/fo4/players/mvpkbymky.png?20210828", salary: 20 },
+      { name: "Achraf Hakimi", baseOvr: 110, img: "https://s1.fifaaddict.com/fo4/players/bkmkympvp.png?20210828", salary: 20 },
+      { name: "Theo Hernández", baseOvr: 110, img: "https://s1.fifaaddict.com/fo4/players/mpkbykmvy.png?20210828", salary: 20 }
     ];
 
     let currentUser = null;
@@ -588,7 +666,10 @@
       document.getElementById('stadiumLobbyView').style.display = 'flex';
 
       if (username.toLowerCase() === ADMIN_USERNAME) {
+        document.getElementById('adminLobbyBtn').style.display = 'flex';
         renderAdminUserTable();
+      } else {
+        document.getElementById('adminLobbyBtn').style.display = 'none';
       }
 
       if (useOnlineFirebase) {
@@ -695,6 +776,57 @@
       rowEl.classList.toggle('show-actions');
     }
 
+    /* SÂN VẬN ĐỘNG */
+    function openStadiumModal() {
+      const url = prompt("Nhập Link URL hình nền sân vận động mới (.jpg / .png):", "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop");
+      if (url && url.trim() !== "") {
+        document.documentElement.style.setProperty('--custom-lobby-bg', `url('${url.trim()}')`);
+        showToast("Đã đổi sân vận động thành công!");
+      }
+    }
+
+    /* PHÒNG THAY ĐỒ (THAY MINIFACE) */
+    function openDressingRoomModal() {
+      if (!userData.inventory || userData.inventory.length === 0) {
+        showToast("Kho chưa đăng ký trống để thay Miniface!");
+        return;
+      }
+      let selectHtml = "";
+      userData.inventory.forEach((item, idx) => {
+        selectHtml += `<option value="${idx}">${item.name} (+${item.grade||1})</option>`;
+      });
+
+      document.getElementById('dressingPlayerSelect').innerHTML = selectHtml;
+      document.getElementById('customMinifaceUrl').value = "";
+      document.getElementById('dressingRoomModal').style.display = 'flex';
+    }
+
+    function applyCustomMiniface() {
+      const idx = parseInt(document.getElementById('dressingPlayerSelect').value);
+      const url = document.getElementById('customMinifaceUrl').value.trim();
+      const fileInput = document.getElementById('customMinifaceFile').files[0];
+
+      if (isNaN(idx) || !userData.inventory[idx]) { showToast("Vui lòng chọn cầu thủ!"); return; }
+
+      if (fileInput) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          userData.inventory[idx].img = e.target.result;
+          saveDataOnline(); updateUI();
+          document.getElementById('dressingRoomModal').style.display = 'none';
+          showToast("Đã đổi Miniface bằng file thành công!");
+        };
+        reader.readAsDataURL(fileInput);
+      } else if (url !== "") {
+        userData.inventory[idx].img = url;
+        saveDataOnline(); updateUI();
+        document.getElementById('dressingRoomModal').style.display = 'none';
+        showToast("Đã đổi Miniface bằng link thành công!");
+      } else {
+        showToast("Vui lòng nhập link hoặc chọn file ảnh!");
+      }
+    }
+
     /* QUẢN LÝ CẦU THỦ */
     function renderSquadManager() {
       const mainContainer = document.getElementById('squadMainListContainer');
@@ -751,13 +883,14 @@
         return 0;
       });
 
+      let htmlContent = '';
       sortedInv.forEach((item) => {
         const realIdx = userData.inventory.findIndex(x => x.id === item.id);
         const grade = item.grade || 1;
         const ovr = calculateOvr(item.baseOvr, grade);
         const priceVal = (ovr * 100000000).toLocaleString('vi-VN');
 
-        tbodyInv.innerHTML += `
+        htmlContent += `
           <tr class="player-row-item" onclick="toggleRowActions(this, event)">
             <td><span style="color:var(--accent-green); font-weight:bold;">${item.pos || 'CM'}</span></td>
             <td>
@@ -780,6 +913,7 @@
           </tr>
         `;
       });
+      tbodyInv.innerHTML = htmlContent;
     }
 
     function sortBy(column) {
@@ -1218,6 +1352,7 @@
       return baseOvr + (grade - 1);
     }
 
+    /* BẢNG ADMIN PANEL */
     function renderAdminUserTable() {
       const tbody = document.getElementById('adminUserTable');
       if (!tbody) return;
@@ -1233,7 +1368,7 @@
               Object.keys(users).forEach(uName => {
                 const uData = users[uName];
                 const isOnline = statuses[uName]?.online || false;
-                tbody.innerHTML += buildAdminRow(uName, isOnline, uData.bp || 0, uData.inventory?.length || 0);
+                tbody.innerHTML += buildAdminRow(uName, isOnline, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
               });
             }
           });
@@ -1250,18 +1385,19 @@
             const uData = JSON.parse(localStorage.getItem('fco_user_' + uName));
             const lastActive = parseInt(localStorage.getItem('fco_online_' + uName) || '0');
             const isOnline = (Date.now() - lastActive) < 30000;
-            tbody.innerHTML += buildAdminRow(uName, isOnline, uData.bp || 0, uData.inventory?.length || 0);
+            tbody.innerHTML += buildAdminRow(uName, isOnline, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
           } catch(e) {}
         });
       }
     }
 
-    function buildAdminRow(uName, isOnline, bp, cardCount) {
+    function buildAdminRow(uName, isOnline, password, bp, cardCount) {
       const statusHtml = isOnline ? `<span class="status-badge status-online"><i class="fa-solid fa-circle"></i> Online</span>` : `<span class="status-badge status-offline">Offline</span>`;
       return `
         <tr>
           <td>${statusHtml}</td>
           <td><strong style="color:var(--accent-blue);">${uName}</strong></td>
+          <td><code style="background:rgba(0,0,0,0.5); padding:2px 6px; border-radius:4px; color:var(--accent-gold);">${password}</code></td>
           <td style="color:var(--accent-gold); font-weight:bold;">${bp.toLocaleString()} BP</td>
           <td>${cardCount} Thẻ</td>
           <td>
