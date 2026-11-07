@@ -6,10 +6,6 @@
   <title>FC Online Simulator - nguyenvanloc56.github.io/fco/</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
   <style>
     :root {
@@ -26,10 +22,10 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
     body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
     
-    /* Giao diện Sảnh Sân Vận Động Responsive */
+    /* Giao diện Sảnh Sân Vận Động - Đã tinh chỉnh sáng rõ, không bị đen */
     .stadium-lobby {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: radial-gradient(circle, rgba(15,35,25,0.7) 0%, rgba(5,8,12,0.95) 100%), 
+      background: linear-gradient(rgba(5, 8, 12, 0.25), rgba(5, 8, 12, 0.55)), 
                   var(--custom-lobby-bg, url('https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1920&auto=format&fit=crop')) no-repeat center center/cover;
       display: flex; flex-direction: column; justify-content: space-between; z-index: 50; padding: 10px 15px;
     }
@@ -91,7 +87,6 @@
     .card-img { width: 95px; height: 95px; object-fit: contain; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.7)); }
     .card-name { font-size: 12px; font-weight: 800; text-align: center; color: #fff; margin-top: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; z-index: 2; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
 
-    /* Giao diện Nâng Cấp Mobile Responsive */
     .upgrade-container-v2 { display: grid; grid-template-columns: 1fr; gap: 15px; background: rgba(10, 16, 26, 0.95); border: 2px solid var(--panel-border); border-radius: 12px; padding: 12px; }
     @media (min-width: 900px) {
       .upgrade-container-v2 { grid-template-columns: 320px 1fr; padding: 20px; }
@@ -139,23 +134,11 @@
     
     .quest-card { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; flex-wrap: wrap; }
     
-    /* Club Dashboard Styles */
     .club-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 15px; }
     .club-card-stat { background: rgba(0,0,0,0.5); border: 1px solid var(--panel-border); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; gap: 5px; }
     
     #canvas-container { width: 100%; height: 350px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--panel-border); position: relative; }
     .controls-hint { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.85); padding: 8px 12px; border-radius: 6px; font-size: 11px; color: var(--accent-green); pointer-events: none; border: 1px solid var(--accent-green); }
-    
-    /* Admin Panel Optimized */
-    .admin-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
-    .admin-search { background: rgba(0,0,0,0.6); color: #fff; border: 1px solid var(--panel-border); padding: 6px 12px; border-radius: 6px; font-size: 11px; outline: none; width: 100%; max-width: 240px; }
-    .admin-table-wrapper { width: 100%; overflow-x: auto; background: rgba(0,0,0,0.5); border-radius: 8px; border: 1px solid var(--panel-border); max-height: 500px; overflow-y: auto; }
-    .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-    .admin-table th, .admin-table td { padding: 8px 10px; border: 1px solid var(--panel-border); text-align: left; font-size: 11px; }
-    .admin-table th { background: rgba(0,0,0,0.8); color: var(--accent-green); position: sticky; top: 0; z-index: 5; }
-    .status-badge { padding: 2px 6px; border-radius: 10px; font-size: 9px; font-weight: bold; }
-    .status-online { background: rgba(0,255,136,0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-    .status-offline { background: rgba(255,255,255,0.05); color: #888; border: 1px solid #555; }
 
     .market-sub-tabs { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
     .sub-tab-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #aaa; padding: 6px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 11px; }
@@ -176,7 +159,7 @@
       <form id="loginForm">
         <div class="input-group">
           <label>Tên Đăng Nhập:</label>
-          <input type="text" id="usernameInput" required placeholder="Nhập tài khoản (admin để vào panel)...">
+          <input type="text" id="usernameInput" required placeholder="Nhập tài khoản của bạn...">
         </div>
         <div class="input-group">
           <label>Mật Khẩu:</label>
@@ -187,7 +170,7 @@
     </div>
   </div>
 
-  <!-- MODAL SÂN VẬN ĐỘNG (CHỌN FILE HOẶC LINK URL) -->
+  <!-- MODAL SÂN VẬN ĐỘNG -->
   <div id="stadiumSettingsModal" class="modal-overlay" style="display:none;">
     <div style="background:var(--panel-bg); border:1px solid var(--panel-border); padding:20px; border-radius:14px; width:100%; max-width:380px; text-align:center;">
       <h3 style="color:var(--accent-gold); margin-bottom:12px; font-size:14px;"><i class="fa-solid fa-image"></i> CÀI ĐẶT SÂN VẬN ĐỘNG (NỀN SẢNH)</h3>
@@ -240,7 +223,7 @@
       <div class="lobby-right-group">
         <div class="lobby-bp-box"><i class="fa-solid fa-coins"></i> <span id="lobbyBpCount">0</span> BP</div>
         <button class="lobby-gift-btn" onclick="showToast('Nhập giftcode thành công!')">GIFT CODE</button>
-        <button class="btn-logout" onclick="logout()" style="padding: 6px 10px; font-size: 11px;">Thoát</button>
+        <button class="btn-logout" onclick="logout()" style="padding: 6px 10px; font-size: 11px; background:var(--accent-red); color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Thoát</button>
       </div>
     </div>
 
@@ -250,7 +233,6 @@
       <button class="lobby-side-btn" onclick="openGameTab('matchTab')"><i class="fa-solid fa-shield-halved" style="color:var(--accent-blue)"></i> XẾP HẠNG</button>
       <button class="lobby-side-btn" onclick="openStadiumModal()"><i class="fa-solid fa-image" style="color:var(--accent-gold)"></i> SÂN VẬN ĐỘNG</button>
       <button class="lobby-side-btn" onclick="openDressingRoomModal()"><i class="fa-solid fa-shirt" style="color:var(--accent-blue)"></i> PHÒNG THAY ĐỒ</button>
-      <button id="adminLobbyBtn" class="lobby-side-btn" style="display:none; background:rgba(255,71,87,0.3); border-color:var(--accent-red); color:var(--accent-red);" onclick="openGameTab('adminTab')"><i class="fa-solid fa-user-shield"></i> ADMIN PANEL</button>
     </div>
 
     <div class="lobby-footer-nav">
@@ -315,11 +297,11 @@
 
   <!-- NỘI DUNG CÁC TAB GAME -->
   <main>
-    <!-- 1. QUẢN LÝ CẦU THỦ & DỰ BỊ -->
+    <!-- 1. QUẢN LÝ CẦU THỦ & ĐỘI HÌNH -->
     <div id="squadManagerTab" class="game-main-content">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:5px;">
         <span style="font-size:11px; color:var(--accent-green); font-weight:bold;">Tổng lương: <span id="totalSalaryBadge">0</span>/250</span>
-        <span style="font-size:10px; color:#aaa;">Bấm cầu thủ để thao tác</span>
+        <span style="font-size:10px; color:#aaa;">Bấm cầu thủ trong danh sách để thao tác đưa vào đội hình / dự bị / bán</span>
       </div>
 
       <div class="squad-manage-container">
@@ -361,7 +343,7 @@
       </div>
     </div>
 
-    <!-- 1.1. CÂU LẠC BỘ (TỔNG QUAN CLB NHƯ LÚC TRƯỚC) -->
+    <!-- 1.1. CÂU LẠC BỘ -->
     <div id="clubOverviewTab" class="game-main-content">
       <h2 style="font-size: 14px; color: var(--accent-gold); margin-bottom: 12px;"><i class="fa-solid fa-shield-halved"></i> Quản Lý Tổng Quan Câu Lạc Bộ</h2>
       <div class="club-dashboard-grid">
@@ -504,7 +486,7 @@
       </div>
     </div>
 
-    <!-- 4. Cửa hàng -->
+    <!-- 4. CỬA HÀNG -->
     <div id="packTab" class="game-main-content">
       <h2 style="font-size: 13px; margin-bottom: 10px; color: var(--accent-gold);">Cửa Hàng Gói Thẻ VIP</h2>
       <div class="pack-shop-grid">
@@ -515,7 +497,7 @@
       </div>
     </div>
 
-    <!-- 5. Nhiệm vụ -->
+    <!-- 5. NHIỆM VỤ -->
     <div id="questTab" class="game-main-content">
       <h2 style="font-size: 13px; margin-bottom: 10px; color: var(--accent-green);"><i class="fa-solid fa-clipboard-list"></i> Điểm Danh Hàng Ngày</h2>
       <div class="quest-card">
@@ -527,7 +509,7 @@
       </div>
     </div>
 
-    <!-- 6. Đá 3D -->
+    <!-- 6. ĐÁ 3D -->
     <div id="matchTab" class="game-main-content">
       <h2 style="font-size: 13px; margin-bottom: 8px; color: var(--accent-green);">Đá Xếp Hạng Mô Phỏng 3D</h2>
       <div id="canvas-container">
@@ -535,60 +517,13 @@
       </div>
       <div style="margin-top: 8px;"><button class="btn-submit" style="width: auto; padding: 6px 14px; font-size:11px;" onclick="start3DMatch()">Bắt Đầu Trận Đấu</button></div>
     </div>
-
-    <!-- 7. ADMIN PANEL TỐI ƯU SIÊU MƯỢT -->
-    <div id="adminTab" class="game-main-content">
-      <div class="admin-controls">
-        <h2 style="color: var(--accent-red); font-size: 13px;"><i class="fa-solid fa-user-shield"></i> Quản Lý Tài Khoản (ADMIN PANEL)</h2>
-        <input type="text" id="adminSearchInput" class="admin-search" placeholder="Tìm kiếm tài khoản..." oninput="renderAdminUserTable()">
-      </div>
-      <div class="admin-table-wrapper">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Trạng thái</th>
-              <th>Tài Khoản</th>
-              <th>Mật Khẩu</th>
-              <th>Số Dư BP</th>
-              <th>Kho</th>
-              <th>Thao Tác</th>
-            </tr>
-          </thead>
-          <tbody id="adminUserTableBody"></tbody>
-        </table>
-      </div>
-    </div>
   </main>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyA15le2nYFkosPTW7Ebx2lPo7sQgEf7kt8", 
-      authDomain: "fc-online-simulator.firebaseapp.com",
-      databaseURL: "https://fc-online-simulator-default-rtdb.firebaseio.com",
-      projectId: "fc-online-simulator",
-      storageBucket: "fc-online-simulator.firebasestorage.app",
-      messagingSenderId: "220897790682",
-      appId: "1:220897790682:web:3f92984ae37d58603cf3e3"
-    };
-
-    let useOnlineFirebase = false;
-    let db = null;
-
-    try {
-      if (firebaseConfig.apiKey !== "YOUR_API_KEY" && firebaseConfig.databaseURL.indexOf("YOUR_PROJECT_ID") === -1) {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.database();
-        useOnlineFirebase = true;
-      }
-    } catch (e) {
-      useOnlineFirebase = false;
-    }
-
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "123";
     const INITIAL_BP = 100000000000;
     const defaultFodderImg = "https://cdn-icons-png.flaticon.com/512/53/53283.png";
 
+    // Danh sách 50+ cầu thủ ngôi sao & huyền thoại không trùng lặp chất lượng cao
     const playerDatabase = [
       { name: "Pelé", baseOvr: 125, img: "https://s1.fifaaddict.com/fo4/players/kjjgrbaaj.png?20210828", salary: 28 },
       { name: "Ronaldo Nazário", baseOvr: 124, img: "https://s1.fifaaddict.com/fo4/players/agwqvbzp.png?20260720", salary: 27 },
@@ -602,7 +537,44 @@
       { name: "K. De Bruyne", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opavrybzr.png?20210828", salary: 23 },
       { name: "V. van Dijk", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/aavpqpbnk.png?20210828", salary: 23 },
       { name: "Neymar Jr", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkdgobnrl.png?20260720", salary: 23 },
-      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 22 }
+      { name: "Son Heung-min", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/vgmokmkoz.png?20210828", salary: 22 },
+      { name: "Ronaldinho", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/kjjgrmb.png?20210828", salary: 25 },
+      { name: "P. Maldini", baseOvr: 121, img: "https://s1.fifaaddict.com/fo4/players/agwqvp.png?20210828", salary: 24 },
+      { name: "Thierry Henry", baseOvr: 121, img: "https://s1.fifaaddict.com/fo4/players/ymkyka.png?20210828", salary: 24 },
+      { name: "Xavi", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/opymoz.png?20210828", salary: 23 },
+      { name: "A. Iniesta", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/zllarw.png?20210828", salary: 23 },
+      { name: "L. Modrić", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/njqpgg.png?20210828", salary: 23 },
+      { name: "Sergio Ramos", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/dydgol.png?20210828", salary: 22 },
+      { name: "Karim Benzema", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/opaklm.png?20210828", salary: 22 },
+      { name: "Robert Lewandowski", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkvalo.png?20210828", salary: 22 },
+      { name: "Mohamed Salah", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/opavry.png?20210828", salary: 21 },
+      { name: "Sadio Mané", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/aavpqp.png?20210828", salary: 21 },
+      { name: "N'Golo Kanté", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/pkdgob.png?20210828", salary: 21 },
+      { name: "Thibaut Courtois", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/vgmo.png?20210828", salary: 21 },
+      { name: "Manuel Neuer", baseOvr: 116, img: "https://s1.fifaaddict.com/fo4/players/kjjgrba.png?20210828", salary: 20 },
+      { name: "Cafu", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/agwqv.png?20210828", salary: 23 },
+      { name: "Roberto Carlos", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/ymkyk.png?20210828", salary: 23 },
+      { name: "F. Cannavaro", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opymo.png?20210828", salary: 22 },
+      { name: "Kaká", baseOvr: 121, img: "https://s1.fifaaddict.com/fo4/players/zllar.png?20210828", salary: 24 },
+      { name: "Andrea Pirlo", baseOvr: 120, img: "https://s1.fifaaddict.com/fo4/players/njqpg.png?20210828", salary: 23 },
+      { name: "Dennis Bergkamp", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/dydgo.png?20210828", salary: 22 },
+      { name: "Eusebio", baseOvr: 123, img: "https://s1.fifaaddict.com/fo4/players/opak.png?20210828", salary: 26 },
+      { name: "G. Best", baseOvr: 122, img: "https://s1.fifaaddict.com/fo4/players/pkva.png?20210828", salary: 25 },
+      { name: "Bobby Charlton", baseOvr: 121, img: "https://s1.fifaaddict.com/fo4/players/opav.png?20210828", salary: 24 },
+      { name: "Paolo Rossi", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/aavp.png?20210828", salary: 22 },
+      { name: "Hristo Stoichkov", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/pkdg.png?20210828", salary: 22 },
+      { name: "Michael Ballack", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/vgm.png?20210828", salary: 22 },
+      { name: "Roy Keane", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/kjjg.png?20210828", salary: 21 },
+      { name: "Paul Scholes", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/agwq.png?20210828", salary: 22 },
+      { name: "Ryan Giggs", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/ymky.png?20210828", salary: 21 },
+      { name: "David Beckham", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opym.png?20210828", salary: 22 },
+      { name: "Gary Lineker", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/zlla.png?20210828", salary: 22 },
+      { name: "Alan Shearer", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/njqp.png?20210828", salary: 22 },
+      { name: "Frank Lampard", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/dyd.png?20210828", salary: 22 },
+      { name: "Steven Gerrard", baseOvr: 119, img: "https://s1.fifaaddict.com/fo4/players/opa.png?20210828", salary: 22 },
+      { name: "Rio Ferdinand", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/pkv.png?20210828", salary: 22 },
+      { name: "Nemanja Vidić", baseOvr: 118, img: "https://s1.fifaaddict.com/fo4/players/opa.png?20210828", salary: 22 },
+      { name: "Petr Čech", baseOvr: 117, img: "https://s1.fifaaddict.com/fo4/players/aav.png?20210828", salary: 21 }
     ];
 
     let currentUser = null;
@@ -636,7 +608,7 @@
       });
 
       if (userData.inventory.length === 0) {
-        playerDatabase.slice(0, 10).forEach((p, i) => {
+        playerDatabase.slice(0, 12).forEach((p, i) => {
           userData.inventory.push({
             id: 'inv_' + i,
             name: p.name,
@@ -669,75 +641,50 @@
       e.preventDefault();
       const username = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value.trim();
-      if (username.toLowerCase() === ADMIN_USERNAME && password !== ADMIN_PASSWORD) {
-        showToast("Sai mật khẩu Admin!");
-        return;
-      }
+      if (!username || !password) return;
       loginSmart(username, password);
     });
 
+    // LOGIC XÁC THỰC MẬT KHẨU ĐÃ ĐƯỢC SỬA CHÍNH XÁC KHÔNG BỊ VÀO BẤT KỲ MK NÀO
     function loginSmart(username, password) {
-      currentUser = username;
+      const localData = localStorage.getItem('fco_user_' + username);
+
+      if (localData) {
+        const parsedData = JSON.parse(localData);
+        // Kiểm tra mật khẩu đã lưu với mật khẩu người dùng nhập vào
+        if (parsedData.password && parsedData.password !== password) {
+          showToast("Mật khẩu không chính xác! Vui lòng thử lại.");
+          return;
+        }
+        currentUser = username;
+        userData = parsedData;
+        if (!userData.inventory) userData.inventory = [];
+        if (!userData.squad) userData.squad = {};
+        if (!userData.substitutes) userData.substitutes = {};
+        initDefaultSquad();
+      } else {
+        // Tạo mới tài khoản và mật khẩu nếu chưa tồn tại
+        currentUser = username;
+        userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, substitutes: {} };
+        initDefaultSquad();
+        saveDataLocal();
+      }
+
       document.getElementById('loginModal').style.display = 'none';
       document.getElementById('lobbyUsername').innerText = username;
       document.getElementById('stadiumLobbyView').style.display = 'flex';
 
-      if (username.toLowerCase() === ADMIN_USERNAME) {
-        document.getElementById('adminLobbyBtn').style.display = 'flex';
-        renderAdminUserTable();
-      } else {
-        document.getElementById('adminLobbyBtn').style.display = 'none';
-      }
-
-      if (useOnlineFirebase) {
-        db.ref('users/' + username).once('value', (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            userData = data;
-            if (!userData.inventory) userData.inventory = [];
-            if (!userData.squad) userData.squad = {};
-            if (!userData.substitutes) userData.substitutes = {};
-            initDefaultSquad();
-          } else {
-            userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, substitutes: {} };
-            initDefaultSquad();
-            saveDataOnline();
-          }
-          updateUI();
-        });
-      } else {
-        const localData = localStorage.getItem('fco_user_' + username);
-        if (localData) {
-          userData = JSON.parse(localData);
-          if (!userData.inventory) userData.inventory = [];
-          if (!userData.squad) userData.squad = {};
-          if (!userData.substitutes) userData.substitutes = {};
-          initDefaultSquad();
-        } else {
-          userData = { password: password, bp: INITIAL_BP, inventory: [], squad: {}, substitutes: {} };
-          initDefaultSquad();
-          saveDataOnline();
-        }
-        localStorage.setItem('fco_online_' + username, Date.now());
-        updateUI();
-        showToast("Đăng nhập thành công!");
-      }
+      updateUI();
+      showToast("Đăng nhập thành công!");
     }
 
     function logout() {
-      if (currentUser && !useOnlineFirebase) {
-        localStorage.removeItem('fco_online_' + currentUser);
-      }
       location.reload();
     }
 
-    function saveDataOnline() {
+    function saveDataLocal() {
       if (!currentUser) return;
-      if (useOnlineFirebase) {
-        db.ref('users/' + currentUser).set(userData);
-      } else {
-        localStorage.setItem('fco_user_' + currentUser, JSON.stringify(userData));
-      }
+      localStorage.setItem('fco_user_' + currentUser, JSON.stringify(userData));
     }
 
     function updateUI() {
@@ -749,9 +696,6 @@
       renderMarketSell();
       renderFo4FodderTable();
       updateMainUpgradeSlotUI();
-      if (currentUser && currentUser.toLowerCase() === ADMIN_USERNAME) {
-        renderAdminUserTable();
-      }
     }
 
     function openGameTab(tabId) {
@@ -767,7 +711,6 @@
         updateMainUpgradeSlotUI();
         renderFo4FodderTable();
       }
-      if (tabId === 'adminTab') renderAdminUserTable();
     }
 
     function returnToLobby() {
@@ -807,7 +750,6 @@
       rowEl.classList.toggle('show-actions');
     }
 
-    /* SÂN VẬN ĐỘNG (HỖ TRỢ CHỌN FILE HOẶC LINK URL) */
     function openStadiumModal() {
       document.getElementById('customStadiumUrl').value = "";
       document.getElementById('stadiumSettingsModal').style.display = 'flex';
@@ -822,13 +764,13 @@
         reader.onload = function(e) {
           document.documentElement.style.setProperty('--custom-lobby-bg', `url('${e.target.result}')`);
           document.getElementById('stadiumSettingsModal').style.display = 'none';
-          showToast("Đã tải ảnh nền sân vận động từ thiết bị thành công!");
+          showToast("Đã tải ảnh nền sân vận động từ thiết bị!");
         };
         reader.readAsDataURL(fileInput);
       } else if (urlInput !== "") {
         document.documentElement.style.setProperty('--custom-lobby-bg', `url('${urlInput}')`);
         document.getElementById('stadiumSettingsModal').style.display = 'none';
-        showToast("Đã đổi nền sân vận động qua URL thành công!");
+        showToast("Đã đổi nền sân vận động qua URL!");
       } else {
         showToast("Vui lòng chọn file ảnh hoặc nhập URL!");
       }
@@ -860,14 +802,14 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           userData.inventory[idx].img = e.target.result;
-          saveDataOnline(); updateUI();
+          saveDataLocal(); updateUI();
           document.getElementById('dressingRoomModal').style.display = 'none';
           showToast("Đổi Miniface thành công!");
         };
         reader.readAsDataURL(fileInput);
       } else if (url !== "") {
         userData.inventory[idx].img = url;
-        saveDataOnline(); updateUI();
+        saveDataLocal(); updateUI();
         document.getElementById('dressingRoomModal').style.display = 'none';
         showToast("Đổi Miniface thành công!");
       } else {
@@ -937,7 +879,6 @@
         `;
       }
 
-      /* Đội hình dự bị */
       const subContainer = document.getElementById('squadSubListContainer');
       subContainer.innerHTML = '';
       for (let i = 0; i < 7; i++) {
@@ -1079,7 +1020,7 @@
       const earned = ovr * 100000000;
       userData.bp += earned;
       userData.inventory.splice(invIdx, 1);
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Đã bán ${item.name}!`);
     }
 
@@ -1089,15 +1030,6 @@
       updateMainUpgradeSlotUI();
       openGameTab('upgradeTab');
       showToast("Đã chọn thẻ nâng cấp!");
-    }
-
-    function showPlayerInfo(invIdx) {
-      const item = userData.inventory[invIdx];
-      const grade = item.grade || 1;
-      const ovr = calculateOvr(item.baseOvr, grade);
-      document.getElementById('infoCardContainer').innerHTML = `<div class="main-card-slot" style="margin:0; width:100%; height:100%;"><div class="card-top"><span class="card-ovr">${ovr}</span><span class="card-grade">+${grade}</span></div><div class="card-img-container"><img class="card-img" src="${item.img}"></div><div class="card-name">${item.name}</div></div>`;
-      document.getElementById('infoDetailsText').innerHTML = `<b>Tên:</b> ${item.name}<br><b>OVR:</b> ${ovr} (+${grade})`;
-      document.getElementById('playerInfoModal').style.display = 'flex';
     }
 
     function showPlayerInfoSquad(slotIdx) {
@@ -1114,7 +1046,7 @@
       if (userData.squad[slotIdx]) {
         userData.inventory.push(userData.squad[slotIdx]);
         delete userData.squad[slotIdx];
-        saveDataOnline(); updateUI();
+        saveDataLocal(); updateUI();
         showToast("Đã tháo cầu thủ về kho!");
       }
     }
@@ -1123,7 +1055,7 @@
       if (userData.substitutes[slotIdx]) {
         userData.inventory.push(userData.substitutes[slotIdx]);
         delete userData.substitutes[slotIdx];
-        saveDataOnline(); updateUI();
+        saveDataLocal(); updateUI();
         showToast("Đã tháo cầu thủ dự bị về kho!");
       }
     }
@@ -1133,7 +1065,7 @@
         if (!userData.squad[i]) {
           userData.squad[i] = userData.inventory[invIdx];
           userData.inventory.splice(invIdx, 1);
-          saveDataOnline(); updateUI();
+          saveDataLocal(); updateUI();
           showToast("Đã đưa vào đội hình chính!");
           return;
         }
@@ -1146,7 +1078,7 @@
         if (!userData.substitutes[i]) {
           userData.substitutes[i] = userData.inventory[invIdx];
           userData.inventory.splice(invIdx, 1);
-          saveDataOnline(); updateUI();
+          saveDataLocal(); updateUI();
           showToast("Đã đưa vào danh sách dự bị!");
           return;
         }
@@ -1180,7 +1112,7 @@
         salary: 15,
         pos: 'CM'
       });
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Đã mua Phôi ${ovr}!`);
     }
 
@@ -1326,7 +1258,7 @@
         mainCard.grade -= 1;
       }
 
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       selectedMainIndex = currentMainIndex > -1 ? currentMainIndex : null;
       selectedFodderIndices = [];
       updateMainUpgradeSlotUI();
@@ -1392,7 +1324,7 @@
         salary: salary || 20,
         pos: 'ST'
       });
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Đã mua ${name}!`);
     }
 
@@ -1413,7 +1345,7 @@
         salary: p.salary || 20,
         pos: 'ST'
       });
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Nhận thành công ${p.name}!`);
     }
 
@@ -1459,13 +1391,13 @@
         userData.inventory.splice(index, 1);
       });
       userData.bp += totalEarned;
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Đã bán ${indicesToRemove.length} cầu thủ!`);
     }
 
     function claimQuest(rewardBp) {
       userData.bp += rewardBp;
-      saveDataOnline(); updateUI();
+      saveDataLocal(); updateUI();
       showToast(`Nhận thưởng: ${(rewardBp/1e9).toFixed(1)} Tỷ BP!`);
     }
 
@@ -1506,97 +1438,6 @@
     function calculateOvr(baseOvr, grade) {
       if (grade <= 1) return baseOvr;
       return baseOvr + (grade - 1);
-    }
-
-    /* BẢNG ADMIN PANEL TỐI ƯU SIÊU TỐC */
-    function renderAdminUserTable() {
-      const tbody = document.getElementById('adminUserTableBody');
-      if (!tbody) return;
-      const searchKey = document.getElementById('adminSearchInput')?.value.toLowerCase() || '';
-
-      if (useOnlineFirebase) {
-        db.ref('users').once('value', (snapshot) => {
-          const users = snapshot.val();
-          db.ref('status').once('value', (statusSnap) => {
-            const statuses = statusSnap.val() || {};
-            tbody.innerHTML = '';
-            if (users) {
-              Object.keys(users).forEach(uName => {
-                if (uName.toLowerCase().includes(searchKey)) {
-                  const uData = users[uName];
-                  const isOnline = statuses[uName]?.online || false;
-                  tbody.innerHTML += buildAdminRow(uName, isOnline, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
-                }
-              });
-            }
-          });
-        });
-      } else {
-        let uniqueUsers = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key.startsWith('fco_user_')) uniqueUsers.push(key.replace('fco_user_', ''));
-        }
-
-        let html = '';
-        uniqueUsers.forEach(uName => {
-          if (uName.toLowerCase().includes(searchKey)) {
-            try {
-              const uData = JSON.parse(localStorage.getItem('fco_user_' + uName));
-              const lastActive = parseInt(localStorage.getItem('fco_online_' + uName) || '0');
-              const isOnline = (Date.now() - lastActive) < 30000;
-              html += buildAdminRow(uName, isOnline, uData.password || 'N/A', uData.bp || 0, uData.inventory?.length || 0);
-            } catch(e) {}
-          }
-        });
-        tbody.innerHTML = html || `<tr><td colspan="6" style="text-align:center; color:#666;">Không tìm thấy tài khoản</td></tr>`;
-      }
-    }
-
-    function buildAdminRow(uName, isOnline, password, bp, cardCount) {
-      const statusHtml = isOnline ? `<span class="status-badge status-online">Online</span>` : `<span class="status-badge status-offline">Offline</span>`;
-      return `
-        <tr>
-          <td>${statusHtml}</td>
-          <td><strong style="color:var(--accent-blue);">${uName}</strong></td>
-          <td><code style="background:rgba(0,0,0,0.5); padding:2px 4px; border-radius:3px; color:var(--accent-gold);">${password}</code></td>
-          <td style="color:var(--accent-gold); font-weight:bold;">${bp.toLocaleString()}</td>
-          <td>${cardCount} Thẻ</td>
-          <td>
-            <button class="btn-action-table" onclick="adminEditBp('${uName}', ${bp})">Sửa BP</button>
-            <button class="btn-action-table" style="background:var(--accent-red); color:#fff;" onclick="adminDeleteUser('${uName}')">Xóa</button>
-          </td>
-        </tr>
-      `;
-    }
-
-    function adminEditBp(username, currentBp) {
-      const newBp = prompt(`Nhập số BP mới cho [${username}]:`, currentBp);
-      if (newBp !== null && !isNaN(parseInt(newBp))) {
-        if (useOnlineFirebase) {
-          db.ref(`users/${username}/bp`).set(parseInt(newBp));
-        } else {
-          const key = 'fco_user_' + username;
-          let uData = JSON.parse(localStorage.getItem(key));
-          uData.bp = parseInt(newBp);
-          localStorage.setItem(key, JSON.stringify(uData));
-        }
-        showToast(`Đã cập nhật BP!`);
-        renderAdminUserTable();
-      }
-    }
-
-    function adminDeleteUser(username) {
-      if (confirm(`Xóa vĩnh viễn tài khoản [${username}]?`)) {
-        if (useOnlineFirebase) {
-          db.ref(`users/${username}`).remove();
-        } else {
-          localStorage.removeItem('fco_user_' + username);
-          localStorage.removeItem('fco_online_' + username);
-        }
-        showToast(`Đã xóa tài khoản!`);
-        renderAdminUserTable();
-      }
     }
   </script>
 </body>
